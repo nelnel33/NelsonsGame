@@ -258,11 +258,11 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 }
                 if(npcs.get(i).getHitbox().isLeft(Player.getHitbox())
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.RIGHT);
+                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.LEFT);
                 }
                 if(npcs.get(i).getHitbox().isRight(Player.getHitbox())
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.LEFT);
+                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.RIGHT);
                 }
                 //((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).fire();
             }

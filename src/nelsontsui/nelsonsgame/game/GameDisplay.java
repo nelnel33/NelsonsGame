@@ -22,13 +22,6 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.Timer;
 
-/*
-TODO: 
--DamagableEntity class(extends Entity, Character extends DamageableEntity)
--Portal class(extends Entity)
------Single portal and paired portals
-*/
-
 public class GameDisplay extends JFrame implements ActionListener{
     public long frameCount = 0;
     
@@ -527,16 +520,16 @@ public class GameDisplay extends JFrame implements ActionListener{
     
     private void createMap(){//TODO DELETE METHOD
         ArrayList<Entity> killers = new ArrayList<>();
-        killers.add(new NonPlayerCharacter(100,100,20,20,20,20,150,"killer1",10,10,200,NonPlayerCharacter.ARCHER));
-        killers.add(new NonPlayerCharacter(300,300,20,20,10,10,0,"killer2",15,10,200,NonPlayerCharacter.TANK));
-        killers.add(new NonPlayerCharacter(500,500,60,60,30,30,0,"BicBoi",10,10,40,NonPlayerCharacter.WARRIOR));
-        killers.add(new NonPlayerCharacter(465,20,30,30,30,30,0,"obj",10,10,500,NonPlayerCharacter.WARRIOR));
+        killers.add(new NonPlayerCharacter(100,100,20,20,50,50,200,"killer1",10,10,200,NonPlayerCharacter.ARCHER));
+        killers.add(new NonPlayerCharacter(300,300,20,20,50,50,0,"killer2",15,10,200,NonPlayerCharacter.TANK));
+        killers.add(new NonPlayerCharacter(500,500,60,60,50,50,0,"BicBoi",10,10,40,NonPlayerCharacter.WARRIOR));
+        killers.add(new NonPlayerCharacter(465,20,30,30,50,50,0,"obj",10,10,500,NonPlayerCharacter.WARRIOR));
         killers.add(new OpaqueEntity(500,0,20,100));
-        killers.add(new NonPlayerCharacter(100,100,30,30,10,10,0,"killer3",15,10,500,NonPlayerCharacter.TANK));
-        killers.add(new NonPlayerCharacter(30,200,30,30,25,25,200,"obj",100,10,100,NonPlayerCharacter.BOSS));
-        killers.add(new NonPlayerCharacter(420,100,30,30,10,10,0,"killer3",20,10,500,NonPlayerCharacter.TANK));
+        killers.add(new NonPlayerCharacter(100,100,30,30,50,50,0,"killer3",15,10,500,NonPlayerCharacter.TANK));
+        killers.add(new NonPlayerCharacter(30,200,30,30,50,50,300,"obj",100,10,100,NonPlayerCharacter.BOSS));
+        killers.add(new NonPlayerCharacter(420,100,30,30,50,50,0,"killer3",20,10,500,NonPlayerCharacter.TANK));
         killers.add(new OpaqueEntity(500,0,20,100));
-        killers.add(new DamagableEntity(200,200,40,40,10));
+        killers.add(new DamagableEntity(200,200,50,50,10));
         killers.add(new SpawnableItem(600,50,new HealthPotion("H-Pot",5,5)));
         killers.add(new SpawnableItem(600,50,new Arrow("Arrow", 30)));
         killers.add(new SpawnableItem(600,50,new Bow("Bow", 2)));
@@ -552,7 +545,7 @@ public class GameDisplay extends JFrame implements ActionListener{
         killers.add(new SpawnableItem(670,70,new HealthPotion("H-Pot",5,5)));
         Portal one = new Portal(350,250,20,20,new Portal(180,120,20,20,new Entity(300,300,20,20)));
         killers = one.addPortals(killers);
-        Character achar = new Character(600,30,10,10,75,75,150,"Player",100,2);
+        Character achar = new Character(600,30,10,10,100,100,200,"Player",100,2);
         
         
         Player = achar;
