@@ -518,15 +518,21 @@ public class GameDisplay extends JFrame implements ActionListener{
         
     }
     
+    private void lose(){
+        if(Player.getHitpoints()<=0){
+            System.exit(0);
+        }    
+    }
+    
     private void createMap(){//TODO DELETE METHOD
         ArrayList<Entity> killers = new ArrayList<>();
-        killers.add(new NonPlayerCharacter(100,100,20,20,50,50,200,"killer1",10,10,200,NonPlayerCharacter.ARCHER));
+        killers.add(new NonPlayerCharacter(100,100,20,20,50,50,300,"killer1",10,10,200,NonPlayerCharacter.ARCHER));
         killers.add(new NonPlayerCharacter(300,300,20,20,50,50,0,"killer2",15,10,200,NonPlayerCharacter.TANK));
         killers.add(new NonPlayerCharacter(500,500,60,60,50,50,0,"BicBoi",10,10,40,NonPlayerCharacter.WARRIOR));
         killers.add(new NonPlayerCharacter(465,20,30,30,50,50,0,"obj",10,10,500,NonPlayerCharacter.WARRIOR));
         killers.add(new OpaqueEntity(500,0,20,100));
         killers.add(new NonPlayerCharacter(100,100,30,30,50,50,0,"killer3",15,10,500,NonPlayerCharacter.TANK));
-        killers.add(new NonPlayerCharacter(30,200,30,30,50,50,300,"obj",100,10,100,NonPlayerCharacter.BOSS));
+        killers.add(new NonPlayerCharacter(30,200,30,30,50,50,500,"obj",100,10,100,NonPlayerCharacter.BOSS));
         killers.add(new NonPlayerCharacter(420,100,30,30,50,50,0,"killer3",20,10,500,NonPlayerCharacter.TANK));
         killers.add(new OpaqueEntity(500,0,20,100));
         killers.add(new DamagableEntity(200,200,50,50,10));
@@ -545,7 +551,7 @@ public class GameDisplay extends JFrame implements ActionListener{
         killers.add(new SpawnableItem(670,70,new HealthPotion("H-Pot",5,5)));
         Portal one = new Portal(350,250,20,20,new Portal(180,120,20,20,new Entity(300,300,20,20)));
         killers = one.addPortals(killers);
-        Character achar = new Character(600,30,10,10,100,100,200,"Player",100,2);
+        Character achar = new Character(600,30,10,10,100,100,300,"Player",100,2);
         
         
         Player = achar;
@@ -557,7 +563,8 @@ public class GameDisplay extends JFrame implements ActionListener{
         setInventoryColor();
         setInventoryIcons();
         inventoryRemoveIcons();
-        setStatsText();        
+        setStatsText();  
+        lose();
     }
     
     public static void main(String[] args){
