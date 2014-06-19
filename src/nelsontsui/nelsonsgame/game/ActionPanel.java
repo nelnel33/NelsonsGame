@@ -17,9 +17,7 @@ import java.awt.Rectangle;
 
 /*
 *NPCS attack once a second
-*Movement goes by fps(1 travelX/Y = 50 movements per second)
 *Player is independent of FPS
-*Projectiles goes by fps(1 Travel X/Y = 50 movements per second)
 */
 
 public class ActionPanel extends JPanel implements ActionListener, KeyListener{
@@ -749,8 +747,6 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                         }
                     }
                 }
-                
-                
                 else{
                     graphic.setColor(Color.DARK_GRAY);//greenish
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
