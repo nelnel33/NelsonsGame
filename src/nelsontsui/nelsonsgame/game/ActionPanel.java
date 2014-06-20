@@ -34,6 +34,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     private int edgeY;
     
     private InventoryIcon[] inventoryItems = new InventoryIcon[0];//only declared to prevent nullpointerexception
+    
+    public static final int hitpointsBarOffset = 6;
+    public static final int hitpointsBarHeight = 3;
             
     protected boolean[] keyPressed = new boolean[12];
     public static final int UP = 0;
@@ -746,6 +749,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                             graphic.fill(new Ellipse2D.Double(p.x,p.y,p.width,p.height));
                         }
                     }
+                    
+                    drawHitpointsBar(graphic,(NonPlayerCharacter)temp);
+                    
                 }
                 else{
                     graphic.setColor(Color.DARK_GRAY);//greenish
@@ -753,6 +759,20 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 }
 
             }
+        }
+    }
+    
+    public void drawHitpointsBar(Graphics2D g, NonPlayerCharacter d){
+        double ratio = d.getHitpoints()/d.getinitHitpoints();
+        double hitpointsBarWidth = d.getWidth()*ratio;
+        g.setColor(Color.GREEN);
+        if(d.getY()>(edgeY/2)){
+            g.fill(new Rectangle2D.Double(
+                    d.getX(),d.getHitbox().close.y-hitpointsBarOffset,hitpointsBarWidth,hitpointsBarHeight));
+            }
+        else{
+            g.fill(new Rectangle2D.Double(
+                    d.getX(),d.getHitbox().far.y+hitpointsBarOffset,hitpointsBarWidth,hitpointsBarHeight));
         }
     }
     

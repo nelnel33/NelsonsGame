@@ -526,7 +526,7 @@ public class GameDisplay extends JFrame implements ActionListener{
         killers.add(new NonPlayerCharacter(465,20,30,30,50,50,0,"obj",10,10,500,NonPlayerCharacter.WARRIOR));
         killers.add(new OpaqueEntity(500,0,20,100));
         killers.add(new NonPlayerCharacter(100,100,30,30,50,50,0,"killer3",15,10,500,NonPlayerCharacter.TANK));
-        killers.add(new NonPlayerCharacter(30,200,30,30,50,50,300,"obj",100,10,100,NonPlayerCharacter.BOSS));
+        killers.add(new NonPlayerCharacter(30,200,30,30,50,50,300,"obj",100,30,500,NonPlayerCharacter.BOSS));
         killers.add(new NonPlayerCharacter(420,100,30,30,50,50,0,"killer3",20,10,500,NonPlayerCharacter.TANK));
         killers.add(new OpaqueEntity(500,0,20,100));
         killers.add(new DamagableEntity(200,200,50,50,10));
