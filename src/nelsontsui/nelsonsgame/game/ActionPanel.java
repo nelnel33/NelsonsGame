@@ -234,9 +234,11 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
     public void detectForDamage(){
         for(int i=0;i<npcs.size();i++){
-            if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())){
-                if(npcs.get(i) instanceof NonPlayerCharacter){
-                    ((NonPlayerCharacter)npcs.get(i)).attack(Player);
+            if(npcs.get(i) instanceof NonPlayerCharacter){
+                if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())){
+                    if(((NonPlayerCharacter)npcs.get(i)).getCharacterClass()!=NonPlayerCharacter.ARCHER){
+                        ((NonPlayerCharacter)npcs.get(i)).attack(Player);
+                    }                    
                 }                
             }
         }
@@ -244,7 +246,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public boolean canNpcFireProjectile(Entity e){
             if(e instanceof NonPlayerCharacter){
                 if(((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.ARCHER
-                        ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.BOSS){
+                        ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.BOSS
+                        ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.SUBBOSS){
                     if(((NonPlayerCharacter)e).getDetectionBox().isTouching(Player.getHitbox())){
                         return true;
                 }    
@@ -383,7 +386,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())
                         &&Player.inventory.getSize()<Inventory.MAX_SIZE){
                     Player.inventory.pickUpItem(((SpawnableItem)npcs.get(i)).getItems());
-                    dialogPanel.message("You picked up: "+((SpawnableItem)npcs.get(i)).getItems().getQuantity()+" "+((SpawnableItem)npcs.get(i)).getItems().getName()+"s");
+                    dialogPanel.message("You picked up: "+((SpawnableItem)npcs.get(i)).getItems().getQuantity()+" "+((SpawnableItem)npcs.get(i)).getItems().getName());
                     npcs.remove(i);
                     for(int j=0;j<Player.inventory.items.size();j++){
                     }
@@ -411,6 +414,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     for(int j=0;j<npcs.size();j++){
                         if(i==j){}
                         else{
+                            ((Portal)npcs.get(i)).determineCanPlayerUse(npcs);
                             ((Portal)npcs.get(i)).teleport(Player);
                             if(((Portal)npcs.get(i)).canNpcUse()){
                                 ((Portal)npcs.get(i)).teleport(npcs.get(j));
@@ -481,9 +485,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
         
-        boolean hasWeapon = Player.getHasWeapon()&&hasBow;
-        
-        if(Player.canFireNextProjectile()&&hasWeapon&&(index!=100)){
+        if(Player.canFireNextProjectile()&&hasBow&&(index!=100)){
             Player.loadProjectile(Player.getDirection());
             Player.inventory.useItem(index,Player);
         }
@@ -545,7 +547,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }        
         
-        dialogPanel.message("You drop: "+Player.inventory.items.get(i).getName());
+        dialogPanel.message("You drop: "+Player.inventory.items.get(i).getQuantity()+" "+Player.inventory.items.get(i).getName());
         
         if(Player.getX()<edgeX/2){
             SpawnableItem temp = Player.inventory.dropItem(i, Player.getX()+Player.DROP_DISTANCE_X, Player.getY());  
@@ -585,8 +587,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             keyPressed[ATTACK] = false;
         }
         if(keyPressed[SHOOT]){
-            keyPressed[SHOOT] = false;
             shoot();
+            keyPressed[SHOOT] = false;
         }
         if(keyPressed[DEFEND]){
                       
@@ -760,7 +762,10 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     }
                     graphic.fill(new Ellipse2D.Double(npcs.get(i).getX(),npcs.get(i).getY(),npcs.get(i).getWidth(),npcs.get(i).getHeight()));
                 }
-                
+                else if(temp instanceof MapGate){
+                    graphic.setColor(Color.black);
+                    graphic.draw(new Ellipse2D.Double(npcs.get(i).getX(),npcs.get(i).getY(),npcs.get(i).getWidth(),npcs.get(i).getHeight()));
+                }               
                 
                 else if(temp instanceof NonPlayerCharacter){
                     if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.WARRIOR){
@@ -771,6 +776,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     }
                     else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.TANK){
                         graphic.setColor(new Color(92,90,19));//camogreen
+                    }
+                    else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.SUBBOSS){
+                        graphic.setColor(new Color(85,18,105));//dark purple
                     }
                     else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BOSS){
                         graphic.setColor(new Color(0,0,0));//black
@@ -785,6 +793,10 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     
                     drawHitpointsBar(graphic,(NonPlayerCharacter)temp);
                     
+                }
+                else if(temp instanceof DamagableEntity){
+                    graphic.setColor(Color.GRAY);//greenish
+                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }
                 else{
                     graphic.setColor(Color.DARK_GRAY);//greenish

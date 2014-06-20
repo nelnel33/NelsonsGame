@@ -81,6 +81,9 @@ public class GameDisplay extends JFrame implements ActionListener{
     private JButton defend;
     private JButton heal;
     
+    //Ingame Elements/Entities
+    //MapGate win;
+    
     public static final int edgeX = 740;
     public static final int edgeY = 400;
 
@@ -520,54 +523,113 @@ public class GameDisplay extends JFrame implements ActionListener{
     private void createActionLayout(){
         
     }
-    
+    private void win(){
+        //if(win.canOperate(Player)){
+        //    dialogPanel.message("You Win!!!!");
+        //}
+        
+    }    
     private void lose(){
         if(Player.getHitpoints()<=0){
-            System.exit(0);
+            dialogPanel.message("You Lose.");
+            check.stop();
         }
-    }    
-    
-    private void createMap(){//TODO DELETE METHOD
-        ArrayList<Entity> killers = new ArrayList<>();
-        killers.add(new NonPlayerCharacter(100,100,20,20,50,50,200,"killer1",10,10,200,NonPlayerCharacter.ARCHER));
-        killers.add(new NonPlayerCharacter(300,300,20,20,50,50,0,"killer2",15,10,200,NonPlayerCharacter.TANK));
-        killers.add(new NonPlayerCharacter(500,500,60,60,50,50,0,"BicBoi",10,10,40,NonPlayerCharacter.WARRIOR));
-        killers.add(new NonPlayerCharacter(465,20,30,30,50,50,0,"obj",10,10,500,NonPlayerCharacter.WARRIOR));
-        killers.add(new OpaqueEntity(500,0,20,100));
-        killers.add(new NonPlayerCharacter(100,100,30,30,50,50,0,"killer3",15,10,500,NonPlayerCharacter.TANK));
-        killers.add(new NonPlayerCharacter(30,200,30,30,50,50,300,"obj",100,30,500,NonPlayerCharacter.BOSS));
-        killers.add(new NonPlayerCharacter(420,100,30,30,50,50,0,"killer3",20,10,500,NonPlayerCharacter.TANK));
-        killers.add(new OpaqueEntity(500,0,20,100));
-        killers.add(new DamagableEntity(200,200,50,50,10));
-        killers.add(new SpawnableItem(600,50,new HealthPotion("H-Pot",5,5)));
-        killers.add(new SpawnableItem(600,50,new Arrow("Arrow", 30)));
-        killers.add(new SpawnableItem(600,50,new Bow("Bow", 2)));
-        killers.add(new SpawnableItem(600,50,new Weapon("Sword", 3)));
-        killers.add(new SpawnableItem(600,50,new Armor("Armor10",20)));
-        killers.add(new SpawnableItem(600,50,new Armor("Armor20",10)));
-        killers.add(new SpawnableItem(600,60,new HealthPotion("H-Pot",5,5)));
-        killers.add(new SpawnableItem(600,70,new HealthPotion("H-Pot",5,5)));
-        killers.add(new SpawnableItem(600,50,new StrengthPotion("S-Pot",5,1.5)));
-        killers.add(new SpawnableItem(600,60,new HealthPotion("H-Pot",5,5)));
-        killers.add(new SpawnableItem(650,70,new HealthPotion("H-Pot",5,5)));
-        killers.add(new SpawnableItem(660,60,new HealthPotion("H-Pot",5,5)));
-        killers.add(new SpawnableItem(670,70,new HealthPotion("H-Pot",5,5)));
-        Portal one = new Portal(350,250,20,20,new Portal(180,120,20,20,new Entity(300,300,20,20)));
-        killers = one.addPortals(killers);
-        Character achar = new Character(600,30,10,10,100,100,200,"Player",100,2);
-        
-        
-        Player = achar;
-        npcs = killers;
+    }        
+    private void createMap(){
+        createExampleMap();
     } 
+    private void createExampleMap(){
+        ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
+        Character p = new Character(0,0,10,10,100,100,200,"Nelson",100000,500);
+        
+        e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
+        e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
+        e.add(new SpawnableItem(30,30,new Weapon("Pencil",2)));
+        e.add(new SpawnableItem(30,30,new Armor("Sombrero",10)));
+        e.add(new SpawnableItem(30,30,new HealthPotion("Gum",3,5)));
+        
+        
+        Portal one = new Portal(30,50,20,20,new Entity(80,50,20,20),Portal.DEFAULT,true);//portal from spawnroom to room1  
+        Portal two = new Portal(80,50,20,20,new Entity(30,50,20,20),Portal.DEFAULT,false);//portal from room1 to spawnroom
+        e.add(one);
+        e.add(two);
+        
+        e.add(new OpaqueEntity(150,0,10,360));//right wall of room 1 and room 2; left wall of room 3
+        e.add(new OpaqueEntity(0,150,120,10));//bottom wall of room 1
+        e.add(new NonPlayerCharacter(100,0,10,10,50,50,0,"Anvil Master's Minion",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(100,30,10,10,50,50,0,"Anvil Master's Minion",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,120,10,10,50,50,0,"Anvil Master's Minion",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,120,10,10,50,50,0,"Anvil Master's Minion",2,5,10,NonPlayerCharacter.WARRIOR));        
+        
+        e.add(new DamagableEntity(150,362,10,36,2));//breakable entity/door of room 1 to room 2
+        e.add(new NonPlayerCharacter(30,200,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,200,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(70,200,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,250,10,10,50,50,200,"Anvil Master's Minion",2,5,40,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(30,290,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,290,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(70,290,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,310,10,10,50,50,200,"Anvil Master's Minion",2,5,40,NonPlayerCharacter.ARCHER));        
+        e.add(new SpawnableItem(0,380,new Weapon("BigStick",8)));
+        e.add(new SpawnableItem(0,200,new Armor("T-Shirt",30)));
+        e.add(new SpawnableItem(30,300,new Arrow("Rocks",50)));
+        e.add(new SpawnableItem(100,340,new HealthPotion("Donuts",5,5)));
+        
+        e.add(new DamagableEntity(450,2,10,36,2));//breakable entity/door of room 2 to room 3
+        e.add(new OpaqueEntity(450,40,10,400));//right wall of room 2; left wall of room 3 and 4
+        e.add(new OpaqueEntity(280,180,40,40));//safespot/obstacle middle
+        e.add(new DamagableEntity(280,60,40,40,30));//safespot/obstacle top
+        e.add(new DamagableEntity(280,300,40,40,30));//safespot/obstacle bottom
+        
+        e.add(new NonPlayerCharacter(240,60,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(240,80,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(360,60,10,10,25,25,0,"Anvil Master's Minion",2,30,200,NonPlayerCharacter.TANK));
+        e.add(new NonPlayerCharacter(360,80,10,10,50,50,200,"Anvil Master's Minion",2,10,200,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(240,300,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(240,330,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(360,300,10,10,25,25,0,"Anvil Master's Minion",2,30,200,NonPlayerCharacter.TANK));
+        e.add(new NonPlayerCharacter(360,330,10,10,50,50,200,"Anvil Master's Minion",2,10,200,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(240,180,15,15,50,50,300,"Anvil Apprentice",10,50,100,NonPlayerCharacter.SUBBOSS));
+        
+        e.add(new SpawnableItem(200,200,new Bow("Slingshot",6)));
+        e.add(new SpawnableItem(450,231,new Weapon("Sword",20)));
+        e.add(new SpawnableItem(440,340,new Armor("Shield",50)));
+        e.add(new SpawnableItem(300,350,new HealthPotion("H-Pot",10,20)));
+        
+        e.add(new OpaqueEntity(460,195,280,10));
+        
+        Portal three = new Portal(720,175,20,20,new Entity(720,215,20,20),Portal.KILL_ALL_NONBOSS,true);//portal to bossroom(1way)
+        e.add(three);
+        
+        e.add(new NonPlayerCharacter(680,50,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(660,100,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(500,150,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(530,150,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.ARCHER));
+        e.add(new SpawnableItem(700,40,new Weapon("Anti-Anvil",35)));
+        e.add(new SpawnableItem(660,160,new StrengthPotion("S-Pot",1,5)));
+        
+        //BOSSROOM//
+        e.add(new NonPlayerCharacter(600,330,50,50,50,50,200,"Anvil Master",50,200,200,NonPlayerCharacter.BOSS));
+        //win = new MapGate(700,360,20,20,MapGate.KILL_ALL);
+        //e.add(win);
+        //e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.SUBBOSS));
+        //e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.ARCHER));
+        //e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
+        //e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Anvil Master's Minion",2,50,200,NonPlayerCharacter.TANK));       
+        
+        Player = p;
+        npcs = e;
+    }
     @Override
     public void actionPerformed(ActionEvent e) {   
-        //controlButtonAction();
         setInventoryColor();
         setInventoryIcons();
         inventoryRemoveIcons();
-        setStatsText();        
+        setStatsText();  
+        //win.checkIfCanUse(npcs);
         lose();
+        //win();
+        
     }
     
     public static void main(String[] args){

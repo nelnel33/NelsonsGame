@@ -36,6 +36,14 @@ public class MapGate extends Entity{
             }
         }
     }
+    public boolean canOperate(Entity e){
+        if((e.getHitbox().isTouching(this.getHitbox()))&&canUse){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public void operate(Entity e){
         if((e.getHitbox().isTouching(this.getHitbox()))&&canUse){
             setOperation(e);

@@ -3,42 +3,30 @@ package nelsontsui.nelsonsgame.game;
 import java.util.ArrayList;
 
 public class Portal extends Entity{
-    private boolean isTwoWay;
     private Entity subportal;
-    protected boolean isMain;
     private boolean canNpcUse;
-    public static int offsetDistance=5;//must be greater than 1;
+    private int condition;
+    private boolean canPlayerUse;
+    protected boolean isMain;
     
-    
-    //public static int linkerIndex=0;
+    public static int offsetDistance=10;//must be greater than 1;
+    public static int DEFAULT = 100;
+    public static int KILL_ALL_NONBOSS = 200;
     
     public Portal(//to create subportals
             double x,
             double y,
             double width,
             double height,
-            Entity subportal
+            Entity subportal,
+            int condition,
+            boolean isMain
             ){
         super(x,y,width,height);
+        this.isMain = isMain;//for aesthetics.
         this.subportal = subportal;
         this.canNpcUse = false;
-        this.isTwoWay = false;
-        this.isMain = false;
-        
-        //linkerIndex++;
-    }
-    public Portal(//to create mainportals
-            double x,
-            double y,
-            double width,
-            double height,
-            Portal subportal
-            ){
-        super(x,y,width,height);
-        this.subportal = subportal;
-        this.canNpcUse = false;
-        this.isTwoWay = true;
-        this.isMain = true;
+        this.condition = condition;
         
         //linkerIndex++;
     }
@@ -51,57 +39,65 @@ public class Portal extends Entity{
     public boolean canNpcUse(){
         return canNpcUse;
     }
-    public boolean isTwoWay(){
-        return isTwoWay;
+    public int getCondition(){
+        return condition;
+    }
+    public boolean getCanPlayerUse(){
+        return canPlayerUse;
     }
     public void setSubportal(Entity subportal){
         this.subportal = subportal;
     }
-    public void setTwoWay(boolean isTwoWay){
-        this.isTwoWay = isTwoWay;
+    public void setCondition(int condition){
+        this.condition = condition;
     }
-    public ArrayList<Entity> addPortals(ArrayList<Entity> e){
-        e.add(this);
-        e.add(subportal);
-        return e;
+    public void setCanPlayerUse(boolean canPlayerUse){
+        this.canPlayerUse = canPlayerUse;
     }
-    public void teleport(Entity e){
-        if(isTwoWay){
-            if(e.getHitbox().isTouching(this.getHitbox())){
-                if(subportal.getX()<GameDisplay.edgeX/2){
-                    e.setX(subportal.getX()+subportal.getWidth()+offsetDistance);
-                    e.setY(subportal.getY());
-                }
-                else{
-                    e.setX(subportal.getX()-subportal.getWidth()-offsetDistance);
-                    e.setY(subportal.getY());
-                }
-            }
-            /*
-            else if(e.getHitbox().isTouching(subportal.getHitbox())){
-                if(this.getX()<GameDisplay.edgeX/2){
-                    e.setX(this.getX()+this.getWidth()+offsetDistance);
-                    e.setY(subportal.getY());
-                }
-                else{
-                    e.setX(this.getX()-this.getWidth()-offsetDistance);
-                    e.setY(subportal.getY());
-                }
-            }  
-            */
+    public void determineCanPlayerUse(ArrayList<Entity> e){
+        if(condition==DEFAULT){
+            canPlayerUse = true;
         }
-        else if(isTwoWay==false){
-            if(e.getHitbox().isTouching(this.getHitbox())){
-                if(subportal.getX()<GameDisplay.edgeX/2){
-                    e.setX(subportal.getX()+subportal.getWidth()+offsetDistance);
-                    e.setY(subportal.getY());
-                }
-                else{
-                    e.setX(subportal.getX()-subportal.getWidth()-offsetDistance);
-                    e.setY(subportal.getY());
+        else if(condition == KILL_ALL_NONBOSS){
+            checkNpcs(e);
+        }
+        
+    }
+    private void checkNpcs(ArrayList<Entity> e){
+        int npcCount = 0;
+        for(int i=0;i<e.size();i++){
+            if(e.get(i) instanceof NonPlayerCharacter){
+                if(((NonPlayerCharacter)e.get(i)).getCharacterClass()==NonPlayerCharacter.ARCHER
+                        ||((NonPlayerCharacter)e.get(i)).getCharacterClass()==NonPlayerCharacter.SUBBOSS
+                        ||((NonPlayerCharacter)e.get(i)).getCharacterClass()==NonPlayerCharacter.WARRIOR
+                        ||((NonPlayerCharacter)e.get(i)).getCharacterClass()==NonPlayerCharacter.TANK){
+                    canPlayerUse = false;
+                    npcCount++;
                 }
             }
-        }        
-    }   
+        }
+        if(npcCount==0){
+            canPlayerUse = true;
+        }
+        
+    }
+    private void setCoords(Entity e, Entity p){
+                if(e.getHitbox().isTouching(this.getHitbox())){
+                    if(p.getX()<GameDisplay.edgeX/2){
+                        e.setX(p.getX()+p.getWidth()+offsetDistance);
+                        e.setY(p.getY());
+                    }
+                    else{
+                        e.setX(p.getX()-offsetDistance);
+                        e.setY(p.getY());
+                    }
+                }
+            }
+
+    public void teleport(Entity e){
+        if(canPlayerUse){
+            setCoords(e,subportal);
+        } 
+    }
     
 }
