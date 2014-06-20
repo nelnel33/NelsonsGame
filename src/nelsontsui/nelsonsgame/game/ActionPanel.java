@@ -744,6 +744,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         
         graphic.setColor(new Color(63,131,104));//Cyanish Green
         graphic.fill(new Rectangle2D.Double(Player.getX(),Player.getY(),Player.getWidth(),Player.getHeight()));
+        drawHitpointsBar(graphic,Player);
+        
         
         if(!Player.getProjectile().isEmpty()){
             for(int z=0;z<Player.getProjectile().size();z++){
@@ -813,7 +815,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
     }
     
-    public void drawHitpointsBar(Graphics2D g, NonPlayerCharacter d){
+    public void drawHitpointsBar(Graphics2D g, Character d){
         double ratio = d.getHitpoints()/d.getinitHitpoints();
         double hitpointsBarWidth = d.getWidth()*ratio;
         g.setColor(Color.GREEN);

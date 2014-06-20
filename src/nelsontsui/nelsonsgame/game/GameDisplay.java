@@ -540,12 +540,12 @@ public class GameDisplay extends JFrame implements ActionListener{
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"Nelson",200,5);
+        Character p = new Character(0,0,10,10,100,100,300,"Nelson",100,2);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
-        e.add(new SpawnableItem(30,30,new Weapon("Pencil",2)));
-        e.add(new SpawnableItem(30,30,new Armor("Sombrero",10)));
+        e.add(new SpawnableItem(30,30,new Weapon("Pencil",1)));
+        e.add(new SpawnableItem(30,30,new Armor("Sombrero",5)));
         e.add(new SpawnableItem(30,30,new HealthPotion("Gum",3,5)));
         
         
@@ -570,7 +570,7 @@ public class GameDisplay extends JFrame implements ActionListener{
         e.add(new NonPlayerCharacter(50,290,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
         e.add(new NonPlayerCharacter(70,290,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
         e.add(new NonPlayerCharacter(30,310,10,10,50,50,200,"Anvil Master's Minion",2,5,40,NonPlayerCharacter.ARCHER));        
-        e.add(new SpawnableItem(0,380,new Weapon("BigStick",8)));
+        e.add(new SpawnableItem(0,380,new Weapon("BigStick",4)));
         e.add(new SpawnableItem(0,200,new Armor("T-Shirt",30)));
         e.add(new SpawnableItem(30,300,new Arrow("Rocks",50)));
         e.add(new SpawnableItem(100,340,new HealthPotion("Donuts",5,5)));
@@ -591,9 +591,9 @@ public class GameDisplay extends JFrame implements ActionListener{
         e.add(new NonPlayerCharacter(360,330,10,10,50,50,200,"Anvil Master's Minion",2,10,200,NonPlayerCharacter.ARCHER));        
         e.add(new NonPlayerCharacter(240,180,15,15,50,50,300,"Anvil Apprentice",10,50,100,NonPlayerCharacter.SUBBOSS));
         
-        e.add(new SpawnableItem(200,200,new Bow("Slingshot",6)));
-        e.add(new SpawnableItem(450,231,new Weapon("Sword",20)));
-        e.add(new SpawnableItem(440,340,new Armor("Shield",50)));
+        e.add(new SpawnableItem(200,200,new Bow("Slingshot",3)));
+        e.add(new SpawnableItem(450,231,new Weapon("Sword",10)));
+        e.add(new SpawnableItem(440,340,new Armor("Shield",100)));
         e.add(new SpawnableItem(300,350,new HealthPotion("H-Pot",10,20)));
         
         e.add(new OpaqueEntity(460,195,280,10));
@@ -605,7 +605,6 @@ public class GameDisplay extends JFrame implements ActionListener{
         e.add(new NonPlayerCharacter(660,100,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.SUBBOSS));
         e.add(new NonPlayerCharacter(500,150,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.ARCHER));
         e.add(new NonPlayerCharacter(530,150,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.ARCHER));
-        e.add(new SpawnableItem(700,40,new Weapon("Anti-Anvil",35)));
         e.add(new SpawnableItem(660,160,new StrengthPotion("S-Pot",1,5)));
         
         //BOSSROOM//
