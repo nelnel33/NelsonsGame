@@ -38,7 +38,7 @@ public class GameDisplay extends JFrame implements ActionListener{
     private JPanel statsPanel;
     private JPanel inventoryPanel;
     private JPanel controlPanel;
-    private JPanel dialogPanel;
+    private DialogBox dialogPanel;
     
     //Panels in statsPanel
     private JPanel statsLabel;
@@ -91,6 +91,7 @@ public class GameDisplay extends JFrame implements ActionListener{
     
     createBackgroundLayout();    
     check.addActionListener(activePanel);
+    check.addActionListener(dialogPanel);
     
     createStatsLayout();    
     createControlLayout();
@@ -115,10 +116,12 @@ public class GameDisplay extends JFrame implements ActionListener{
     statsPanel = new JPanel();
     inventoryPanel = new JPanel();
     controlPanel = new JPanel();
-    dialogPanel = new JPanel();
+    dialogPanel = new DialogBox(300,150,new Color(197,179,88));
+    
+    activePanel.setDialogPanel(dialogPanel);
     
     border = getInsets();
-    System.out.println(getSize()+","+getWidth()+","+getHeight());
+    //System.out.println(getSize()+","+getWidth()+","+getHeight());
     
     activePanel.setBackground(new Color(228,221,181));
     activePanel.setPreferredSize(new Dimension(740,400));//890,500::1200,800
@@ -518,6 +521,12 @@ public class GameDisplay extends JFrame implements ActionListener{
         
     }
     
+    private void lose(){
+        if(Player.getHitpoints()<=0){
+            System.exit(0);
+        }
+    }    
+    
     private void createMap(){//TODO DELETE METHOD
         ArrayList<Entity> killers = new ArrayList<>();
         killers.add(new NonPlayerCharacter(100,100,20,20,50,50,200,"killer1",10,10,200,NonPlayerCharacter.ARCHER));
@@ -558,6 +567,7 @@ public class GameDisplay extends JFrame implements ActionListener{
         setInventoryIcons();
         inventoryRemoveIcons();
         setStatsText();        
+        lose();
     }
     
     public static void main(String[] args){

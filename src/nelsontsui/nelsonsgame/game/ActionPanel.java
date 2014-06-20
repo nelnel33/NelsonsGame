@@ -34,6 +34,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     private int edgeY;
     
     private InventoryIcon[] inventoryItems = new InventoryIcon[0];//only declared to prevent nullpointerexception
+    private DialogBox dialogPanel;
     
     public static final int hitpointsBarOffset = 6;
     public static final int hitpointsBarHeight = 3;
@@ -65,6 +66,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
     public void setInventoryItems(InventoryIcon[] inventoryItems){
         this.inventoryItems = inventoryItems;
+    }
+    public void setDialogPanel(DialogBox dialogPanel){
+        this.dialogPanel = dialogPanel;
     }
     public void npcMove(){
         for(int i=0;i<npcs.size();i++){
@@ -202,6 +206,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     Player.attack((DamagableEntity)npcs.get(i));
                     System.out.println("npc"+i+" HP:"+((DamagableEntity)npcs.get(i)).getHitpoints());
                         if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
+                            if(npcs.get(i) instanceof NonPlayerCharacter){
+                                dialogPanel.message(((NonPlayerCharacter)npcs.get(i)).getName()+" has been killed");
+                            }
                             npcs.remove(i);
                         }
                         if(Player.getProjectile().isEmpty()){
@@ -230,7 +237,6 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())){
                 if(npcs.get(i) instanceof NonPlayerCharacter){
                     ((NonPlayerCharacter)npcs.get(i)).attack(Player);
-                    //System.out.println("Player HP: "+Player.getHitpoints());
                 }                
             }
         }
@@ -321,6 +327,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     Player.attack((DamagableEntity)npcs.get(i));
                     System.out.println("NPC"+i+" HP: "+((DamagableEntity)npcs.get(i)).getHitpoints());
                         if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
+                            if(npcs.get(i) instanceof NonPlayerCharacter){
+                                dialogPanel.message(((NonPlayerCharacter)npcs.get(i)).getName()+" has been killed");
+                            }
                             npcs.remove(i);
                         }
                     }
@@ -374,6 +383,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())
                         &&Player.inventory.getSize()<Inventory.MAX_SIZE){
                     Player.inventory.pickUpItem(((SpawnableItem)npcs.get(i)).getItems());
+                    dialogPanel.message("You picked up: "+((SpawnableItem)npcs.get(i)).getItems().getQuantity()+" "+((SpawnableItem)npcs.get(i)).getItems().getName()+"s");
                     npcs.remove(i);
                     for(int j=0;j<Player.inventory.items.size();j++){
                     }
@@ -409,6 +419,11 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     }                    
                 }
             }
+        }
+    }
+    public void regenOverTime(){
+        if(Player.getHitpoints()<Player.getinitHitpoints()){
+            Player.heal(1);       
         }
     }
             
@@ -450,19 +465,25 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         int index=100;//Arbitrary number just to check.
         
         for(int i=0;i<Player.inventory.items.size();i++){
-            if(Player.inventory.items.get(i) instanceof Bow){
-                hasBow = true;
-            }
-            if(Player.inventory.items.get(i) instanceof Arrow){
-                hasArrow = true;
-                index = i;
-                break;
+            if(Player.getHasWeapon()){
+                if(Player.inventory.items.get(i) instanceof Bow){
+                    if(Player.weapon.equals(Player.inventory.items.get(i))){
+                        hasBow = true;
+                    }
+                }
+                if(Player.inventory.items.get(i) instanceof Arrow){
+                    hasArrow = true;
+                    index = i;                
+                }
+                if(hasBow&&hasArrow){
+                    break;
+                }
             }
         }
         
         boolean hasWeapon = Player.getHasWeapon()&&hasBow;
         
-        if(Player.canFireNextProjectile()&&hasWeapon&&(hasBow&&index!=100)){
+        if(Player.canFireNextProjectile()&&hasWeapon&&(index!=100)){
             Player.loadProjectile(Player.getDirection());
             Player.inventory.useItem(index,Player);
         }
@@ -484,22 +505,27 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         if(Player.inventory.items.get(i) instanceof UnusableItem){
             if(Player.inventory.items.get(i) instanceof Weapon){
                 if(Player.getHasWeapon()&&(Player.weapon.equals((Weapon)Player.inventory.items.get(i)))){
-                   Player.unequipWeapon((Weapon)Player.inventory.items.get(i)); 
+                   dialogPanel.message("You unequip: "+Player.weapon.getName());
+                   Player.unequipWeapon((Weapon)Player.inventory.items.get(i));                   
                 }
                 else{
                    Player.equipWeapon((Weapon)Player.inventory.items.get(i));  
+                   dialogPanel.message("You equip: "+Player.weapon.getName());
                 }
             }
             if(Player.inventory.items.get(i) instanceof Armor){
                 if(Player.getHasArmor()&&(Player.armor.equals((Armor)Player.inventory.items.get(i)))){
-                   Player.unequipArmor((Armor)Player.inventory.items.get(i)); 
+                   dialogPanel.message("You unequip: "+Player.armor.getName());
+                   Player.unequipArmor((Armor)Player.inventory.items.get(i));                    
                 }
                 else{
-                   Player.equipArmor((Armor)Player.inventory.items.get(i));  
+                   Player.equipArmor((Armor)Player.inventory.items.get(i));
+                   dialogPanel.message("You equip: "+Player.armor.getName());
                 }
             }
         } 
         else {
+            dialogPanel.message("You use: "+Player.inventory.items.get(i).getName());
             Player.inventory.useItem(i,Player);
         }
     }
@@ -507,19 +533,22 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         if(Player.inventory.items.get(i) instanceof UnusableItem){
             if(Player.inventory.items.get(i) instanceof Weapon){
                 if(Player.getHasWeapon()&&(Player.weapon.equals((Weapon)Player.inventory.items.get(i)))){
-                   Player.unequipWeapon((Weapon)Player.inventory.items.get(i)); 
+                   dialogPanel.message("You unequip: "+Player.weapon.getName());
+                   Player.unequipWeapon((Weapon)Player.inventory.items.get(i));
                 }
             }
             else if(Player.inventory.items.get(i) instanceof Armor){
                 if(Player.getHasArmor()&&(Player.armor.equals((Armor)Player.inventory.items.get(i)))){
+                   dialogPanel.message("You unequip: "+Player.armor.getName());
                    Player.unequipArmor((Armor)Player.inventory.items.get(i)); 
                 }
             }
         }        
         
+        dialogPanel.message("You drop: "+Player.inventory.items.get(i).getName());
         
         if(Player.getX()<edgeX/2){
-            SpawnableItem temp = Player.inventory.dropItem(i, Player.getX()+Player.DROP_DISTANCE_X, Player.getY());                    
+            SpawnableItem temp = Player.inventory.dropItem(i, Player.getX()+Player.DROP_DISTANCE_X, Player.getY());  
             npcs.add(temp);
             }
         else{
@@ -535,6 +564,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             //System.out.println("Player HP:"+Player.getHitpoints());
             npcFireProjectile();
         }   
+        if(frameCount%(10*FPS)==0){
+            regenOverTime();
+        }
         if(keyPressed[UP]){
             up();
         }
@@ -549,6 +581,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
         if(keyPressed[ATTACK]){
             attack();
+            //shoot();
             keyPressed[ATTACK] = false;
         }
         if(keyPressed[SHOOT]){

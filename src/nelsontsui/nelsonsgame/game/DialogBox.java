@@ -2,39 +2,51 @@ package nelsontsui.nelsonsgame.game;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.JFrame;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JScrollBar;
-import javax.swing.JViewport;
+import javax.swing.JTextArea;
 
-public class DialogBox extends JPanel{
+public class DialogBox extends JPanel implements ActionListener{
     private ArrayList<String> text;
-    private JScrollPane pane;
-    private JViewport view;
-    public DialogBox(){
-        this.view = new JViewport();
-        this.view.setPreferredSize(new Dimension(this.getPreferredSize().width,this.getPreferredSize().height));
-        pane = new JScrollPane(view,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    private JTextArea textArea;
+    
+    private final static String newline = "\n";
+    
+    public DialogBox(int width, int height, Color color){
+        setLayout(new GridLayout(1,1));
+        setPreferredSize(new Dimension(width,height));
+        
+        textArea = new JTextArea();
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setPreferredSize(new Dimension(width,height));
+        textArea.setBackground(color);
+        
+        JScrollPane scrollPane = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(width,height));   
+
+        //Add Components to this panel.
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridwidth = GridBagConstraints.REMAINDER;
+
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        add(scrollPane, c);
     }
-    
-    public static void main(String[] args){
-        JFrame frame = new JFrame("test");
-        frame.setLayout(null);
-        DialogBox dialogbox = new DialogBox();
-        dialogbox.setBackground(Color.red);
-        dialogbox.setPreferredSize(new Dimension(200,200));
-        dialogbox.setBounds(0,0,200,200);
-        frame.setSize(new Dimension(500,500));
-        frame.add(dialogbox);
-        
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
-        
+    public void message(String s){
+        textArea.append(s+newline);
+    }    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(textArea.getLineCount()>textArea.getRows()){
+            textArea.setRows(textArea.getLineCount());
+        }
+        repaint();
     }
-    
-    
 }
