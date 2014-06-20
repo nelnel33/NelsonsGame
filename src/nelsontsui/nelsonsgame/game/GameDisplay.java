@@ -82,7 +82,7 @@ public class GameDisplay extends JFrame implements ActionListener{
     private JButton heal;
     
     //Ingame Elements/Entities
-    //MapGate win;
+    MapGate win;//TODO: Temporary
     
     public static final int edgeX = 740;
     public static final int edgeY = 400;
@@ -524,9 +524,9 @@ public class GameDisplay extends JFrame implements ActionListener{
         
     }
     private void win(){
-        //if(win.canOperate(Player)){
-        //    dialogPanel.message("You Win!!!!");
-        //}
+        if(win.canOperate(Player)){
+           dialogPanel.message("You Win!!!!");
+        }
         
     }    
     private void lose(){
@@ -540,7 +540,7 @@ public class GameDisplay extends JFrame implements ActionListener{
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,200,"Nelson",100000,500);
+        Character p = new Character(0,0,10,10,100,100,300,"Nelson",200,5);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
@@ -610,12 +610,12 @@ public class GameDisplay extends JFrame implements ActionListener{
         
         //BOSSROOM//
         e.add(new NonPlayerCharacter(600,330,50,50,50,50,200,"Anvil Master",50,200,200,NonPlayerCharacter.BOSS));
-        //win = new MapGate(700,360,20,20,MapGate.KILL_ALL);
-        //e.add(win);
-        //e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.SUBBOSS));
-        //e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.ARCHER));
-        //e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
-        //e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Anvil Master's Minion",2,50,200,NonPlayerCharacter.TANK));       
+        win = new MapGate(700,360,20,20,MapGate.KILL_ALL);
+        e.add(win);
+        e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.BR_SUBBOSS));
+        e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.BR_ARCHER));
+        e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.BR_WARRIOR));
+        e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Anvil Master's Minion",2,50,200,NonPlayerCharacter.BR_TANK));       
         
         Player = p;
         npcs = e;
@@ -626,9 +626,10 @@ public class GameDisplay extends JFrame implements ActionListener{
         setInventoryIcons();
         inventoryRemoveIcons();
         setStatsText();  
-        //win.checkIfCanUse(npcs);
-        lose();
-        //win();
+        
+        lose();        
+        win.checkIfCanUse(activePanel.npcs);        
+        win();
         
     }
     

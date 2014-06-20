@@ -28,8 +28,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     
     //protected Timer check = new Timer(TICK,this);
     
-    Character Player;
-    ArrayList<Entity> npcs = new ArrayList<>();
+    protected Character Player;
+    protected ArrayList<Entity> npcs = new ArrayList<>();
     private int edgeX;
     private int edgeY;
     
@@ -247,7 +247,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             if(e instanceof NonPlayerCharacter){
                 if(((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.ARCHER
                         ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.BOSS
-                        ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.SUBBOSS){
+                        ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.SUBBOSS
+                        ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.BR_ARCHER
+                        ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.BR_SUBBOSS){
                     if(((NonPlayerCharacter)e).getDetectionBox().isTouching(Player.getHitbox())){
                         return true;
                 }    
@@ -768,16 +770,20 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 }               
                 
                 else if(temp instanceof NonPlayerCharacter){
-                    if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.WARRIOR){
+                    if(((((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.WARRIOR)
+                            ||((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BR_WARRIOR)){
                         graphic.setColor(new Color(156,34,34));//dark red
                     }
-                    else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.ARCHER){
+                    else if(((((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.ARCHER)
+                            ||((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BR_ARCHER)){
                         graphic.setColor(new Color(176,176,75));//snakeskin
                     }
-                    else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.TANK){
+                    else if(((((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.TANK)
+                            ||((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BR_TANK)){
                         graphic.setColor(new Color(92,90,19));//camogreen
                     }
-                    else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.SUBBOSS){
+                    else if(((((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.SUBBOSS)
+                            ||((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BR_SUBBOSS)){
                         graphic.setColor(new Color(85,18,105));//dark purple
                     }
                     else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BOSS){

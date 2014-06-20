@@ -19,6 +19,11 @@ public class NonPlayerCharacter extends Character {
     public static final int TANK = 30;
     public static final int SUBBOSS = 40;
     public static final int BOSS = 50;
+    public static final int BR_WARRIOR = 51;
+    public static final int BR_ARCHER = 52;
+    public static final int BR_TANK = 53;
+    public static final int BR_SUBBOSS = 54;
+    
     
     public NonPlayerCharacter(){
         detectionRadius = 30;
