@@ -27,7 +27,6 @@ public class NelsonWatermark extends JPanel{
         graphic.setFont(new Font(Font.SANS_SERIF,Font.BOLD,15));
         graphic.setColor(new Color(184,242,242));//light blue;
         graphic.drawString(web,15,15);
-        graphic.drawString(gamename,865,15);
-        
+        graphic.drawString(gamename,865,15);        
     }
 }
