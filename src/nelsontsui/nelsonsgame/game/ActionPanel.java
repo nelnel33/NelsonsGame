@@ -388,7 +388,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())
                         &&Player.inventory.getSize()<Inventory.MAX_SIZE){
                     Player.inventory.pickUpItem(((SpawnableItem)npcs.get(i)).getItems());
-                    dialogPanel.message("You picked up: "+((SpawnableItem)npcs.get(i)).getItems().getQuantity()+" "+((SpawnableItem)npcs.get(i)).getItems().getName());
+                    dialogPanel.message(Player.getName()+" picked up: "+((SpawnableItem)npcs.get(i)).getItems().getQuantity()+" "+((SpawnableItem)npcs.get(i)).getItems().getName());
                     npcs.remove(i);
                     for(int j=0;j<Player.inventory.items.size();j++){
                     }
@@ -509,27 +509,27 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         if(Player.inventory.items.get(i) instanceof UnusableItem){
             if(Player.inventory.items.get(i) instanceof Weapon){
                 if(Player.getHasWeapon()&&(Player.weapon.equals((Weapon)Player.inventory.items.get(i)))){
-                   dialogPanel.message("You unequip: "+Player.weapon.getName());
+                   dialogPanel.message(Player.getName()+" unequip: "+Player.weapon.getName());
                    Player.unequipWeapon((Weapon)Player.inventory.items.get(i));                   
                 }
                 else{
                    Player.equipWeapon((Weapon)Player.inventory.items.get(i));  
-                   dialogPanel.message("You equip: "+Player.weapon.getName());
+                   dialogPanel.message(Player.getName()+" equip: "+Player.weapon.getName());
                 }
             }
             if(Player.inventory.items.get(i) instanceof Armor){
                 if(Player.getHasArmor()&&(Player.armor.equals((Armor)Player.inventory.items.get(i)))){
-                   dialogPanel.message("You unequip: "+Player.armor.getName());
+                   dialogPanel.message(Player.getName()+" unequip: "+Player.armor.getName());
                    Player.unequipArmor((Armor)Player.inventory.items.get(i));                    
                 }
                 else{
                    Player.equipArmor((Armor)Player.inventory.items.get(i));
-                   dialogPanel.message("You equip: "+Player.armor.getName());
+                   dialogPanel.message(Player.getName()+" equip: "+Player.armor.getName());
                 }
             }
         } 
         else {
-            dialogPanel.message("You use: "+Player.inventory.items.get(i).getName());
+            dialogPanel.message(Player.getName()+" use: "+Player.inventory.items.get(i).getName());
             Player.inventory.useItem(i,Player);
         }
     }
@@ -537,19 +537,19 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         if(Player.inventory.items.get(i) instanceof UnusableItem){
             if(Player.inventory.items.get(i) instanceof Weapon){
                 if(Player.getHasWeapon()&&(Player.weapon.equals((Weapon)Player.inventory.items.get(i)))){
-                   dialogPanel.message("You unequip: "+Player.weapon.getName());
+                   dialogPanel.message(Player.getName()+" unequip: "+Player.weapon.getName());
                    Player.unequipWeapon((Weapon)Player.inventory.items.get(i));
                 }
             }
             else if(Player.inventory.items.get(i) instanceof Armor){
                 if(Player.getHasArmor()&&(Player.armor.equals((Armor)Player.inventory.items.get(i)))){
-                   dialogPanel.message("You unequip: "+Player.armor.getName());
+                   dialogPanel.message(Player.getName()+" unequip: "+Player.armor.getName());
                    Player.unequipArmor((Armor)Player.inventory.items.get(i)); 
                 }
             }
         }        
         
-        dialogPanel.message("You drop: "+Player.inventory.items.get(i).getQuantity()+" "+Player.inventory.items.get(i).getName());
+        dialogPanel.message(Player.getName()+" drop: "+Player.inventory.items.get(i).getQuantity()+" "+Player.inventory.items.get(i).getName());
         
         if(Player.getX()<edgeX/2){
             SpawnableItem temp = Player.inventory.dropItem(i, Player.getX()+Player.DROP_DISTANCE_X, Player.getY());  
@@ -562,6 +562,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         
     }          
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if(frameCount%FPS==0){
             detectForDamage();
@@ -639,6 +640,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         //System.out.println("framecount:"+frameCount);
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_UP){
@@ -738,6 +740,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             keyPressed[DROP] = true;
         }
     }
+    @Override
     public void paintComponent(Graphics g){//TODO: if character=="stringname" then paint component.
         super.paintComponent(g);
         Graphics2D graphic = (Graphics2D)g;

@@ -1,13 +1,8 @@
 package nelsontsui.nelsonsgame.game;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,7 +14,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.BoxLayout;
 import javax.swing.Timer;
 
 public class GameDisplay extends JFrame implements ActionListener{
@@ -81,11 +75,17 @@ public class GameDisplay extends JFrame implements ActionListener{
     private JButton defend;
     private JButton heal;
     
+    //Changable static variables
+    public static final int edgeX = 740;
+    public static final int edgeY = 400;
+    
+    //Watermark
+    NelsonWatermark watermark;    
+    
     //Ingame Elements/Entities
     MapGate win;//TODO: Temporary
     
-    public static final int edgeX = 740;
-    public static final int edgeY = 400;
+   
 
     public GameDisplay(){
     super("Nelson's Game"); 
@@ -95,6 +95,8 @@ public class GameDisplay extends JFrame implements ActionListener{
     createBackgroundLayout();    
     check.addActionListener(activePanel);
     check.addActionListener(dialogPanel);
+    
+    addWatermark();
     
     createStatsLayout();    
     createControlLayout();
@@ -108,10 +110,15 @@ public class GameDisplay extends JFrame implements ActionListener{
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
     }
+    private void addWatermark(){
+        watermark = new NelsonWatermark();
+        watermark.setBounds(0,570,1020,20);
+        add(watermark);
+    }
     
     private void createBackgroundLayout(){
     setLayout(null);
-    setSize(1000,600);
+    setSize(1000,610);
     getContentPane().setBackground(new Color(55,198,164));
     
     activePanel = new ActionPanel(Player,npcs,edgeX,edgeY);
@@ -540,7 +547,7 @@ public class GameDisplay extends JFrame implements ActionListener{
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"Nelson",100,2);
+        Character p = new Character(0,0,10,10,100,100,300,"You",100,2);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
@@ -556,20 +563,20 @@ public class GameDisplay extends JFrame implements ActionListener{
         
         e.add(new OpaqueEntity(150,0,10,360));//right wall of room 1 and room 2; left wall of room 3
         e.add(new OpaqueEntity(0,150,120,10));//bottom wall of room 1
-        e.add(new NonPlayerCharacter(100,0,10,10,50,50,0,"Anvil Master's Minion",2,5,10,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(100,30,10,10,50,50,0,"Anvil Master's Minion",2,5,10,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(30,120,10,10,50,50,0,"Anvil Master's Minion",2,5,10,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(50,120,10,10,50,50,0,"Anvil Master's Minion",2,5,10,NonPlayerCharacter.WARRIOR));        
+        e.add(new NonPlayerCharacter(100,0,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(100,30,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,120,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,120,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));        
         
         e.add(new DamagableEntity(150,362,10,36,2));//breakable entity/door of room 1 to room 2
-        e.add(new NonPlayerCharacter(30,200,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(50,200,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(70,200,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(30,250,10,10,50,50,200,"Anvil Master's Minion",2,5,40,NonPlayerCharacter.ARCHER));
-        e.add(new NonPlayerCharacter(30,290,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(50,290,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(70,290,10,10,50,50,0,"Anvil Master's Minion",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(30,310,10,10,50,50,200,"Anvil Master's Minion",2,5,40,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(30,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(70,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,250,10,10,50,50,200,"Arlpha",2,5,40,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(30,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(70,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,310,10,10,50,50,200,"Arlpha",2,5,40,NonPlayerCharacter.ARCHER));        
         e.add(new SpawnableItem(0,380,new Weapon("BigStick",4)));
         e.add(new SpawnableItem(0,200,new Armor("T-Shirt",30)));
         e.add(new SpawnableItem(30,300,new Arrow("Rocks",50)));
@@ -581,15 +588,15 @@ public class GameDisplay extends JFrame implements ActionListener{
         e.add(new DamagableEntity(280,60,40,40,30));//safespot/obstacle top
         e.add(new DamagableEntity(280,300,40,40,30));//safespot/obstacle bottom
         
-        e.add(new NonPlayerCharacter(240,60,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(240,80,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(360,60,10,10,25,25,0,"Anvil Master's Minion",2,30,200,NonPlayerCharacter.TANK));
-        e.add(new NonPlayerCharacter(360,80,10,10,50,50,200,"Anvil Master's Minion",2,10,200,NonPlayerCharacter.ARCHER));        
-        e.add(new NonPlayerCharacter(240,300,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(240,330,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(360,300,10,10,25,25,0,"Anvil Master's Minion",2,30,200,NonPlayerCharacter.TANK));
-        e.add(new NonPlayerCharacter(360,330,10,10,50,50,200,"Anvil Master's Minion",2,10,200,NonPlayerCharacter.ARCHER));        
-        e.add(new NonPlayerCharacter(240,180,15,15,50,50,300,"Anvil Apprentice",10,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(240,60,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(240,80,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(360,60,10,10,25,25,0,"Therta",2,30,200,NonPlayerCharacter.TANK));
+        e.add(new NonPlayerCharacter(360,80,10,10,50,50,200,"Arlpha",2,10,200,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(240,300,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(240,330,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(360,300,10,10,25,25,0,"Therta",2,30,200,NonPlayerCharacter.TANK));
+        e.add(new NonPlayerCharacter(360,330,10,10,50,50,200,"Arlpha",2,10,200,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(240,180,15,15,50,50,300,"Derlta",10,50,100,NonPlayerCharacter.SUBBOSS));
         
         e.add(new SpawnableItem(200,200,new Bow("Slingshot",3)));
         e.add(new SpawnableItem(450,231,new Weapon("Sword",10)));
@@ -601,20 +608,20 @@ public class GameDisplay extends JFrame implements ActionListener{
         Portal three = new Portal(720,175,20,20,new Entity(720,215,20,20),Portal.KILL_ALL_NONBOSS,true);//portal to bossroom(1way)
         e.add(three);
         
-        e.add(new NonPlayerCharacter(680,50,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.SUBBOSS));
-        e.add(new NonPlayerCharacter(660,100,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.SUBBOSS));
-        e.add(new NonPlayerCharacter(500,150,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.ARCHER));
-        e.add(new NonPlayerCharacter(530,150,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(680,50,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(660,100,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(500,150,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(530,150,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.ARCHER));
         e.add(new SpawnableItem(660,160,new StrengthPotion("S-Pot",1,5)));
         
         //BOSSROOM//
-        e.add(new NonPlayerCharacter(600,330,50,50,50,50,200,"Anvil Master",50,200,200,NonPlayerCharacter.BOSS));
+        e.add(new NonPlayerCharacter(600,330,50,50,50,50,200,"Al-ee Sa-ya-nee Dah Pack-ee",50,200,200,NonPlayerCharacter.BOSS));
         win = new MapGate(700,360,20,20,MapGate.KILL_ALL);
         e.add(win);
-        e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Anvil Knight",15,50,100,NonPlayerCharacter.BR_SUBBOSS));
-        e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"Anvil Master's Minion",5,10,200,NonPlayerCharacter.BR_ARCHER));
-        e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Anvil Master's Minion",4,15,200,NonPlayerCharacter.BR_WARRIOR));
-        e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Anvil Master's Minion",2,50,200,NonPlayerCharacter.BR_TANK));       
+        e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.BR_SUBBOSS));
+        e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.BR_ARCHER));
+        e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.BR_WARRIOR));
+        e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Therta",2,50,200,NonPlayerCharacter.BR_TANK));       
         
         Player = p;
         npcs = e;
