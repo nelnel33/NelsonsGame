@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,8 +13,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import java.awt.Rectangle;
 
 /*
 *NPCS attack once a second
@@ -24,7 +25,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public static final double FPS = 50;
     public static final double TICK = 1000.0/FPS;
     public static final double DELTA = TICK/1000.0;
-    public double frameCount = 0;
+    public long frameCount = 0;
     
     //protected Timer check = new Timer(TICK,this);
     
@@ -740,6 +741,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             keyPressed[DROP] = true;
         }
     }
+    
     @Override
     public void paintComponent(Graphics g){//TODO: if character=="stringname" then paint component.
         super.paintComponent(g);
@@ -809,6 +811,10 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     graphic.setColor(Color.GRAY);//greenish
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }
+                else if(temp instanceof SpawnableItem){
+                    graphic.setColor(new Color(188,101,121));
+                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
+                }
                 else{
                     graphic.setColor(Color.DARK_GRAY);//greenish
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
@@ -831,10 +837,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     d.getX(),d.getHitbox().far.y+hitpointsBarOffset,hitpointsBarWidth,hitpointsBarHeight));
         }
     }
-    
+
     @Override
     public void keyTyped(KeyEvent e) {}
-    
-    
     
 }

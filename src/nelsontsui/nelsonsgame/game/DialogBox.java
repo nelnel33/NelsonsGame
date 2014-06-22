@@ -10,12 +10,15 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 public class DialogBox extends JPanel implements ActionListener{
     private ArrayList<String> text;
     private JTextArea textArea;
+    private boolean hasBeenSelected;
     
-    private final static String newline = "\n";
+    public final static String newline = "\n";
     
     public DialogBox(int width, int height, Color color){
         setLayout(new GridLayout(1,1));
@@ -26,6 +29,16 @@ public class DialogBox extends JPanel implements ActionListener{
         textArea.setLineWrap(true);
         textArea.setPreferredSize(new Dimension(width,height));
         textArea.setBackground(color);
+        textArea.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                hasBeenSelected = true;
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {}
+        });
         
         JScrollPane scrollPane = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(width,height));   
@@ -39,6 +52,12 @@ public class DialogBox extends JPanel implements ActionListener{
         c.weighty = 1.0;
         add(scrollPane, c);
     }
+    public boolean getHasBeenSelected(){
+        return hasBeenSelected;
+    }
+    public void setHasBeenSelected(boolean h){
+        hasBeenSelected = h;
+    }
     public void message(String s){
         textArea.append(s+newline);
     }    
@@ -49,4 +68,7 @@ public class DialogBox extends JPanel implements ActionListener{
         }
         repaint();
     }
+    
+    
+    
 }

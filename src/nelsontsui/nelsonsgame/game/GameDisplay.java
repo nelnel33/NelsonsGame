@@ -1,22 +1,23 @@
 package nelsontsui.nelsonsgame.game;
+import java.awt.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.border.Border;
 
-public class GameDisplay extends JFrame implements ActionListener{
+public class GameDisplay extends JPanel implements ActionListener{ //JFrame to JPanel
     public long frameCount = 0;
     
     private Timer check= new Timer((int)ActionPanel.TICK,this);
@@ -28,7 +29,7 @@ public class GameDisplay extends JFrame implements ActionListener{
     protected ArrayList<Entity> npcs;
     
     //Main Panels
-    private ActionPanel activePanel;
+    protected ActionPanel activePanel;
     private JPanel statsPanel;
     private JPanel inventoryPanel;
     private JPanel controlPanel;
@@ -53,9 +54,12 @@ public class GameDisplay extends JFrame implements ActionListener{
     private JPanel levelDisplay;
     private JLabel levelLabel;
     
+    //buttonPanel(below in the statsPanel; below "Statistics:")
     private JPanel buttonPanel;
     private JButton saveButton;
     private JButton importButton;
+    private JButton toStartMenu;
+    private JButton howTo;
     
     //Panels in inventoryPanel    
     private JPanel inventoryLabel;
@@ -87,8 +91,9 @@ public class GameDisplay extends JFrame implements ActionListener{
     
    
 
-    public GameDisplay(){
-    super("Nelson's Game"); 
+    public GameDisplay(JButton toStartMenu){
+    //super("Nelson's Game"); //JFrame to JPanel
+    this.toStartMenu = toStartMenu;
         
     createMap();
     
@@ -106,9 +111,12 @@ public class GameDisplay extends JFrame implements ActionListener{
     miscButtonAction();
     check.start();
 
-    setResizable(false);
-    setVisible(true);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+    //setResizable(false); //JFrame to JPanel
+    //setVisible(true); //JFrame to JPanel
+    //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //JFrame to JPanel 
+    }
+    public void getFocus(){
+        activePanel.requestFocusInWindow();
     }
     private void addWatermark(){
         watermark = new NelsonWatermark();
@@ -118,8 +126,9 @@ public class GameDisplay extends JFrame implements ActionListener{
     
     private void createBackgroundLayout(){
     setLayout(null);
-    setSize(1000,610);
-    getContentPane().setBackground(new Color(55,198,164));
+    setPreferredSize(new Dimension(1000,610));
+    //getContentPane().  //JFrame to JPanel
+            setBackground(new Color(55,198,164));
     
     activePanel = new ActionPanel(Player,npcs,edgeX,edgeY);
     
@@ -247,20 +256,7 @@ public class GameDisplay extends JFrame implements ActionListener{
         XPDisplay.setBackground(new Color(197,179,88));        
         levelDisplay.setBackground(new Color(197,179,88));
         
-        saveButton = new JButton("Save");
-        importButton = new JButton("Import");
-        saveButton.setBackground(new Color(197,179,88));        
-        saveButton.setOpaque(true);
-        importButton.setBackground(new Color(197,179,88));
-        importButton.setOpaque(true);
-        
-        //saveButton.setBorderPainted(false);
-        
-        buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2,1));
-        buttonPanel.setBackground(new Color(197,179,88));
-        buttonPanel.add(saveButton);
-        buttonPanel.add(importButton);
+        setButtonPanelLayout();
         
         statsPanel.add(statsLabel);
         statsPanel.add(damageDisplay);
@@ -273,6 +269,26 @@ public class GameDisplay extends JFrame implements ActionListener{
         statsPanel.add(totalHitpointsDisplay);
         statsPanel.add(levelDisplay);      
     }
+    private void setButtonPanelLayout(){//Directory Buttons(in the Stats Panel)
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(4,1));
+        buttonPanel.setBackground(new Color(197,179,88));
+        
+        saveButton = new JButton("Save");
+        importButton = new JButton("Import");
+        //toStartMenu = new JButton("Start Menu");
+        howTo = new JButton("Instructions");
+        
+        saveButton.setBackground(new Color(197,179,88));        
+        saveButton.setOpaque(true);
+        importButton.setBackground(new Color(197,179,88));
+        importButton.setOpaque(true);
+        
+        buttonPanel.add(saveButton);
+        buttonPanel.add(importButton);
+        buttonPanel.add(toStartMenu);
+        buttonPanel.add(howTo);
+    }
     private void miscButtonAction(){
         saveButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -284,6 +300,48 @@ public class GameDisplay extends JFrame implements ActionListener{
                 activePanel.requestFocusInWindow();
             }
         });
+        /*
+        toStartMenu.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                activePanel.requestFocusInWindow();
+            }
+        });
+        */
+        howTo.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                activePanel.requestFocusInWindow();
+                dialogPanel.message(
+                        "||General Information||"+DialogBox.newline+
+                        "**Make sure to scroll all the way down!**"+DialogBox.newline+
+                        DialogBox.newline+
+                        "||Controls||" +DialogBox.newline+
+                        "Arrow Keys - Up,Down,Left,Right" +DialogBox.newline+
+                        "A - attack"+DialogBox.newline+
+                        "S - shoot"+DialogBox.newline+
+                        "D - defend"+DialogBox.newline+
+                        "H - heal"+DialogBox.newline+
+                        "Q - inventory selector[backwards]"+DialogBox.newline+
+                        "W - inventory selector[forwards]"+DialogBox.newline+
+                        "E/Mouse 1[Left Click] - use"+DialogBox.newline+
+                        "R/Mouse 2[Right Click - drop"+DialogBox.newline+
+                        DialogBox.newline+
+                        "||Color Identification||"+DialogBox.newline+
+                        "Warrior - red"+DialogBox.newline+
+                        "Archer - light green"+DialogBox.newline+
+                        "Tank - dark green"+DialogBox.newline+
+                        "Sub-Boss - purple"+DialogBox.newline+
+                        "Boss - black"+DialogBox.newline+
+                        "Dark Grey - walls"+DialogBox.newline+
+                        "Grey - doors[damagable walls]"+DialogBox.newline+
+                        "Pink - items"+DialogBox.newline+
+                        "Orange/Blue - main/sub - portals"+DialogBox.newline+
+                        DialogBox.newline+
+                        "||Objective||"+DialogBox.newline+
+                        "Make it to the black circle and you win!"                       
+                        
+                );
+            }
+        });        
     }
     private void setStatsText(){
         damageLabel.setText("<html>Damage:<br><br><html>"+Player.getinitDamage());
@@ -530,6 +588,25 @@ public class GameDisplay extends JFrame implements ActionListener{
     private void createActionLayout(){
         
     }
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {   
+        setInventoryColor();
+        setInventoryIcons();
+        inventoryRemoveIcons();
+        setStatsText();  
+        if(dialogPanel.getHasBeenSelected()){
+            getFocus();
+            dialogPanel.setHasBeenSelected(false);
+        }
+        
+        lose();        
+        win.checkIfCanUse(activePanel.npcs);        
+        win();
+        
+    }
+    
+        
     private void win(){
         if(win.canOperate(Player)){
            dialogPanel.message("You Win!!!!");
@@ -547,7 +624,7 @@ public class GameDisplay extends JFrame implements ActionListener{
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"You",100,2);
+        Character p = new Character(0,0,10,10,100,100,300,"You",10000,100);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
@@ -625,26 +702,5 @@ public class GameDisplay extends JFrame implements ActionListener{
         
         Player = p;
         npcs = e;
-    }
-    @Override
-    public void actionPerformed(ActionEvent e) {   
-        setInventoryColor();
-        setInventoryIcons();
-        inventoryRemoveIcons();
-        setStatsText();  
-        
-        lose();        
-        win.checkIfCanUse(activePanel.npcs);        
-        win();
-        
-    }
-    
-    public static void main(String[] args){
-        GameDisplay game = new GameDisplay();
-    }
-
-   
-
-   
-    
+    }  
 }
