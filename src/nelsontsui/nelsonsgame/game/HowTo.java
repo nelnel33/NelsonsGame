@@ -22,6 +22,7 @@ public class HowTo extends JDialog{
         setVisible(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);        
         pack();
+        setLocationRelativeTo(owner);
     }
     private void showInstructions(){
         howto = new JTextArea(

@@ -1,6 +1,7 @@
 package nelsontsui.nelsonsgame.game;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -28,11 +29,14 @@ public class MainDisplay extends JFrame implements ActionListener{
         super("Nelson's Game");
         
         init();
-        
+
         setVisible(true);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(1000,610));        
         pack();
+        //framePlacement();
+        setLocationRelativeTo(null);
     }
     private void init(){
         play = new JButton("Play Nelson's Game");
@@ -44,6 +48,10 @@ public class MainDisplay extends JFrame implements ActionListener{
         setGameDisplayButtonAction();
         startMenu = new StartMenu(play,howTo,importButton,leveleditor);
         add(startMenu);
+    }
+    private void framePlacement(){
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
     }
     private void removeStartMenu(){
         this.remove(startMenu);

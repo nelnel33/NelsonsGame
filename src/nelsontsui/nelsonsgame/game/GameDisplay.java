@@ -284,10 +284,10 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         importButton.setBackground(new Color(197,179,88));
         importButton.setOpaque(true);
         
-        buttonPanel.add(saveButton);
-        buttonPanel.add(importButton);
         buttonPanel.add(toStartMenu);
         buttonPanel.add(howTo);
+        buttonPanel.add(importButton);
+        buttonPanel.add(saveButton);
     }
     private void miscButtonAction(){
         saveButton.addActionListener(new ActionListener(){
