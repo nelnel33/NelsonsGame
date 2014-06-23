@@ -1,61 +1,103 @@
 package nelsontsui.nelsonsgame.leveleditor;
 
-import nelsontsui.nelsonsgame.game.GameDisplay;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import nelsontsui.nelsonsgame.game.Point;
+import nelsontsui.nelsonsgame.game.*;
 
-public class LevelEditorDisplay extends JFrame{    
+public class LevelEditorDisplay extends JDialog implements ActionListener{   
+    //static decs
     private static final int TOTAL_SELECTORS = 4;
     private static final int TOTAL_DETAILEDSELECTORS = 40;
-    
-    private final int gap = 10;
-    
-    private int panelWidth = GameDisplay.edgeX;
-    private int panelHeight = GameDisplay.edgeY;
-    
-    private String fileName;
-    
-    private JPanel activePanel;
-    
-    private JPanel selectorPanel;
-    private EntityTile[] selectors = new EntityTile[TOTAL_SELECTORS];
-    private JButton save;
-    private JButton importFile;
-    
-    private JPanel detailedSelectorPanelHolder;
-    
-    private JPanel[] detailedSelectorPanel;    
-    private EntityTile[][] detailedSelectors = new EntityTile[TOTAL_SELECTORS][TOTAL_DETAILEDSELECTORS];
-    
-    private JPanel textPanel;
-       
     private static final int PLAYER_CHARACTER = 0;
     private static final int ENTITY = 1;
     private static final int NONPLAYERCHARACTER = 2;
     private static final int ITEM = 3;
+
+    //gap for layout
+    private final int gap = 10;
     
-    public LevelEditorDisplay(){
-       super("Nelson's Game: Level Editor");
+    //what will be read from and written to
+    private ArrayList<Entity> npcs = new ArrayList<>();
+    private nelsontsui.nelsonsgame.game.Character player;
+    
+    //width and height of the map/gameplay panel
+    private int panelWidth = GameDisplay.edgeX;
+    private int panelHeight = GameDisplay.edgeY;
+    
+    //where your cursor is/where your cursor is being dragged to
+    private Point cursor;
+    private Point drag;
+    private DimensionDouble dragArea;
+    
+    //the name of the file that is being written to
+    private String fileName;
+    
+    private EditingPanel editPanel;
+    
+    //bottom right, main selectors
+    private JPanel selectorPanel;
+    private EntityTile[] selectors = new EntityTile[TOTAL_SELECTORS];
+    
+    //misc buttons
+    private JButton save;
+    private JButton importFile;
+    
+    //selectors for detailed selecting
+    private JPanel detailedSelectorPanelHolder;//Placeholder for starting    
+    private JPanel[] detailedSelectorPanel; //index of TOTAL_SELECTORS.   
+    private EntityTile[][] detailedSelectors = new EntityTile[TOTAL_SELECTORS][TOTAL_DETAILEDSELECTORS];
+    
+    //text/name
+    private JPanel textPanel;
+    
+    //timer
+    Timer check = new Timer((int)ActionPanel.TICK,this);
+    
+    public LevelEditorDisplay(JFrame owner){
+       super(owner, "Nelson's Game: Level Editor");
        setLayout(null);
        
-       activePanelInit();
-       selectorPanelInit();  
+       editingPanelInit();  
        textPanel();
-       detailedSelectorPanelHolderInit();
-       
+       selectorPanelInit();
+       detailedSelectorPanelHolderInit();       
        selectorLayout();
+       
+       check.start();
        
        setSize(gap+panelWidth+gap+detailedSelectorPanelHolder.getWidth()+gap,
                gap+panelHeight+gap+selectorPanel.getHeight()+gap+gap+gap);
        setResizable(false);
        setVisible(true);
-       setDefaultCloseOperation(EXIT_ON_CLOSE);   
+       setDefaultCloseOperation(DISPOSE_ON_CLOSE);   
+    }
+    private void editingPanelInit(){
+        cursor = new Point(0.0,0.0);
+        drag = new Point(0.0,0.0);
+        dragArea = new DimensionDouble(0.0,0.0);
+        editPanel = new EditingPanel(cursor,drag,dragArea);
+        editPanel.setBorder(GameDisplay.blackborder);
+        editPanel.setSize(new Dimension(panelWidth,panelHeight));        
+        editPanel.setBounds(gap,gap,panelWidth,panelHeight);
+        editPanel.setBackground(Color.white);
+        
+        add(editPanel);
     }
     private void selectorLayout(){
         initSelectors();
@@ -78,28 +120,20 @@ public class LevelEditorDisplay extends JFrame{
     private void textPanel(){
         textPanel = new JPanel();
         textPanel.setBorder(GameDisplay.blackborder);
-        textPanel.add(new JLabel("<html><br><b>Nelson's Game:<b><br><html>",SwingConstants.CENTER));
+        textPanel.add(new JLabel("<html><b>Nelson's Game: <b><html>",SwingConstants.CENTER));
         textPanel.add(new JLabel("<html><b>Level Editor<b><html>",SwingConstants.CENTER));
-        textPanel.setBounds(gap+600+gap,gap+panelHeight+gap,130,EntityTile.size);
+        textPanel.setPreferredSize(new Dimension(180,EntityTile.size));
+        textPanel.setBounds(gap,gap+panelHeight+gap,180,EntityTile.size);
         textPanel.setBackground(Color.ORANGE);
         
         add(textPanel);
-    }
-    private void activePanelInit(){
-        activePanel = new JPanel();
-        activePanel.setBorder(GameDisplay.blackborder);
-        activePanel.setSize(new Dimension(panelWidth,panelHeight));        
-        activePanel.setBounds(gap,gap,panelWidth,panelHeight);
-        activePanel.setBackground(Color.white);
-        
-        add(activePanel);
     }
     private void selectorPanelInit(){
         selectorPanel = new JPanel();
         selectorPanel.setBorder(GameDisplay.blackborder);
         selectorPanel.setLayout(new GridLayout(1,5,2,2));        
         selectorPanel.setSize(new Dimension(EntityTile.size*5,EntityTile.size));        
-        selectorPanel.setBounds(gap,gap+panelHeight+gap,EntityTile.size*6,EntityTile.size);        
+        selectorPanel.setBounds(gap+textPanel.getPreferredSize().width+gap,gap+panelHeight+gap,EntityTile.size*6,EntityTile.size);        
         selectorPanel.setBackground(Color.BLACK);
         
         add(selectorPanel);
@@ -108,12 +142,22 @@ public class LevelEditorDisplay extends JFrame{
         detailedSelectorPanelHolder = new JPanel();
         //detailedSelectorPanel.setPreferredSize(new GridLayout)
         detailedSelectorPanelHolder.setBorder(GameDisplay.blackborder);        
-        detailedSelectorPanelHolder.setBounds(gap+gap+panelWidth,gap,250,510);
+        detailedSelectorPanelHolder.setBounds(gap+gap+panelWidth,gap,250,460);
         detailedSelectorPanelHolder.setBackground(Color.BLACK);
         add(detailedSelectorPanelHolder);
     }
     public static void main(String[] args){
-        LevelEditorDisplay c = new LevelEditorDisplay();
+        LevelEditorDisplay c = new LevelEditorDisplay(new JFrame());
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        selectors[PLAYER_CHARACTER].canToggle(selectors);
+        selectors[ENTITY].canToggle(selectors);
+        selectors[NONPLAYERCHARACTER].canToggle(selectors);
+        selectors[ITEM].canToggle(selectors);
+        
+        System.out.println(cursor.getX());
     }
     
 }

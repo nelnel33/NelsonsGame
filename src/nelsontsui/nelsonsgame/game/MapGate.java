@@ -32,8 +32,18 @@ public class MapGate extends Entity{
             for(int i=0;i<e.size();i++){
                 if(e.get(i) instanceof NonPlayerCharacter){
                     canUse = false;
+                    return;
                 }
             }
+            canUse=true;
+        }
+    }
+    public boolean canOperate(Entity e){
+        if((e.getHitbox().isTouching(this.getHitbox()))&&canUse){
+            return true;
+        }
+        else{
+            return false;
         }
     }
     public void operate(Entity e){

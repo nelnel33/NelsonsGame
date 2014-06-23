@@ -11,8 +11,12 @@ public class HealthPotion extends Potion{
     }
     @Override
     public void ability(Character e){
-    if(e.getHitpoints()+super.getStrength()<=e.getinitHitpoints()){
-        e.heal(super.getStrength());
+        if(e.getHitpoints()+super.getStrength()<=e.getinitHitpoints()+e.getArmorHitpoints()){
+            e.heal(super.getStrength());
         }
+        else{
+            if(super.getStrength()>=e.getinitHitpoints()+e.getArmorHitpoints()-e.getHitpoints())
+                e.heal((e.getinitHitpoints()+e.getArmorHitpoints())-e.getHitpoints());
+            }
     }
 }

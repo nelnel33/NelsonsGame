@@ -1,28 +1,23 @@
 package nelsontsui.nelsonsgame.game;
+import java.awt.*;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import javax.swing.BoxLayout;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.border.Border;
 
-public class GameDisplay extends JFrame implements ActionListener{
+public class GameDisplay extends JPanel implements ActionListener{ //JFrame to JPanel
     public long frameCount = 0;
     
     private Timer check= new Timer((int)ActionPanel.TICK,this);
@@ -34,11 +29,11 @@ public class GameDisplay extends JFrame implements ActionListener{
     protected ArrayList<Entity> npcs;
     
     //Main Panels
-    private ActionPanel activePanel;
+    protected ActionPanel activePanel;
     private JPanel statsPanel;
     private JPanel inventoryPanel;
     private JPanel controlPanel;
-    private JPanel dialogPanel;
+    private DialogBox dialogPanel;
     
     //Panels in statsPanel
     private JPanel statsLabel;
@@ -59,9 +54,12 @@ public class GameDisplay extends JFrame implements ActionListener{
     private JPanel levelDisplay;
     private JLabel levelLabel;
     
+    //buttonPanel(below in the statsPanel; below "Statistics:")
     private JPanel buttonPanel;
     private JButton saveButton;
     private JButton importButton;
+    private JButton toStartMenu;
+    private JButton howTo;
     
     //Panels in inventoryPanel    
     private JPanel inventoryLabel;
@@ -81,16 +79,29 @@ public class GameDisplay extends JFrame implements ActionListener{
     private JButton defend;
     private JButton heal;
     
+    //Changable static variables
     public static final int edgeX = 740;
     public static final int edgeY = 400;
+    
+    //Watermark
+    NelsonWatermark watermark;    
+    
+    //Ingame Elements/Entities
+    MapGate win;//TODO: Temporary
+    
+   
 
-    public GameDisplay(){
-    super("Nelson's Game"); 
+    public GameDisplay(JButton toStartMenu){
+    //super("Nelson's Game"); //JFrame to JPanel
+    this.toStartMenu = toStartMenu;
         
     createMap();
     
     createBackgroundLayout();    
     check.addActionListener(activePanel);
+    check.addActionListener(dialogPanel);
+    
+    addWatermark();
     
     createStatsLayout();    
     createControlLayout();
@@ -100,25 +111,36 @@ public class GameDisplay extends JFrame implements ActionListener{
     miscButtonAction();
     check.start();
 
-    setResizable(false);
-    setVisible(true);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+    //setResizable(false); //JFrame to JPanel
+    //setVisible(true); //JFrame to JPanel
+    //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //JFrame to JPanel 
+    }
+    public void getFocus(){
+        activePanel.requestFocusInWindow();
+    }
+    private void addWatermark(){
+        watermark = new NelsonWatermark();
+        watermark.setBounds(0,570,1020,20);
+        add(watermark);
     }
     
     private void createBackgroundLayout(){
     setLayout(null);
-    setSize(1000,600);
-    getContentPane().setBackground(new Color(55,198,164));
+    setPreferredSize(new Dimension(1000,610));
+    //getContentPane().  //JFrame to JPanel
+            setBackground(new Color(55,198,164));
     
     activePanel = new ActionPanel(Player,npcs,edgeX,edgeY);
     
     statsPanel = new JPanel();
     inventoryPanel = new JPanel();
     controlPanel = new JPanel();
-    dialogPanel = new JPanel();
+    dialogPanel = new DialogBox(300,150,new Color(197,179,88));
+    
+    activePanel.setDialogPanel(dialogPanel);
     
     border = getInsets();
-    System.out.println(getSize()+","+getWidth()+","+getHeight());
+    //System.out.println(getSize()+","+getWidth()+","+getHeight());
     
     activePanel.setBackground(new Color(228,221,181));
     activePanel.setPreferredSize(new Dimension(740,400));//890,500::1200,800
@@ -234,20 +256,7 @@ public class GameDisplay extends JFrame implements ActionListener{
         XPDisplay.setBackground(new Color(197,179,88));        
         levelDisplay.setBackground(new Color(197,179,88));
         
-        saveButton = new JButton("Save");
-        importButton = new JButton("Import");
-        saveButton.setBackground(new Color(197,179,88));        
-        saveButton.setOpaque(true);
-        importButton.setBackground(new Color(197,179,88));
-        importButton.setOpaque(true);
-        
-        //saveButton.setBorderPainted(false);
-        
-        buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2,1));
-        buttonPanel.setBackground(new Color(197,179,88));
-        buttonPanel.add(saveButton);
-        buttonPanel.add(importButton);
+        setButtonPanelLayout();
         
         statsPanel.add(statsLabel);
         statsPanel.add(damageDisplay);
@@ -260,6 +269,26 @@ public class GameDisplay extends JFrame implements ActionListener{
         statsPanel.add(totalHitpointsDisplay);
         statsPanel.add(levelDisplay);      
     }
+    private void setButtonPanelLayout(){//Directory Buttons(in the Stats Panel)
+        buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(4,1));
+        buttonPanel.setBackground(new Color(197,179,88));
+        
+        saveButton = new JButton("Save");
+        importButton = new JButton("Import");
+        //toStartMenu = new JButton("Start Menu");
+        howTo = new JButton("Instructions");
+        
+        saveButton.setBackground(new Color(197,179,88));        
+        saveButton.setOpaque(true);
+        importButton.setBackground(new Color(197,179,88));
+        importButton.setOpaque(true);
+        
+        buttonPanel.add(toStartMenu);
+        buttonPanel.add(howTo);
+        buttonPanel.add(importButton);
+        buttonPanel.add(saveButton);
+    }
     private void miscButtonAction(){
         saveButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -271,6 +300,48 @@ public class GameDisplay extends JFrame implements ActionListener{
                 activePanel.requestFocusInWindow();
             }
         });
+        /*
+        toStartMenu.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                activePanel.requestFocusInWindow();
+            }
+        });
+        */
+        howTo.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                activePanel.requestFocusInWindow();
+                dialogPanel.message(
+                        "||General Information||"+DialogBox.newline+
+                        "**Make sure to scroll all the way down!**"+DialogBox.newline+
+                        DialogBox.newline+
+                        "||Controls||" +DialogBox.newline+
+                        "Arrow Keys - Up,Down,Left,Right" +DialogBox.newline+
+                        "A - attack"+DialogBox.newline+
+                        "S - shoot"+DialogBox.newline+
+                        "D - defend"+DialogBox.newline+
+                        "H - heal"+DialogBox.newline+
+                        "Q - inventory selector[backwards]"+DialogBox.newline+
+                        "W - inventory selector[forwards]"+DialogBox.newline+
+                        "E/Mouse 1[Left Click] - use"+DialogBox.newline+
+                        "R/Mouse 2[Right Click - drop"+DialogBox.newline+
+                        DialogBox.newline+
+                        "||Color Identification||"+DialogBox.newline+
+                        "Warrior - red"+DialogBox.newline+
+                        "Archer - light green"+DialogBox.newline+
+                        "Tank - dark green"+DialogBox.newline+
+                        "Sub-Boss - purple"+DialogBox.newline+
+                        "Boss - black"+DialogBox.newline+
+                        "Dark Grey - walls"+DialogBox.newline+
+                        "Grey - doors[damagable walls]"+DialogBox.newline+
+                        "Pink - items"+DialogBox.newline+
+                        "Orange/Blue - main/sub - portals"+DialogBox.newline+
+                        DialogBox.newline+
+                        "||Objective||"+DialogBox.newline+
+                        "Make it to the black circle and you win!"                       
+                        
+                );
+            }
+        });        
     }
     private void setStatsText(){
         damageLabel.setText("<html>Damage:<br><br><html>"+Player.getinitDamage());
@@ -518,6 +589,7 @@ public class GameDisplay extends JFrame implements ActionListener{
         
     }
     
+<<<<<<< HEAD
     private void lose(){
         if(Player.getHitpoints()<=0){
             System.exit(0);
@@ -557,22 +629,128 @@ public class GameDisplay extends JFrame implements ActionListener{
         Player = achar;
         npcs = killers;
     } 
+=======
+>>>>>>> FETCH_HEAD
     @Override
     public void actionPerformed(ActionEvent e) {   
-        //controlButtonAction();
         setInventoryColor();
         setInventoryIcons();
         inventoryRemoveIcons();
         setStatsText();  
+<<<<<<< HEAD
         lose();
     }
     
     public static void main(String[] args){
         GameDisplay game = new GameDisplay();
+=======
+        if(dialogPanel.getHasBeenSelected()){
+            getFocus();
+            dialogPanel.setHasBeenSelected(false);
+        }
+        
+        lose();        
+        win.checkIfCanUse(activePanel.npcs);        
+        win();
+        
+>>>>>>> FETCH_HEAD
     }
-
-   
-
-   
     
+        
+    private void win(){
+        if(win.canOperate(Player)){
+           dialogPanel.message("You Win!!!!");
+        }
+        
+    }    
+    private void lose(){
+        if(Player.getHitpoints()<=0){
+            dialogPanel.message("You Lose.");
+            check.stop();
+        }
+    }        
+    private void createMap(){
+        createExampleMap();
+    } 
+    private void createExampleMap(){
+        ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
+        Character p = new Character(0,0,10,10,100,100,300,"You",10000,100);
+        
+        e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
+        e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
+        e.add(new SpawnableItem(30,30,new Weapon("Pencil",1)));
+        e.add(new SpawnableItem(30,30,new Armor("Sombrero",5)));
+        e.add(new SpawnableItem(30,30,new HealthPotion("Gum",3,5)));
+        
+        
+        Portal one = new Portal(30,50,20,20,new Entity(80,50,20,20),Portal.DEFAULT,true);//portal from spawnroom to room1  
+        Portal two = new Portal(80,50,20,20,new Entity(30,50,20,20),Portal.DEFAULT,false);//portal from room1 to spawnroom
+        e.add(one);
+        e.add(two);
+        
+        e.add(new OpaqueEntity(150,0,10,360));//right wall of room 1 and room 2; left wall of room 3
+        e.add(new OpaqueEntity(0,150,120,10));//bottom wall of room 1
+        e.add(new NonPlayerCharacter(100,0,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(100,30,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,120,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,120,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));        
+        
+        e.add(new DamagableEntity(150,362,10,36,2));//breakable entity/door of room 1 to room 2
+        e.add(new NonPlayerCharacter(30,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(70,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,250,10,10,50,50,200,"Arlpha",2,5,40,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(30,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(70,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,310,10,10,50,50,200,"Arlpha",2,5,40,NonPlayerCharacter.ARCHER));        
+        e.add(new SpawnableItem(0,380,new Weapon("BigStick",4)));
+        e.add(new SpawnableItem(0,200,new Armor("T-Shirt",30)));
+        e.add(new SpawnableItem(30,300,new Arrow("Rocks",50)));
+        e.add(new SpawnableItem(100,340,new HealthPotion("Donuts",5,5)));
+        
+        e.add(new DamagableEntity(450,2,10,36,2));//breakable entity/door of room 2 to room 3
+        e.add(new OpaqueEntity(450,40,10,400));//right wall of room 2; left wall of room 3 and 4
+        e.add(new OpaqueEntity(280,180,40,40));//safespot/obstacle middle
+        e.add(new DamagableEntity(280,60,40,40,30));//safespot/obstacle top
+        e.add(new DamagableEntity(280,300,40,40,30));//safespot/obstacle bottom
+        
+        e.add(new NonPlayerCharacter(240,60,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(240,80,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(360,60,10,10,25,25,0,"Therta",2,30,200,NonPlayerCharacter.TANK));
+        e.add(new NonPlayerCharacter(360,80,10,10,50,50,200,"Arlpha",2,10,200,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(240,300,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(240,330,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(360,300,10,10,25,25,0,"Therta",2,30,200,NonPlayerCharacter.TANK));
+        e.add(new NonPlayerCharacter(360,330,10,10,50,50,200,"Arlpha",2,10,200,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(240,180,15,15,50,50,300,"Derlta",10,50,100,NonPlayerCharacter.SUBBOSS));
+        
+        e.add(new SpawnableItem(200,200,new Bow("Slingshot",3)));
+        e.add(new SpawnableItem(450,231,new Weapon("Sword",10)));
+        e.add(new SpawnableItem(440,340,new Armor("Shield",100)));
+        e.add(new SpawnableItem(300,350,new HealthPotion("H-Pot",10,20)));
+        
+        e.add(new OpaqueEntity(460,195,280,10));
+        
+        Portal three = new Portal(720,175,20,20,new Entity(720,215,20,20),Portal.KILL_ALL_NONBOSS,true);//portal to bossroom(1way)
+        e.add(three);
+        
+        e.add(new NonPlayerCharacter(680,50,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(660,100,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(500,150,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(530,150,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.ARCHER));
+        e.add(new SpawnableItem(660,160,new StrengthPotion("S-Pot",1,5)));
+        
+        //BOSSROOM//
+        e.add(new NonPlayerCharacter(600,330,50,50,50,50,200,"Al-ee Sa-ya-nee Dah Pack-ee",50,200,200,NonPlayerCharacter.BOSS));
+        win = new MapGate(700,360,20,20,MapGate.KILL_ALL);
+        e.add(win);
+        e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.BR_SUBBOSS));
+        e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.BR_ARCHER));
+        e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.BR_WARRIOR));
+        e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Therta",2,50,200,NonPlayerCharacter.BR_TANK));       
+        
+        Player = p;
+        npcs = e;
+    }  
 }

@@ -1,5 +1,5 @@
 package nelsontsui.nelsonsgame.leveleditor;
-import nelsontsui.nelsonsgame.game.GameDisplay;
+import nelsontsui.nelsonsgame.game.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -12,17 +12,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+
 public class EntityTile extends JPanel implements MouseListener{
     protected boolean clicked = false;
     private boolean canToggle = true;
     private String entityName;
     
-    public static final int size = 100;//size*size = dimension of button
+    public static final int size = 50;//size*size = dimension of button
     
     public EntityTile(String entityName){           
         this.entityName = entityName;
         this.setBorder(GameDisplay.blackborder);
-        this.setPreferredSize(new Dimension(50,50));
+        this.setPreferredSize(new Dimension(size,size));
         this.setBackground(Color.WHITE);        
         this.setLayout(new GridBagLayout());//GridBagLayout default settings to center text;
         GridBagConstraints c = new GridBagConstraints();        
@@ -42,12 +43,11 @@ public class EntityTile extends JPanel implements MouseListener{
         for(int i=0;i<e.length;i++){
             if(e[i].clicked==true&&!this.equals(e)){
                 canToggle = false;
-                break;
+                return;
             }
-            else{
-                canToggle = true;
-            }
+            
         }
+        canToggle = true;
     }
     
     @Override
