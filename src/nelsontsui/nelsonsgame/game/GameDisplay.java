@@ -291,11 +291,13 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     }
     private void miscButtonAction(){
         saveButton.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.requestFocusInWindow();
             }
         });
         importButton.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.requestFocusInWindow();
             }
@@ -308,6 +310,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         });
         */
         howTo.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.requestFocusInWindow();
                 dialogPanel.message(
@@ -432,48 +435,56 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     }
     private void controlButtonAction(){
         up.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.up();
                 activePanel.requestFocusInWindow();
             }
         });
         down.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.down();
                 activePanel.requestFocusInWindow();
             }
         });;
         left.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.left();
                 activePanel.requestFocusInWindow();
             }
         });
         right.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.right();
                 activePanel.requestFocusInWindow();
             }
         });
         attack.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.attack();
                 activePanel.requestFocusInWindow();
             }
         });
         shoot.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.shoot();
                 activePanel.requestFocusInWindow();
             }
         });
         defend.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.defend();
                 activePanel.requestFocusInWindow();
             }
         });
         heal.addActionListener(new ActionListener(){
+            @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.heal();
                 activePanel.requestFocusInWindow();
@@ -588,30 +599,27 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     private void createActionLayout(){
         
     }
-    
     @Override
     public void actionPerformed(ActionEvent e) {   
         setInventoryColor();
         setInventoryIcons();
         inventoryRemoveIcons();
-        setStatsText();  
+        setStatsText();        
         if(dialogPanel.getHasBeenSelected()){
             getFocus();
-            dialogPanel.setHasBeenSelected(false);
-        }
-        
+           dialogPanel.setHasBeenSelected(false);
+           }
+         
         lose();        
         win.checkIfCanUse(activePanel.npcs);        
         win();
         
-    }
-    
+    }   
         
     private void win(){
         if(win.canOperate(Player)){
            dialogPanel.message("You Win!!!!");
-        }
-        
+        }        
     }    
     private void lose(){
         if(Player.getHitpoints()<=0){
