@@ -41,14 +41,22 @@ public class LevelEditorDisplay extends JDialog implements ActionListener{
     private int panelHeight = GameDisplay.edgeY;
     
     //where your cursor is/where your cursor is being dragged to
-    private Point cursor;
-    private Point drag;
-    private DimensionDouble dragArea;
+    private Point cursor;//where your cursor is
+    private Point dragStart;//point where drag started
+    private Point dragEnd;//point where drag ends
+    private DimensionDouble dragArea;//draged Area
+    
+    
+    //bottom middle panel(coords for cursor,drag,and dragarea)
+    private JPanel pointPanel;
+    private JLabel cursorLabel;
+    private JLabel dragLabel;
+    private JLabel dragAreaLabel;
     
     //the name of the file that is being written to
     private String fileName;
     
-    private EditingPanel editPanel;
+    private EditingPanel editPanel;   
     
     //bottom right, main selectors
     private JPanel selectorPanel;
@@ -75,10 +83,12 @@ public class LevelEditorDisplay extends JDialog implements ActionListener{
        
        editingPanelInit();  
        textPanel();
+       pointPanelInit();
        selectorPanelInit();
        detailedSelectorPanelHolderInit();       
        selectorLayout();
        
+       check.addActionListener(editPanel);
        check.start();
        
        setSize(gap+panelWidth+gap+detailedSelectorPanelHolder.getWidth()+gap,
@@ -89,9 +99,9 @@ public class LevelEditorDisplay extends JDialog implements ActionListener{
     }
     private void editingPanelInit(){
         cursor = new Point(0.0,0.0);
-        drag = new Point(0.0,0.0);
+        dragStart = new Point(0.0,0.0);
         dragArea = new DimensionDouble(0.0,0.0);
-        editPanel = new EditingPanel(cursor,drag,dragArea);
+        editPanel = new EditingPanel(cursor,dragStart,dragEnd,dragArea);//lookforthis
         editPanel.setBorder(GameDisplay.blackborder);
         editPanel.setSize(new Dimension(panelWidth,panelHeight));        
         editPanel.setBounds(gap,gap,panelWidth,panelHeight);
@@ -133,7 +143,8 @@ public class LevelEditorDisplay extends JDialog implements ActionListener{
         selectorPanel.setBorder(GameDisplay.blackborder);
         selectorPanel.setLayout(new GridLayout(1,5,2,2));        
         selectorPanel.setSize(new Dimension(EntityTile.size*5,EntityTile.size));        
-        selectorPanel.setBounds(gap+textPanel.getPreferredSize().width+gap,gap+panelHeight+gap,EntityTile.size*6,EntityTile.size);        
+        selectorPanel.setBounds(gap+textPanel.getPreferredSize().width+gap+pointPanel.getPreferredSize().width+gap,
+                gap+panelHeight+gap,EntityTile.size*6,EntityTile.size);        
         selectorPanel.setBackground(Color.BLACK);
         
         add(selectorPanel);
@@ -146,10 +157,24 @@ public class LevelEditorDisplay extends JDialog implements ActionListener{
         detailedSelectorPanelHolder.setBackground(Color.BLACK);
         add(detailedSelectorPanelHolder);
     }
-    public static void main(String[] args){
-        LevelEditorDisplay c = new LevelEditorDisplay(new JFrame());
+    private void pointPanelInit(){
+        pointPanel = new JPanel();
+        cursorLabel = new JLabel("Cursor: ("+cursor.getX()+","+cursor.getY()+")",SwingConstants.CENTER);
+        dragLabel = new JLabel("Entity Location: ",SwingConstants.CENTER);
+        dragAreaLabel = new JLabel("Width & Height of Entity: ",SwingConstants.CENTER);
+        pointPanel.setLayout(new GridLayout(4,1));
+        
+        pointPanel.add(new JLabel("<html><i>Locations & Coordinates<i><html>",SwingConstants.CENTER));
+        pointPanel.add(cursorLabel);
+        pointPanel.add(dragLabel);
+        pointPanel.add(dragAreaLabel);
+        pointPanel.setBackground(Color.gray);
+        
+        pointPanel.setPreferredSize(new Dimension(240,EntityTile.size));
+        pointPanel.setBounds(gap+textPanel.getWidth()+gap,gap+panelHeight+gap,pointPanel.getPreferredSize().width ,EntityTile.size);
+        add(pointPanel);
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         selectors[PLAYER_CHARACTER].canToggle(selectors);
@@ -157,7 +182,20 @@ public class LevelEditorDisplay extends JDialog implements ActionListener{
         selectors[NONPLAYERCHARACTER].canToggle(selectors);
         selectors[ITEM].canToggle(selectors);
         
-        System.out.println(cursor.getX());
+        cursorLabel.setText("Cursor: ("+cursor.getX()+","+cursor.getY()+")");
+        
+        dragStart = editPanel.getDragStart();
+        dragLabel.setText("Entity Location: ("+dragStart.getX()+","+dragStart.getY()+")");
+        dragArea = editPanel.getDragArea();
+        dragAreaLabel.setText("Dimension of Entity: ("+dragArea.getWidth()+","+dragArea.getHeight()+")");
+        
+        
+        //System.out.println(cursor.getX());
+        repaint();
     }
+    public static void main(String[] args){
+        LevelEditorDisplay c = new LevelEditorDisplay(new JFrame());
+    }
+
     
 }
