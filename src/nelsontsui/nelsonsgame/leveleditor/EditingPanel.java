@@ -76,10 +76,10 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     public void mouseDragged(MouseEvent e) {
         if(SwingUtilities.isLeftMouseButton(e)){
             dragStart = new Point(e.getX(),e.getY());
-            //dragEnd = new Point(cursor.getX(),cursor.getY());
+            dragEnd = new Point(cursor.getX(),cursor.getY());
             dragArea = new DimensionDouble(Math.abs(e.getX()-cursor.getX()),Math.abs(e.getY()-cursor.getY()));
             starts.add(dragStart);
-            //ends.add(dragEnd);
+            ends.add(dragEnd);
             dimensions.add(dragArea);    
             //hasBeenReleased = true;        
             //setPointsAndCheck();
@@ -99,8 +99,8 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void mouseReleased(MouseEvent e) {    
         if(SwingUtilities.isLeftMouseButton(e)){
-            dragEnd = new Point(cursor.getX(),cursor.getY());
-            ends.add(dragEnd);
+           // dragEnd = new Point(cursor.getX(),cursor.getY());
+           // ends.add(dragEnd);
         }
         if(SwingUtilities.isRightMouseButton(e)){
             
