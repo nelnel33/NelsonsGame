@@ -39,9 +39,13 @@ public class EntityTile extends JPanel implements MouseListener{
     public void setEntityName(String entityName){
         this.entityName = entityName;
     }
+    public boolean getClicked(){
+        return clicked;
+    }
     public void canToggle(EntityTile[] e){
         for(int i=0;i<e.length;i++){
-            if(e[i].clicked==true&&!this.equals(e)){
+            if(e[i]==null){}
+            else if(e[i].clicked==true&&!this.equals(e)){
                 canToggle = false;
                 return;
             }

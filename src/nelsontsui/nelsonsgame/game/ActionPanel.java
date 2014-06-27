@@ -428,6 +428,19 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    public void checkTalkableGates(){
+        if(!npcs.isEmpty()){
+            for(int i=0;i<npcs.size();i++){
+                if(npcs.get(i) instanceof TalkableGate){
+                    TalkableGate t = (TalkableGate)npcs.get(i);          
+                    if(t.canOperate(Player)&&(t.getNumberOfRepeats()>0)){
+                        dialogPanel.message(t.getSpeech());                        
+                        t.decrementRepeats();                              
+                    }
+                }
+            }
+        }
+    }
     public void regenOverTime(){
         if(Player.getHitpoints()<Player.getinitHitpoints()){
             Player.heal(1);       
@@ -628,6 +641,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }               
         checkPortals();
+        checkTalkableGates();
         npcProjectileInflictDamage(); 
         checkForItems();
         checkForInventory();
@@ -770,6 +784,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                         graphic.setColor(new Color(43,127,223));//Blue
                     }
                     graphic.fill(new Ellipse2D.Double(npcs.get(i).getX(),npcs.get(i).getY(),npcs.get(i).getWidth(),npcs.get(i).getHeight()));
+                }
+                else if(temp instanceof TalkableGate){
+                    graphic.draw(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }
                 else if(temp instanceof MapGate){
                     graphic.setColor(Color.black);

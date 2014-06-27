@@ -632,14 +632,13 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"You",150,2);
+        Character p = new Character(0,0,10,10,100,100,300,"You",15000,200);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
         e.add(new SpawnableItem(30,30,new Weapon("Pencil",1)));
         e.add(new SpawnableItem(30,30,new Armor("Sombrero",5)));
-        e.add(new SpawnableItem(30,30,new HealthPotion("Gum",3,5)));
-        
+        e.add(new SpawnableItem(30,30,new HealthPotion("Gum",3,5)));        
         
         Portal one = new Portal(30,50,20,20,new Entity(80,50,20,20),Portal.DEFAULT,true);//portal from spawnroom to room1  
         Portal two = new Portal(80,50,20,20,new Entity(30,50,20,20),Portal.DEFAULT,false);//portal from room1 to spawnroom
@@ -687,6 +686,8 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new SpawnableItem(450,231,new Weapon("Sword",10)));
         e.add(new SpawnableItem(440,340,new Armor("Shield",100)));
         e.add(new SpawnableItem(300,350,new HealthPotion("H-Pot",10,20)));
+        
+        e.add(new TalkableGate(450,2,10,36,"Berta, Eye'm lyk dah---sir-prized u made it---lyk dah---dhis far---bart---berta lyk pree-pair to dye.",1));
         
         e.add(new OpaqueEntity(460,195,280,10));
         

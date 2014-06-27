@@ -52,7 +52,7 @@ public class MapGate extends Entity{
         }
     }
     public void setOperation(Entity e){
-
+        //set to import map, etc.
     }
     
 }

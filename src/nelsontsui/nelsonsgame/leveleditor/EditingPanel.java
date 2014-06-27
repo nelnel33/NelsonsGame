@@ -1,5 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package nelsontsui.nelsonsgame.leveleditor;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -7,27 +14,35 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import nelsontsui.nelsonsgame.game.*;
+import nelsontsui.nelsonsgame.game.DamagableEntity;
+import nelsontsui.nelsonsgame.game.DimensionDouble;
+import nelsontsui.nelsonsgame.game.Entity;
+import nelsontsui.nelsonsgame.game.MapGate;
+import nelsontsui.nelsonsgame.game.NonPlayerCharacter;
 import nelsontsui.nelsonsgame.game.Point;
+import nelsontsui.nelsonsgame.game.Portal;
+import nelsontsui.nelsonsgame.game.Projectile;
+import nelsontsui.nelsonsgame.game.SpawnableItem;
+import nelsontsui.nelsonsgame.game.TalkableGate;
 
-public class EditingPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
-    protected ArrayList<Point> ends = new ArrayList<>(); 
-    protected ArrayList<Point> starts = new ArrayList<>();
-    protected ArrayList<DimensionDouble> dimensions = new ArrayList<>();
-    protected ArrayList<Point> points = new ArrayList<>();
-   
-    
+public class EditingPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener{       
     protected Point cursor;//where the cursor is;
-    protected Point dragStart;//Where the drawRect starts;
-    protected Point dragEnd;//Where drawRect ends;
-    protected DimensionDouble dragArea;//How large your drawRect will be;
+    protected Point placement;//where the entity will be placed
+    protected DimensionDouble dimension;//how large the entity will be (dimension by dimension)
     
     protected ArrayList<Entity> npcs = new ArrayList<>();
     protected nelsontsui.nelsonsgame.game.Character player;
+    
+    protected static final int gridRows = 40;
+    protected static final int gridColumns = 74;
+    protected Point[][] points = new Point[gridRows][gridColumns];
+    protected DimensionDouble[][] dimensions = new DimensionDouble[gridRows][gridColumns]; 
+    protected Entity[][] npcsOnGrid = new Entity[gridRows][gridColumns];
     
     public static final int TOP_LEFT = 100;
     public static final int TOP_RIGHT = 200;
@@ -36,141 +51,98 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     
     private static int increment = 0;
     
-    //private boolean hasBeenReleased = false;
-    
-    public EditingPanel(Point cursor,Point dragStart, Point dragEnd, DimensionDouble dragArea){
+    public EditingPanel(Point cursor, Point placement, DimensionDouble dimension){
         this.cursor = cursor;
-        this.dragStart = dragStart;
-        this.dragArea = dragArea;
-        this.dragEnd = dragEnd;
+        this.placement = placement;
+        this.dimension = dimension;
+        
+        
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }
     public Point getEditCursor(){
         return cursor;
     }
-    public Point getDragStart(){
-        return dragStart;
+    public Point getPlacement(){
+        return placement;
     }
-    public Point getDragEnd(){
-        return dragEnd;
+    public DimensionDouble getDimension(){
+        return dimension;
     }
-    public DimensionDouble getDragArea(){
-        return dragArea;
-    }
-    
     public void setEditCursor(Point cursor){
         this.cursor = cursor;
     }
-    public void setDragStart(Point dragStart){
-        this.dragStart = dragStart;
+    public void setPlacement(Point placement){
+        this.placement = placement;
     }
-    public void setDragEnd(Point dragEnd){
-        this.dragEnd = dragEnd;
+    public void setDimension(DimensionDouble dimension){
+        this.dimension = dimension;
+    }   
+    public void cursorToPlacement(Point c){
+        double x = cursor.getX();
+        double y = cursor.getY();
+        double modx = x%10;
+        double mody = y%10;        
+        placement.setX(x-modx);
+        placement.setY(y-mody);
     }
-    public void setDragArea(DimensionDouble dragArea){
-        this.dragArea = dragArea;
-    }
-    
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        if(SwingUtilities.isLeftMouseButton(e)){
-            dragStart = new Point(e.getX(),e.getY());
-            dragEnd = new Point(cursor.getX(),cursor.getY());
-            dragArea = new DimensionDouble(Math.abs(e.getX()-cursor.getX()),Math.abs(e.getY()-cursor.getY()));
-            starts.add(dragStart);
-            ends.add(dragEnd);
-            dimensions.add(dragArea);    
-            //hasBeenReleased = true;        
-            //setPointsAndCheck();
-        }
-    }
-
-    @Override
+     @Override
     public void mouseMoved(MouseEvent e) {
-            cursor.setX(e.getX());
-            cursor.setY(e.getY());
-        }
-    
-    @Override
-    public void mousePressed(MouseEvent e) {
-        
+        cursor.setX(e.getX());
+        cursor.setY(e.getY());
+        cursorToPlacement(cursor);
     }
     @Override
-    public void mouseReleased(MouseEvent e) {    
-        if(SwingUtilities.isLeftMouseButton(e)){
-           // dragEnd = new Point(cursor.getX(),cursor.getY());
-           // ends.add(dragEnd);
+    public void mouseReleased(MouseEvent e) {
+        int py = (int)(placement.getY()/10);
+        int px = (int)(placement.getX()/10);
+        if(SwingUtilities.isLeftMouseButton(e)){            
+            points[py][px] = new Point(placement.getX(),placement.getY());
         }
         if(SwingUtilities.isRightMouseButton(e)){
-            
-        }
-    }
-    public int determineSupposedPointOrigin(Point origin, Point released){
-        if(origin.getX()-released.getX()<0){
-            if(origin.getY()-released.getY()<0){
-                return TOP_LEFT;
-            }
-            else{
-                return BOTTOM_LEFT;
-            }
-        }
-        else{
-            if(origin.getY()-released.getY()<0){
-                return TOP_RIGHT;
-            }
-            else{
-                return BOTTOM_RIGHT;
-            }
-        }
-    }
-    public void setPointsAndCheck(){
-        if((dimensions.size()>increment)&&(starts.size()>increment)&&(ends.size()>increment)){
-            if(determineSupposedPointOrigin(starts.get(increment),ends.get(increment))
-                    ==TOP_LEFT){
-                points.add(starts.get(increment));
-            }
-            else if(determineSupposedPointOrigin(starts.get(increment),ends.get(increment))
-                    ==BOTTOM_LEFT){
-                points.add(new Point(starts.get(increment).getX(),ends.get(increment).getY()));
-            }
-            else if(determineSupposedPointOrigin(starts.get(increment),ends.get(increment))
-                    ==TOP_RIGHT){
-                points.add(new Point(ends.get(increment).getX(),starts.get(increment).getY()));
-            }
-            else{//BOTTOM RIGHT
-                points.add(new Point(ends.get(increment).getX(),ends.get(increment).getY()));
-            }            
-            increment++;
-            //hasBeenReleased = false;
+            points[py][px] = null;
         }
     }
     
-   @Override
-   public void paintComponent(Graphics g){
-       Graphics2D graphic = (Graphics2D)g;
-       
-       for(int i=0;i<increment;i++){
-            graphic.fill(new Rectangle2D.Double(points.get(i).getX(),points.get(i).getY(),
-                    dimensions.get(i).getWidth(),dimensions.get(i).getHeight()));
-       }
-   }
-   @Override
-    public void actionPerformed(ActionEvent e) {
-        setPointsAndCheck();
-   }
-   
+    
+    @Override
+    public void paintComponent(Graphics g){
+        Graphics2D graphic = (Graphics2D)g;
+        for(int i=10;i<gridColumns*10;i+=10){  
+            graphic.drawLine(i,0,i,gridRows*10);
+        }
+        for(int j=10;j<gridRows*10;j+=10){
+            graphic.drawLine(0,j,gridColumns*10,j);
+        }
+        for(int z = 0;z<gridRows;z++){
+            for(int k = 0;k<gridColumns;k++){
+                Point p = points[z][k];
+                if(p==null){}
+                else{
+                    graphic.fill(new Rectangle2D.Double(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight()));
+                }
+            }
+        }
+    }
     
     
-    
-
     @Override
     public void mouseClicked(MouseEvent e) {}
-
+    @Override
+    public void mousePressed(MouseEvent e) {}
+    
+    
+    
     @Override
     public void mouseEntered(MouseEvent e) {}
-
     @Override
     public void mouseExited(MouseEvent e) {}
+    @Override
+    public void mouseDragged(MouseEvent e) {}
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
+    }
+    
 }
