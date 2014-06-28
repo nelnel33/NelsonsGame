@@ -22,12 +22,12 @@ import nelsontsui.nelsonsgame.game.*;
 
 public class LevelEditorDisplay extends JDialog implements ActionListener, MouseListener{   
     //static decs
-    private static final int TOTAL_SELECTORS = 4;
-    private static final int TOTAL_DETAILEDSELECTORS = 40;
-    private static final int PLAYER_CHARACTER = 0;
-    private static final int ENTITY = 1;
-    private static final int NONPLAYERCHARACTER = 2;
-    private static final int ITEM = 3;
+    public static final int TOTAL_SELECTORS = 4;
+    public static final int TOTAL_DETAILEDSELECTORS = 40;
+    public static final int PLAYER_CHARACTER = 0;
+    public static final int ENTITY = 1;
+    public static final int NONPLAYERCHARACTER = 2;
+    public static final int ITEM = 3;
     
     //gap for layout
     private final int gap = 10;
@@ -64,13 +64,13 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     //button holders
     private JPanel buttonHolder;
     private JPanel saveAndImportButtonHolder;
-    private JPanel defaultAndSetDimension;
+    private JPanel defaultAndCustomOptions;
     
     //misc buttons
     private JButton save;
     private JButton importFile;
-    private JButton defaultDimension;
-    private JButton setDimension;
+    private JButton defaultOptions;
+    private JButton customOptions;
     
     //selectors for detailed selecting
     private JPanel detailedSelectorPanelHolder;//Placeholder for starting    
@@ -79,9 +79,14 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     
     //text/name
     private JPanel textPanel;
+    private JPanel labelerPanel;
+    private JLabel labelerLabel;
     
     //timer
     Timer check = new Timer((int)ActionPanel.TICK,this);
+    
+    //JDialog for customoptions
+    CustomOptionsPanel customPanel;
     
     public LevelEditorDisplay(JFrame owner){
        super(owner, "Nelson's Game: Level Editor");
@@ -97,15 +102,21 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
        detailedSelectorPanelInit();
        addDetailedSelectorButtons();
        haveSelectorsBeenClicked();
+       labelerPanelInit();
+       addActions();
+       
+       getContentPane().setBackground(new Color(55,198,164));
        
        check.addActionListener(editPanel);
        check.start();
        
-       setSize(gap+panelWidth+gap+detailedSelectorPanelHolder.getWidth()+gap,
-               gap+panelHeight+gap+selectorPanel.getHeight()+gap+gap+gap);
+       setPreferredSize(new Dimension(gap+panelWidth+gap+detailedSelectorPanelHolder.getWidth()+gap,
+               gap+panelHeight+gap+selectorPanel.getHeight()+gap+gap+gap));
        setResizable(false);
        setVisible(true);
        setDefaultCloseOperation(DISPOSE_ON_CLOSE);   
+       pack();
+       setLocationRelativeTo(null);
     }
     private void editingPanelInit(){
         cursor = new Point(0.0,0.0);
@@ -115,7 +126,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         editPanel.setBorder(GameDisplay.blackborder);
         editPanel.setSize(new Dimension(panelWidth,panelHeight));        
         editPanel.setBounds(gap,gap,panelWidth,panelHeight);
-        editPanel.setBackground(Color.white);
+        //background color set in paintComponent of EditingPanel class;
         
         add(editPanel);
     }
@@ -128,19 +139,19 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         selectorPanel.add(selectors[ITEM]);
     }
     private void initSelectors(){        
-        selectors[PLAYER_CHARACTER] = new EntityTile("Player");
-        selectors[ENTITY] = new EntityTile("Entity");
-        selectors[NONPLAYERCHARACTER] = new EntityTile("NPC");
-        selectors[ITEM] = new EntityTile("Item");
+        selectors[PLAYER_CHARACTER] = new EntityTile("Player", "Player");
+        selectors[ENTITY] = new EntityTile("Entity", "Entity");
+        selectors[NONPLAYERCHARACTER] = new EntityTile("NPC", "NPC");
+        selectors[ITEM] = new EntityTile("Item", "Item");
     }
     private void textPanel(){
         textPanel = new JPanel();
-        textPanel.setBorder(GameDisplay.blackborder);
+        //textPanel.setBorder(GameDisplay.blackborder);
         textPanel.add(new JLabel("<html><b>Nelson's Game: <b><html>",SwingConstants.CENTER));
         textPanel.add(new JLabel("<html><b>Level Editor<b><html>",SwingConstants.CENTER));
         textPanel.setPreferredSize(new Dimension(120,EntityTile.size));
         textPanel.setBounds(gap,gap+panelHeight+gap,textPanel.getPreferredSize().width,EntityTile.size);
-        textPanel.setBackground(Color.ORANGE);
+        textPanel.setBackground(new Color(197,179,88));
         
         add(textPanel);
     }
@@ -151,14 +162,16 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         saveAndImportButtonHolder.setLayout(new GridLayout(2,1));
         saveAndImportButtonHolder.add(save);
         saveAndImportButtonHolder.add(importFile);
+        saveAndImportButtonHolder.setBackground(new Color(197,179,88));
         
-        defaultDimension = new JButton("Default");
-        setDimension = new JButton("Custom");        
-        defaultAndSetDimension = new JPanel();
-        defaultAndSetDimension.setLayout(new GridLayout(3,1));
-        defaultAndSetDimension.add(new JLabel("<html><b>Dimensions<b><html>",SwingConstants.CENTER));        
-        defaultAndSetDimension.add(defaultDimension);
-        defaultAndSetDimension.add(setDimension);  
+        defaultOptions = new JButton("Default");
+        customOptions = new JButton("Custom");        
+        defaultAndCustomOptions = new JPanel();
+        defaultAndCustomOptions.setLayout(new GridLayout(3,1));
+        defaultAndCustomOptions.add(new JLabel("<html><b>Configure<b><html>",SwingConstants.CENTER));        
+        defaultAndCustomOptions.add(defaultOptions);
+        defaultAndCustomOptions.add(customOptions);  
+        defaultAndCustomOptions.setBackground(new Color(197,179,88));
         
         buttonHolder = new JPanel();
         buttonHolder.setPreferredSize(new Dimension(170,EntityTile.size));
@@ -167,29 +180,30 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                 gap+panelHeight+gap,buttonHolder.getPreferredSize().width,EntityTile.size);
         buttonHolder.setLayout(new GridLayout(1,2));
         buttonHolder.add(saveAndImportButtonHolder);
-        buttonHolder.add(defaultAndSetDimension);
+        buttonHolder.add(defaultAndCustomOptions);
+        buttonHolder.setBackground(new Color(197,179,88));
         
         add(buttonHolder);
     }
     private void selectorPanelInit(){
         selectorPanel = new JPanel();
-        selectorPanel.setBorder(GameDisplay.blackborder);
+        //selectorPanel.setBorder(GameDisplay.blackborder);
         selectorPanel.setLayout(new GridLayout(1,5,2,2));        
         selectorPanel.setSize(new Dimension(EntityTile.size*5,EntityTile.size));        
         selectorPanel.setBounds(gap+textPanel.getPreferredSize().width+gap+pointPanel.getPreferredSize().width+gap,
                 gap+panelHeight+gap,EntityTile.size*4,EntityTile.size);        
-        selectorPanel.setBackground(Color.BLACK);
+        selectorPanel.setBackground(new Color(197,179,88));
         
         add(selectorPanel);
     }
     private void detailedSelectorPanelHolderInit(){
         detailedSelectorPanelHolder = new JPanel();
         detailedSelectorPanelHolder.setLayout(new GridLayout(8,5));
-        detailedSelectorPanelHolder.setBorder(GameDisplay.blackborder);   
+        //detailedSelectorPanelHolder.setBorder(GameDisplay.blackborder);   
         detailedSelectorPanelHolder.setPreferredSize(new Dimension(250,400));
         detailedSelectorPanelHolder.setBounds(gap+gap+panelWidth,gap,
                 detailedSelectorPanelHolder.getPreferredSize().width,detailedSelectorPanelHolder.getPreferredSize().height);
-        detailedSelectorPanelHolder.setBackground(Color.white);
+        detailedSelectorPanelHolder.setBackground(new Color(197,179,88));
         add(detailedSelectorPanelHolder);
     }
     private void pointPanelInit(){
@@ -203,13 +217,13 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         pointPanel.add(cursorLabel);
         pointPanel.add(placementLabel);
         pointPanel.add(dimensionLabel);
-        pointPanel.setBackground(Color.gray);
+        pointPanel.setBackground(new Color(250,250,210));
         
         pointPanel.setPreferredSize(new Dimension(220,EntityTile.size));
         pointPanel.setBounds(gap+textPanel.getWidth()+gap,gap+panelHeight+gap,pointPanel.getPreferredSize().width ,EntityTile.size);
         add(pointPanel);
     }
-    public void setPointPanelText(){
+    private void setPointPanelText(){
         cursorLabel.setText("Cursor: ("+cursor.getX()+","+cursor.getY()+")");        
         placement = editPanel.getPlacement();
         placementLabel.setText("Entity Location: ("+placement.getX()+","+placement.getY()+")");
@@ -223,45 +237,81 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
             detailedSelectorPanel[i].setLayout(new GridLayout(8,5));
         }
     }
+    private void labelerPanelInit(){
+        labelerPanel = new JPanel();
+        labelerLabel = new JLabel("<html><br>"+"Entity"+"<html>");
+        labelerPanel.add(labelerLabel,SwingConstants.CENTER);
+        labelerPanel.setPreferredSize(new Dimension(detailedSelectorPanelHolder.getPreferredSize().width,
+            textPanel.getPreferredSize().height));
+        labelerPanel.setBackground(new Color(250,250,210));
+        labelerPanel.setBounds(panelWidth+gap+gap,detailedSelectorPanelHolder.getPreferredSize().height+gap+gap,
+                labelerPanel.getPreferredSize().width,labelerPanel.getPreferredSize().height);
+        
+        add(labelerPanel);
+    }
+    private void checkLabelerPanel(){
+        if(editPanel.currentDetailedSelectorId!=null){
+            labelerLabel.setText("<html><br>"+editPanel.currentDetailedSelectorId+"<html>");
+        }
+    }
     private void addDetailedSelectorButtons(){
         //detailedSelectors[PLAYER_CHARACTER];
-        detailedSelectors[PLAYER_CHARACTER][0] = new EntityTile("Player");
+        detailedSelectors[PLAYER_CHARACTER][0] = new EntityTile("Player","Player");
         
         //detailedSelectors[ENTITY];
-        detailedSelectors[ENTITY][0] = new EntityTile("Entity");
-        detailedSelectors[ENTITY][1] = new EntityTile("Opaque");
-        detailedSelectors[ENTITY][2] = new EntityTile("Damagable");
-        detailedSelectors[ENTITY][3] = new EntityTile("Talk Gate");
-        detailedSelectors[ENTITY][4] = new EntityTile("Map Gate"); 
-        detailedSelectors[ENTITY][5] = new EntityTile("Portal");    
+        detailedSelectors[ENTITY][0] = new EntityTile("Entity","Entity");
+        detailedSelectors[ENTITY][1] = new EntityTile("Opaque","OpaqueEntity");
+        detailedSelectors[ENTITY][2] = new EntityTile("Damagable","DamagableEntity");
+        detailedSelectors[ENTITY][3] = new EntityTile("Talk Gate","TalkableGate");
+        detailedSelectors[ENTITY][4] = new EntityTile("Map Gate(Default)","MapGateReachGate"); 
+        detailedSelectors[ENTITY][5] = new EntityTile("Map Gate(Kill-All)","MapGateKillAll");        
+        detailedSelectors[ENTITY][6] = new EntityTile("Main Portal(Default)","MainPortalDefault");
+        detailedSelectors[ENTITY][7] = new EntityTile("Sub-Portal(Default)","SubPortalDefault");
+        detailedSelectors[ENTITY][8] = new EntityTile("Main Portal(Kill-All)","MainPortalKillAll");
+        detailedSelectors[ENTITY][9] = new EntityTile("Sub-Portal(Kill-All)","SubPortalKillAll");
         
         //detailedSelectors[NONPLAYERCHARACTER];
-        detailedSelectors[NONPLAYERCHARACTER][0] = new EntityTile("Warrior");
-        detailedSelectors[NONPLAYERCHARACTER][1] = new EntityTile("BR-War");
-        detailedSelectors[NONPLAYERCHARACTER][2] = new EntityTile("Archer");
-        detailedSelectors[NONPLAYERCHARACTER][3] = new EntityTile("BR-Arch");
-        detailedSelectors[NONPLAYERCHARACTER][4] = new EntityTile("Tank");
-        detailedSelectors[NONPLAYERCHARACTER][5] = new EntityTile("BR-Tank");
-        detailedSelectors[NONPLAYERCHARACTER][6] = new EntityTile("Subboss");
-        detailedSelectors[NONPLAYERCHARACTER][7] = new EntityTile("BR-Sub");
-        detailedSelectors[NONPLAYERCHARACTER][8] = new EntityTile("Boss");
+        detailedSelectors[NONPLAYERCHARACTER][0] = new EntityTile("Warrior","Warrior");
+        detailedSelectors[NONPLAYERCHARACTER][1] = new EntityTile("BR-War","BossroomWarrior");
+        detailedSelectors[NONPLAYERCHARACTER][2] = new EntityTile("Archer","Archer");
+        detailedSelectors[NONPLAYERCHARACTER][3] = new EntityTile("BR-Arch","BossroomArcher");
+        detailedSelectors[NONPLAYERCHARACTER][4] = new EntityTile("Tank","Tank");
+        detailedSelectors[NONPLAYERCHARACTER][5] = new EntityTile("BR-Tank","BossroomTank");
+        detailedSelectors[NONPLAYERCHARACTER][6] = new EntityTile("Subboss","Subboss");
+        detailedSelectors[NONPLAYERCHARACTER][7] = new EntityTile("BR-Sub","BossroomSubboss");
+        detailedSelectors[NONPLAYERCHARACTER][8] = new EntityTile("Boss","Boss");
                 
         //detailedSelectors[ITEM];                
-        detailedSelectors[ITEM][0] = new EntityTile("Armor");
-        detailedSelectors[ITEM][1] = new EntityTile("Weapon");
-        detailedSelectors[ITEM][2] = new EntityTile("Bow");
-        detailedSelectors[ITEM][3] = new EntityTile("Arrow");
-        detailedSelectors[ITEM][4] = new EntityTile("H-Pot");
-        detailedSelectors[ITEM][4] = new EntityTile("S-Pot");
+        detailedSelectors[ITEM][0] = new EntityTile("Armor","Armor");
+        detailedSelectors[ITEM][1] = new EntityTile("Weapon","Weapon");
+        detailedSelectors[ITEM][2] = new EntityTile("Bow","Bow");
+        detailedSelectors[ITEM][3] = new EntityTile("Arrow","Arrow");
+        detailedSelectors[ITEM][4] = new EntityTile("H-Pot","HealthPotion");
+        detailedSelectors[ITEM][4] = new EntityTile("S-Pot","StrengthPotion");
         
         for(int i=0;i<TOTAL_SELECTORS;i++){
             for(int j=0;j<detailedSelectors[i].length;j++){
                 if(detailedSelectors[i][j]==null){}
                 else{
                 detailedSelectorPanel[i].add(detailedSelectors[i][j]);
+                detailedSelectorPanel[i].setBackground(new Color(197,179,88));
                 }
             }
         }
+    }
+    public void addActions(){
+        defaultOptions.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                editPanel.initDefaults();
+            }
+        });
+        customOptions.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                customPanel = new CustomOptionsPanel(LevelEditorDisplay.this,editPanel);
+            }
+        });
     }
     public void checkIfCanToggle(){
         selectors[PLAYER_CHARACTER].canToggle(selectors);
@@ -278,7 +328,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
             }
         }
     }
-    public void haveSelectorsBeenClicked(){
+    private void haveSelectorsBeenClicked(){
         selectors[PLAYER_CHARACTER].addMouseListener(new MouseListener(){           
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -286,6 +336,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                 detailedSelectorPanel[PLAYER_CHARACTER].setBounds(detailedSelectorPanelHolder.getBounds());
                 LevelEditorDisplay.this.remove(detailedSelectorPanelHolder);
                 detailedSelectorPanelHolder = detailedSelectorPanel[PLAYER_CHARACTER];
+                editPanel.setDetailedSelectors(detailedSelectors[PLAYER_CHARACTER]);
                 add(detailedSelectorPanelHolder);            
                 }
             }
@@ -309,6 +360,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                 detailedSelectorPanel[ENTITY].setBounds(detailedSelectorPanelHolder.getBounds());
                 LevelEditorDisplay.this.remove(detailedSelectorPanelHolder);
                 detailedSelectorPanelHolder = detailedSelectorPanel[ENTITY];
+                editPanel.setDetailedSelectors(detailedSelectors[ENTITY]);
                 add(detailedSelectorPanelHolder);
                 }
             }
@@ -332,6 +384,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                 detailedSelectorPanel[NONPLAYERCHARACTER].setBounds(detailedSelectorPanelHolder.getBounds());
                 LevelEditorDisplay.this.remove(detailedSelectorPanelHolder);
                 detailedSelectorPanelHolder = detailedSelectorPanel[NONPLAYERCHARACTER];
+                editPanel.setDetailedSelectors(detailedSelectors[NONPLAYERCHARACTER]);
                 add(detailedSelectorPanelHolder);
                 }
             }
@@ -355,6 +408,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                 detailedSelectorPanel[ITEM].setBounds(detailedSelectorPanelHolder.getBounds());
                 LevelEditorDisplay.this.remove(detailedSelectorPanelHolder);
                 detailedSelectorPanelHolder = detailedSelectorPanel[ITEM];
+                editPanel.setDetailedSelectors(detailedSelectors[ITEM]);
                 add(detailedSelectorPanelHolder);
                 }
             }
@@ -375,10 +429,10 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        checkIfCanToggle();
-        //checkIfSelectorsClicked();        
+        checkIfCanToggle();        
         checkIfCanToggle();
         setPointPanelText();  
+        checkLabelerPanel();
         validate();
         repaint();
     }
@@ -396,9 +450,5 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
 
     @Override
     public void mouseExited(MouseEvent e) {}
-
-    public static void main(String[] args){
-        LevelEditorDisplay c = new LevelEditorDisplay(new JFrame());
-    }
     
 }

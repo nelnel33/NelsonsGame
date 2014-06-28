@@ -687,7 +687,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new SpawnableItem(440,340,new Armor("Shield",100)));
         e.add(new SpawnableItem(300,350,new HealthPotion("H-Pot",10,20)));
         
-        e.add(new TalkableGate(450,2,10,36,"Berta, Eye'm lyk dah---sir-prized u made it---lyk dah---dhis far---bart---berta lyk pree-pair to dye.",1));
+        e.add(new TalkableGate(450,2,10,36,"Berta, Eye'm lyk dah---sir-prized u made it---lyk dah---dhis far---bart---berta lyk pree-pair to dye."));
         
         e.add(new OpaqueEntity(460,195,280,10));
         

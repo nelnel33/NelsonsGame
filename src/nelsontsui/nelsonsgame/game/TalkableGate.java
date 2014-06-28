@@ -15,43 +15,29 @@ import static nelsontsui.nelsonsgame.game.MapGate.KILL_ALL;
  */
 public class TalkableGate extends MapGate {
     private String speech;
-    private int numberOfRepeats;
-    
+    private boolean flag = true;
     public TalkableGate(
             double x, 
             double y, 
             double width, 
             double height, 
-            String speech,            
-            int numberOfRepeats) {
+            String speech         
+            ){
         super(x, y, width, height, MapGate.REACH_GATE);
         this.speech = speech;
-        this.numberOfRepeats = numberOfRepeats;
     }
     public String getSpeech(){
         return speech;
     }
-    public int getNumberOfRepeats(){
-        return numberOfRepeats;
-    }
+  
     public void setSpeech(String speech){
         this.speech = speech;
     }       
-    public void setNumberOfRepeats(int n){
-        this.numberOfRepeats = n;
-    }
-    public void decrementRepeats(){
-        if(this.numberOfRepeats>0){
-            this.numberOfRepeats--;
-        }
-    }
-    public void incrementRepeats(){
-        this.numberOfRepeats++;
-    }
     @Override
     public boolean canOperate(Entity e){
-        if((e.getHitbox().isTouching(this.getHitbox()))&&(numberOfRepeats>0)){
-            return true;
+        if((e.getHitbox().isTouching(this.getHitbox()))&&flag){
+            flag = false;
+            return true;            
         }
         else{
             return false;

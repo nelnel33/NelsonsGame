@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import nelsontsui.nelsonsgame.leveleditor.LevelEditorDisplay;
 
 public class MainDisplay extends JFrame implements ActionListener{
     private GameDisplay gameDisplay;
@@ -23,6 +24,9 @@ public class MainDisplay extends JFrame implements ActionListener{
     
     //JDialog that contains howto/instructions
     private HowTo instructions;
+    
+    //JDialog that contains LevelEditor
+    private LevelEditorDisplay levelEditor;
     
     
     public MainDisplay(){
@@ -82,7 +86,7 @@ public class MainDisplay extends JFrame implements ActionListener{
         leveleditor.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-
+                levelEditor = new LevelEditorDisplay(MainDisplay.this);
             }
         });
     }

@@ -17,14 +17,16 @@ public class EntityTile extends JPanel implements MouseListener{
     protected boolean clicked = false;
     private boolean canToggle = true;
     private String entityName;
+    private String id;
     
     public static final int size = 50;//size*size = dimension of button
     
-    public EntityTile(String entityName){           
+    public EntityTile(String entityName, String id){           
         this.entityName = entityName;
-        this.setBorder(GameDisplay.blackborder);
+        this.id = id;
+        //this.setBorder(GameDisplay.blackborder);
         this.setPreferredSize(new Dimension(size,size));
-        this.setBackground(Color.WHITE);        
+        this.setBackground(new Color(250,250,210));        
         this.setLayout(new GridBagLayout());//GridBagLayout default settings to center text;
         GridBagConstraints c = new GridBagConstraints();        
         JLabel tile = new JLabel(entityName,SwingConstants.CENTER);
@@ -36,8 +38,14 @@ public class EntityTile extends JPanel implements MouseListener{
     public String getEntityName(){
         return entityName;
     }
+    public String getId(){
+        return id;
+    }
     public void setEntityName(String entityName){
         this.entityName = entityName;
+    }
+    public void setId(String id){
+        this.id = id;
     }
     public boolean getClicked(){
         return clicked;
@@ -63,7 +71,7 @@ public class EntityTile extends JPanel implements MouseListener{
             }
             else{
                 clicked = false;
-                this.setBackground(Color.WHITE);
+                this.setBackground(new Color(250,250,210));
             }
         }
     }

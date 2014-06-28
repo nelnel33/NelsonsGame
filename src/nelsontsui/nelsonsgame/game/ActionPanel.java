@@ -433,9 +433,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             for(int i=0;i<npcs.size();i++){
                 if(npcs.get(i) instanceof TalkableGate){
                     TalkableGate t = (TalkableGate)npcs.get(i);          
-                    if(t.canOperate(Player)&&(t.getNumberOfRepeats()>0)){
-                        dialogPanel.message(t.getSpeech());                        
-                        t.decrementRepeats();                              
+                    if(t.canOperate(Player)){
+                        dialogPanel.message(t.getSpeech());                                                          
                     }
                 }
             }

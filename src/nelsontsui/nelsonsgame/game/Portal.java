@@ -45,6 +45,9 @@ public class Portal extends Entity{
     public boolean getCanPlayerUse(){
         return canPlayerUse;
     }
+    public boolean getIsMain(){
+        return isMain;
+    }
     public void setSubportal(Entity subportal){
         this.subportal = subportal;
     }
@@ -53,6 +56,9 @@ public class Portal extends Entity{
     }
     public void setCanPlayerUse(boolean canPlayerUse){
         this.canPlayerUse = canPlayerUse;
+    }
+    public void setIsMain(boolean isMain){
+        this.isMain = isMain;
     }
     public void determineCanPlayerUse(ArrayList<Entity> e){
         if(condition==DEFAULT){
