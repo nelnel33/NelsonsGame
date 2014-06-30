@@ -6,15 +6,10 @@
 
 package nelsontsui.nelsonsgame.leveleditor;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import javax.swing.JFileChooser;
-
-
-public class test {
-    public static void main(String[] args){
-        JFileChooser fc = new JFileChooser();
-    }
+/**
+ *
+ * @author Nelnel33
+ */
+public class ReadFile {
     
-   
 }

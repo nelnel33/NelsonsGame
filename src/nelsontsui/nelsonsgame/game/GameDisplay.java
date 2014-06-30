@@ -632,7 +632,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"You",15000,200);
+        Character p = new Character(0,0,10,10,100,100,300,"You",100,2);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
@@ -691,7 +691,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         
         e.add(new OpaqueEntity(460,195,280,10));
         
-        Portal three = new Portal(720,175,20,20,new Entity(720,215,20,20),Portal.KILL_ALL_NONBOSS,true);//portal to bossroom(1way)
+        Portal three = new Portal(720,175,20,20,new Entity(720,380,20,20),Portal.KILL_ALL_NONBOSS,true);//portal to bossroom(1way)
         e.add(three);
         
         e.add(new NonPlayerCharacter(680,50,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.SUBBOSS));
@@ -701,10 +701,10 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new SpawnableItem(660,160,new StrengthPotion("S-Pot",1,5)));
         
         //BOSSROOM//
-        e.add(new NonPlayerCharacter(600,330,50,50,50,50,200,"Al-ee Sa-ya-nee Dah Pack-ee",50,200,200,NonPlayerCharacter.BOSS));
+        e.add(new NonPlayerCharacter(600,330,50,50,50,50,200,"Al-ee Sa-ya-nee Dah Pack-ee",30,200,200,NonPlayerCharacter.BOSS));
         win = new MapGate(700,360,20,20,MapGate.KILL_ALL);
         e.add(win);
-        e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.BR_SUBBOSS));
+        e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Omerga",10,50,100,NonPlayerCharacter.BR_SUBBOSS));
         e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.BR_ARCHER));
         e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.BR_WARRIOR));
         e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Therta",2,50,200,NonPlayerCharacter.BR_TANK));       

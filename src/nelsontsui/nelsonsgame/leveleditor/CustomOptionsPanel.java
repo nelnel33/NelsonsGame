@@ -127,7 +127,7 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         nameOfFields[WEAPONDAMAGE] = new JLabel("Damage of Weapon");
         nameOfFields[ITEMNAME] = new JLabel("Name of Item");
         nameOfFields[POTIONSTRENGTH] = new JLabel("Strength of Potion");
-        nameOfFields[DIMENSIONS] = new JLabel("Dimension of Entity");
+        nameOfFields[DIMENSIONS] = new JLabel("Dimension of Entity(Seperated by comma [,])");
         nameOfFields[PORTALEXIT] = new JLabel("Exit Coordinates of Portal(Seperated by comma [,])");
         
         previousValues[NAME] = new JLabel("Current: "+editPanel.name);
