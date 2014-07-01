@@ -118,10 +118,6 @@ public class Character extends DamagableEntity{
     public void addToInventory(Item item){
         this.inventory.addToInventory(item);
     }
-    public void removeProjectile(){
-        projectile.remove(0);
-        canFireNextProjectile=true;
-    }
     public void attack(DamagableEntity other){
         int d = (int)(Math.random()*this.damage);
         other.hurt(d);
@@ -137,8 +133,15 @@ public class Character extends DamagableEntity{
         canFireNextProjectile=false;
         return projectile.get(projectile.size()-1);
     }
+    public void removeProjectile(){
+        projectile.remove(0);
+        canFireNextProjectile=true;
+    }
     public boolean canFireNextProjectile(){
         return canFireNextProjectile;
+    }
+    public void setCanFireNextProjectile(boolean t){
+        canFireNextProjectile = t;
     }
     public void equipArmor(Armor armor){
         if(hasArmor==false){

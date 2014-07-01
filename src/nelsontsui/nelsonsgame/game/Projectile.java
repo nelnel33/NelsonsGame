@@ -8,10 +8,12 @@ package nelsontsui.nelsonsgame.game;
 public class Projectile extends Entity{
     private double speed;
     private int direction;
+    private boolean hasBeenFired;
     public Projectile(double x, double y, double width, double height, double speed, int direction){
         super(x,y,width,height);
         this.speed=speed;
         this.direction = direction;
+        hasBeenFired = false;
     }
     public void setSpeed(double speed){
         this.speed=speed;
@@ -31,6 +33,10 @@ public class Projectile extends Entity{
         }
         if(direction==Entity.RIGHT){
             x+=speed;
-        }        
+        }
+        hasBeenFired = true;
+    }
+    public boolean hasBeenFired(){
+        return hasBeenFired;
     }
 }

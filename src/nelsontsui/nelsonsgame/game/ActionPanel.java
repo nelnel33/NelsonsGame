@@ -226,7 +226,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public void projectileWithinPanel(){
         if(!Player.getProjectile().isEmpty()){
             if(withinPanel(Player.getProjectile().get(0))){
-                Player.getProjectile().get(0).fire();
+                //Player.getProjectile().get(0).fire();
             }
             else{
                 Player.removeProjectile();
@@ -444,6 +444,15 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         if(Player.getHitpoints()<Player.getinitHitpoints()){
             Player.heal(1);       
         }
+    }  
+    public void checkHasBeenFired(){
+        if(!Player.getProjectile().isEmpty()){
+            for(int i=0;i<Player.getProjectile().size();i++){
+                if(Player.getProjectile().get(i).hasBeenFired()){
+                    Player.getProjectile().get(i).fire();
+                }
+            }
+        }
     }
             
     public void up(){
@@ -500,9 +509,12 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
         
-        if(Player.canFireNextProjectile()&&hasBow&&(index!=100)){
+        if(hasBow&&(index!=100)){
             Player.loadProjectile(Player.getDirection());
             Player.inventory.useItem(index,Player);
+            for(int i=0;i<Player.getProjectile().size();i++){
+                Player.getProjectile().get(i).fire();
+            }
         }
     }
     public void attack(){
@@ -638,7 +650,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     }
                 }
             }
-        }               
+        }     
+        checkHasBeenFired();
         checkPortals();
         checkTalkableGates();
         npcProjectileInflictDamage(); 

@@ -47,22 +47,24 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     protected EntityTile[] detailedSelectors = new EntityTile[LevelEditorDisplay.TOTAL_DETAILEDSELECTORS];
     protected String currentDetailedSelectorId;
     
-    //defaultOptions
-    protected String defaultName="Default Name";
-    protected double defaultHitpoints=10;
-    protected double defaultDamage=2;
-    protected double defaultDetectionRadius=500;
-    protected double defaultProjectileSpeed=300;
-    protected double defaultSpeed=50;
-    protected String defaultTalkableSpeech="Set the speech of a TalkableGate by clicking custom, which is underneath configure.";
-    protected int defaultQuantity=1;
-    protected int defaultArmorProtection=10;
-    protected int defaultWeaponDamage=10;
-    protected String defaultItemName="Item";
-    protected int defaultPotionStrength=2;
-    protected Point defaultPortalExit = new Point(0,0);
+    protected final String defaultDetailedSelectorId = "Entity";
     
-    protected DimensionDouble defaultDimension = new DimensionDouble(10,10);
+    //defaultOptions
+    protected final String defaultName="Default Name";
+    protected final double defaultHitpoints=10;
+    protected final double defaultDamage=2;
+    protected final double defaultDetectionRadius=500;
+    protected final double defaultProjectileSpeed=300;
+    protected final double defaultSpeed=50;
+    protected final String defaultTalkableSpeech="Set the speech of a TalkableGate by clicking custom, which is underneath configure.";
+    protected final int defaultQuantity=1;
+    protected final int defaultArmorProtection=10;
+    protected final int defaultWeaponDamage=10;
+    protected final String defaultItemName="Item";
+    protected final int defaultPotionStrength=2;
+    protected final Point defaultPortalExit = new Point(0,0);
+    
+    protected final DimensionDouble defaultDimension = new DimensionDouble(10,10);
             
     
     //for characters & npcs
@@ -278,9 +280,14 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
             else{
                 if(detailedSelectors[i].getClicked()){
                     currentDetailedSelectorId = detailedSelectors[i].getId();
+                    break;
+                }
+                else{
+                    currentDetailedSelectorId = defaultDetailedSelectorId;
                 }
             }
         }
+        
     }
     @Override
     public void paintComponent(Graphics g){

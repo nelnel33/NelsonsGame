@@ -53,15 +53,14 @@ public class EntityTile extends JPanel implements MouseListener{
     public void canToggle(EntityTile[] e){
         for(int i=0;i<e.length;i++){
             if(e[i]==null){}
-            else if(e[i].clicked==true&&!this.equals(e)){
+            else if(e[i].clicked&&!this.equals(e[i])){
                 canToggle = false;
                 return;
             }
             
         }
         canToggle = true;
-    }
-    
+    }    
     @Override
     public void mouseReleased(MouseEvent e) {
         if(SwingUtilities.isLeftMouseButton(e)){
