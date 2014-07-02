@@ -76,6 +76,16 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             if(npcs.get(i) instanceof NonPlayerCharacter){
                 if(canNpcAct((NonPlayerCharacter)npcs.get(i))){
                     if(!npcs.get(i).getHitbox().isTouching(Player.getHitbox())){
+                        if(Player.getHitbox().isRight(npcs.get(i).getHitbox())
+                                &&canNpcMoveRight(npcs.get(i))
+                                &&withinPanelX(npcs.get(i))!=Hitbox.RIGHT){
+                            npcs.get(i).setX(npcs.get(i).getX()-((NonPlayerCharacter)npcs.get(i)).getTravelX());
+                        }
+                        if(Player.getHitbox().isLeft(npcs.get(i).getHitbox())
+                                &&canNpcMoveLeft(npcs.get(i))
+                                &&withinPanelX(npcs.get(i))!=Hitbox.LEFT){
+                            npcs.get(i).setX(npcs.get(i).getX()+((NonPlayerCharacter)npcs.get(i)).getTravelX());
+                        } 
                         if(Player.getHitbox().isBelow(npcs.get(i).getHitbox())
                                 &&canNpcMoveDown(npcs.get(i))
                                 &&withinPanelY(npcs.get(i))!=Hitbox.BELOW){
@@ -85,17 +95,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                                 &&canNpcMoveUp(npcs.get(i))
                                 &&withinPanelY(npcs.get(i))!=Hitbox.ABOVE){
                             npcs.get(i).setY(npcs.get(i).getY()-((NonPlayerCharacter)npcs.get(i)).getTravelY());
-                        }
-                        if(Player.getHitbox().isRight(npcs.get(i).getHitbox())
-                                &&canNpcMoveRight(npcs.get(i))
-                                &&withinPanelY(npcs.get(i))!=Hitbox.RIGHT){
-                            npcs.get(i).setX(npcs.get(i).getX()-((NonPlayerCharacter)npcs.get(i)).getTravelX());
-                        }
-                        if(Player.getHitbox().isLeft(npcs.get(i).getHitbox())
-                                &&canNpcMoveLeft(npcs.get(i))
-                                &&withinPanelY(npcs.get(i))!=Hitbox.LEFT){
-                            npcs.get(i).setX(npcs.get(i).getX()+((NonPlayerCharacter)npcs.get(i)).getTravelX());
-                        }                        
+                        }                      
                     }
                 }
             }
@@ -204,7 +204,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                         &&npcs.get(i) instanceof OpaqueEntity){
                     Player.removeProjectile();
                     if(npcs.get(i) instanceof DamagableEntity){
-                    Player.attack((DamagableEntity)npcs.get(i));
+                    Player.shoot((DamagableEntity)npcs.get(i));
                     System.out.println("npc"+i+" HP:"+((DamagableEntity)npcs.get(i)).getHitpoints());
                         if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
                             if(npcs.get(i) instanceof NonPlayerCharacter){
@@ -265,19 +265,18 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
                     ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.DOWN);
                 }
-                if(npcs.get(i).getHitbox().isBelow(Player.getHitbox())
-                        &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.UP);
-                }
-                if(npcs.get(i).getHitbox().isLeft(Player.getHitbox())
+                else if(npcs.get(i).getHitbox().isLeft(Player.getHitbox())
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
                     ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.LEFT);
                 }
-                if(npcs.get(i).getHitbox().isRight(Player.getHitbox())
+                else if(npcs.get(i).getHitbox().isRight(Player.getHitbox())
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.RIGHT);
+                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.RIGHT);                    
                 }
-                //((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).fire();
+                else if(npcs.get(i).getHitbox().isBelow(Player.getHitbox())
+                        &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
+                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.UP);
+                }
             }
         }
     }
@@ -301,7 +300,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             if(!((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty()){
                 if(((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).getHitbox().isTouching(Player.getHitbox())){
                     ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
-                    ((NonPlayerCharacter)npcs.get(i)).attack(Player);
+                    ((NonPlayerCharacter)npcs.get(i)).shoot(Player);
                             }
                 else{
                 for(int z=0;z<npcs.size();z++){

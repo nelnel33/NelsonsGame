@@ -119,8 +119,24 @@ public class Character extends DamagableEntity{
         this.inventory.addToInventory(item);
     }
     public void attack(DamagableEntity other){
-        int d = (int)(Math.random()*this.damage);
-        other.hurt(d);
+        if(this.hasWeapon){
+            if(!(this.weapon instanceof Bow)){
+                int d = (int)(Math.random()*this.damage);
+                other.hurt(d);            
+            }
+        }
+        else{
+            int d = (int)(Math.random()*this.damage);
+            other.hurt(d); 
+        }
+    }
+    public void shoot(DamagableEntity other){
+        if(this.hasWeapon){
+            if(this.weapon instanceof Bow){
+                int d = (int)(Math.random()*this.damage);
+                other.hurt(d);        
+            }
+        }
     }
     public void gainHitpoint(){
         hitpoints++;
