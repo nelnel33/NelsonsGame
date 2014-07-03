@@ -261,19 +261,19 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public void npcFireProjectile(){
         for(int i=0;i<npcs.size();i++){
             if(canNpcFireProjectile(npcs.get(i))){
-                if(npcs.get(i).getHitbox().isAbove(Player.getHitbox())
+                if(npcs.get(i).getHitbox().isStrictlyAbove(Player.getHitbox())
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
                     ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.DOWN);
                 }
-                else if(npcs.get(i).getHitbox().isLeft(Player.getHitbox())
+                else if(npcs.get(i).getHitbox().isStrictlyLeft(Player.getHitbox())
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.LEFT);
+                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.RIGHT);
                 }
-                else if(npcs.get(i).getHitbox().isRight(Player.getHitbox())
+                else if(npcs.get(i).getHitbox().isStrictlyRight(Player.getHitbox())
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.RIGHT);                    
+                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.LEFT);                    
                 }
-                else if(npcs.get(i).getHitbox().isBelow(Player.getHitbox())
+                else if(npcs.get(i).getHitbox().isStrictlyBelow(Player.getHitbox())
                         &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
                     ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.UP);
                 }
