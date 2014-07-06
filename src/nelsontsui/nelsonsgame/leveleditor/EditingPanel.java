@@ -55,29 +55,29 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     
     //defaultOptions
     protected final String defaultName="Default Name";
-    protected final double defaultHitpoints=10;
-    protected final double defaultDamage=2;
-    protected final double defaultDetectionRadius=500;
-    protected final double defaultProjectileSpeed=300;
-    protected final double defaultSpeed=50;
+    protected final int defaultHitpoints=20;
+    protected final int defaultDamage=2;
+    protected final int defaultDetectionRadius=200;
+    protected final int defaultProjectileSpeed=200;
+    protected final int defaultSpeed=50;
     protected final String defaultTalkableSpeech="Set the speech of a TalkableGate by clicking custom, which is underneath configure.";
     protected final int defaultQuantity=1;
-    protected final int defaultArmorProtection=10;
-    protected final int defaultWeaponDamage=10;
+    protected final int defaultArmorProtection=5;
+    protected final int defaultWeaponDamage=5;
     protected final String defaultItemName="Item";
     protected final int defaultPotionStrength=2;
     protected final Point defaultPortalExit = new Point(0,0);
     
-    protected final DimensionDouble defaultDimension = new DimensionDouble(10,10);
+    protected final DimensionDouble defaultDimension = new DimensionDouble(20,20);
             
     
     //for characters & npcs
     protected String name;
-    protected double hitpoints;
-    protected double damage;
-    protected double detectionRadius;
-    protected double projectileSpeed;
-    protected double speed;
+    protected int hitpoints;
+    protected int damage;
+    protected int detectionRadius;
+    protected int projectileSpeed;
+    protected int speed;
     //for talkablegates
     protected String talkableSpeech;
     //for items
@@ -264,18 +264,18 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         }
         //detailedSelectors-Items
         else if(currentDetailedSelectorId.equalsIgnoreCase("Armor")){
-            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Armor(itemName,quantity));
+            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Armor(itemName,armorProtection));
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("Weapon")){
-            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Weapon(itemName,quantity));
+            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Weapon(itemName,weaponDamage));
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("Bow")){
-            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Bow(itemName,quantity));
+            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Bow(itemName,weaponDamage));
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("Arrow")){
             npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Arrow(itemName,quantity));
         }
-         else if(currentDetailedSelectorId.equalsIgnoreCase("HealthPotion")){
+        else if(currentDetailedSelectorId.equalsIgnoreCase("HealthPotion")){
             npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new HealthPotion(itemName,quantity,potionStrength));
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("StrengthPotion")){

@@ -186,19 +186,19 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
             editPanel.name = fields[NAME].getText();
         }
         if((fields[HITPOINTS]!=null)&&isStringNumerical(fields[HITPOINTS].getText())){
-            editPanel.hitpoints = Double.parseDouble(fields[HITPOINTS].getText());
+            editPanel.hitpoints = Integer.parseInt(fields[HITPOINTS].getText());
         }
         if((fields[DAMAGE]!=null)&&isStringNumerical(fields[DAMAGE].getText())){
-            editPanel.damage = Double.parseDouble(fields[DAMAGE].getText());
+            editPanel.damage = Integer.parseInt(fields[DAMAGE].getText());
         }
         if((fields[DETECTIONRADIUS]!=null)&&isStringNumerical(fields[DETECTIONRADIUS].getText())){
-            editPanel.detectionRadius = Double.parseDouble(fields[DETECTIONRADIUS].getText());
+            editPanel.detectionRadius = Integer.parseInt(fields[DETECTIONRADIUS].getText());
         }
         if((fields[PROJECTILESPEED]!=null)&&isStringNumerical(fields[PROJECTILESPEED].getText())){
-            editPanel.projectileSpeed = Double.parseDouble(fields[PROJECTILESPEED].getText());
+            editPanel.projectileSpeed = Integer.parseInt(fields[PROJECTILESPEED].getText());
         }
         if((fields[SPEED]!=null)&&isStringNumerical(fields[SPEED].getText())){
-            editPanel.speed = Double.parseDouble(fields[SPEED].getText());
+            editPanel.speed = Integer.parseInt(fields[SPEED].getText());
         }
         if(fields[TALKABLESPEECH]!=null){
             editPanel.talkableSpeech = fields[TALKABLESPEECH].getText();

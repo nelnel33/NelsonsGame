@@ -288,7 +288,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         detailedSelectors[ITEM][2] = new EntityTile("Bow","Bow");
         detailedSelectors[ITEM][3] = new EntityTile("Arrow","Arrow");
         detailedSelectors[ITEM][4] = new EntityTile("H-Pot","HealthPotion");
-        detailedSelectors[ITEM][4] = new EntityTile("S-Pot","StrengthPotion");
+        detailedSelectors[ITEM][5] = new EntityTile("S-Pot","StrengthPotion");
         
         for(int i=0;i<TOTAL_SELECTORS;i++){
             for(int j=0;j<detailedSelectors[i].length;j++){

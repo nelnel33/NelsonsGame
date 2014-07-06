@@ -305,13 +305,37 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
-    public void npcProjectileInflictDamage(){
+    public void npcProjectileInflictDamage(){         
+        for(int i=0;i<npcs.size();i++){
+            if(npcs.get(i) instanceof NonPlayerCharacter){
+                if(!(((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty())){
+                    if(((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).getHitbox().isTouching(Player.getHitbox())){
+                        ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
+                        ((NonPlayerCharacter)npcs.get(i)).attack(Player);
+                        }
+                    else{
+                        for(int j=0;j<npcs.size();j++){
+                            if(i==j){}
+                            else{                    
+                                if(npcs.get(j) instanceof OpaqueEntity
+                                    &&((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).getHitbox().isTouching((npcs.get(j)).getHitbox())){
+                                        ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
+                                        break;
+                            }                        
+                        }
+                    }
+                }
+            }
+        }
+    }
+            
+    /*        
     for(int i=0;i<npcs.size();i++){
         if(npcs.get(i) instanceof NonPlayerCharacter){
             if(!((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty()){
                 if(((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).getHitbox().isTouching(Player.getHitbox())){
                     ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
-                    ((NonPlayerCharacter)npcs.get(i)).shoot(Player);
+                    ((NonPlayerCharacter)npcs.get(i)).attack(Player);
                             }
                 else{
                 for(int z=0;z<npcs.size();z++){
@@ -333,7 +357,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     }                          
                 }
             }
-        } 
+        }
+    */ 
     }  
     
     public void inflictDamage(){
@@ -671,19 +696,19 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                         }
                     }
                 }
-            }     
+            }  
+            npcProjectileInflictDamage();
+            npcMove();
+            npcProjectileWithinPanel();            
             checkForMapGateOperation();
             checkHasBeenFired();
             checkPortals();
-            checkTalkableGates();
-            npcProjectileInflictDamage(); 
+            checkTalkableGates(); 
             checkForItems();
             checkForInventory();
             projectileWithinPanel();
             projectileInflictDamage();
-            Player.inventory.sortInventory();
-            npcProjectileWithinPanel();     
-            npcMove();
+            Player.inventory.sortInventory();    
             repaint();
             frameCount++;
         }
