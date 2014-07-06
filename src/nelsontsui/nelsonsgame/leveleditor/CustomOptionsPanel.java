@@ -204,19 +204,19 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
             editPanel.talkableSpeech = fields[TALKABLESPEECH].getText();
         }
         if((fields[QUANTITY]!=null)&&isStringNumerical(fields[QUANTITY].getText())){
-            editPanel.quantity = (int)Double.parseDouble(fields[QUANTITY].getText());
+            editPanel.quantity = Integer.parseInt(fields[QUANTITY].getText());
         }
         if((fields[ARMORPROTECTION]!=null)&&isStringNumerical(fields[ARMORPROTECTION].getText())){
-            editPanel.armorProtection = (int)Double.parseDouble(fields[ARMORPROTECTION].getText());
+            editPanel.armorProtection = Integer.parseInt(fields[ARMORPROTECTION].getText());
         }
         if((fields[WEAPONDAMAGE]!=null)&&isStringNumerical(fields[WEAPONDAMAGE].getText())){
-            editPanel.weaponDamage = (int)Double.parseDouble(fields[WEAPONDAMAGE].getText());
+            editPanel.weaponDamage = Integer.parseInt(fields[WEAPONDAMAGE].getText());
         }
         if(fields[ITEMNAME]!=null){
             editPanel.itemName = fields[ITEMNAME].getText();
         }
         if((fields[POTIONSTRENGTH]!=null)&&isStringNumerical(fields[POTIONSTRENGTH].getText())){
-            editPanel.potionStrength = (int)Double.parseDouble(fields[POTIONSTRENGTH].getText());
+            editPanel.potionStrength = Integer.parseInt(fields[POTIONSTRENGTH].getText());
         }
         if(fields[DIMENSIONS]!=null){
             DimensionDouble d = decodeDimension(fields[DIMENSIONS].getText());

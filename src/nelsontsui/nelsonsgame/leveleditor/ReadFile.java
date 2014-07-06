@@ -37,6 +37,7 @@ public class ReadFile {
         try{
         objectReader = new ObjectInputStream(new FileInputStream(formalFileName));
         numberOfObjects = objectReader.readInt();
+        System.out.println("Read "+numberOfObjects+" As Integer");
         for(int i=0;i<numberOfObjects;i++){
             Entity e = (Entity)objectReader.readObject();
             if(!(e instanceof NonPlayerCharacter)
@@ -46,6 +47,8 @@ public class ReadFile {
             else{
                 npcs.add(e);
                 }
+            
+            System.out.println("Read "+numberOfObjects+" Objects");
             }
         }
         catch(ClassNotFoundException | IOException e){

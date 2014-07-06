@@ -22,6 +22,8 @@ public class WriteFile {
     private Character player;
     private File file;
     
+    private File currentFile;
+    
     ObjectOutputStream objectWriter;
     
     private int numberOfObjects;
@@ -31,18 +33,17 @@ public class WriteFile {
         this.npcs = npcs;
         this.player = player;     
         this.file = file;
-        formalFileName = getFileName(file.getPath())+EXTENSION;        
+        formalFileName = getFileName(file.getPath())+EXTENSION;     
+        
+        currentFile = new File(formalFileName);
     }
     public void write(){
-        try{
-            if(file.delete()){
-                file.createNewFile();
-            }
-            
+        try{            
             objectWriter = new ObjectOutputStream(new FileOutputStream(formalFileName));
             
             numberOfObjects = npcs.size()+1;
             objectWriter.writeInt(numberOfObjects);//amount of objects in the nel file
+            System.out.println("Wrote "+numberOfObjects+" as Integer");
             
             objectWriter.writeObject(player);
             objectWriter.flush();
@@ -50,7 +51,7 @@ public class WriteFile {
                 for(int i=0;i<npcs.size();i++){
                     objectWriter.writeObject(npcs.get(i));
                     objectWriter.flush();
-                    System.out.println("Wrote "+npcs.size()+" Objects");
+                    //System.out.println("Wrote "+npcs.size()+" Objects");
                 }
             }
             objectWriter.close();

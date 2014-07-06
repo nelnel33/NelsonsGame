@@ -9,6 +9,8 @@ package nelsontsui.nelsonsgame.game;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -64,7 +66,8 @@ public class FileSelector extends JFileChooser{
             file = fileSelector.getSelectedFile();
             fileName = fileSelector.getName(file); 
             if(operation == SAVE){
-                WriteFile write = new WriteFile(file,npcs,player);
+                file.delete();
+                WriteFile write = new WriteFile(file,npcs,player);                
                 write.write();
             }            
             if(operation == IMPORT){

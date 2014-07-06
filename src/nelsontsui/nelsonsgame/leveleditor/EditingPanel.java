@@ -302,11 +302,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         }        
     }
     public void setGameNpcs(){
-        if(!npcs.isEmpty()){//remove all items from npcs
-            for(int k=0;k<npcs.size();k++){
-                npcs.remove(0);
-            }
-        }
+        npcs = new ArrayList<>();
         for(int i=0;i<npcsOnGrid.length;i++){//adds all npcs on grid into npcs
             for(int j=0;j<npcsOnGrid[i].length;j++){
                 if(npcsOnGrid[i][j]!=null){
@@ -334,22 +330,23 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         this.player = player;
     }
     public void setGridNpcs(){
+        /*
         for(int i=0;i<npcsOnGrid.length;i++){
             for(int j=0;j<npcsOnGrid[i].length;j++){
                 npcsOnGrid[i][j] = null;
             }
-        }
+        }*/
+        npcsOnGrid = new Entity[gridRows][gridColumns];
+        
+        int px = ((int)player.getX())/10;
+        int py = ((int)player.getY())/10;
+        npcsOnGrid[py][px] = player;
+        playerSet = true;
         if(!npcs.isEmpty()){
             for(int i=0;i<npcs.size();i++){
                 int nx = ((int)npcs.get(i).getX())/10;
                 int ny = ((int)npcs.get(i).getY())/10;
                 npcsOnGrid[ny][nx] = npcs.get(i);
-                
-                int px = ((int)player.getX())/10;
-                int py = ((int)player.getY())/10;
-                npcsOnGrid[py][px] = player;
-                playerSet = true;
-                
                 //System.out.println("Placed "+npcsOnGrid[ny][nx]+"@"+nx+","+ny);
             }
         }
