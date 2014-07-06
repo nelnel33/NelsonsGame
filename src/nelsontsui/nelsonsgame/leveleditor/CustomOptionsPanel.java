@@ -197,6 +197,9 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         if((fields[PROJECTILESPEED]!=null)&&isStringNumerical(fields[PROJECTILESPEED].getText())){
             editPanel.projectileSpeed = Double.parseDouble(fields[PROJECTILESPEED].getText());
         }
+        if((fields[SPEED]!=null)&&isStringNumerical(fields[SPEED].getText())){
+            editPanel.speed = Double.parseDouble(fields[SPEED].getText());
+        }
         if(fields[TALKABLESPEECH]!=null){
             editPanel.talkableSpeech = fields[TALKABLESPEECH].getText();
         }
@@ -245,8 +248,7 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         }
         for(int j=h+1;j<s.length();j++){
             sy = sy+s.charAt(j);
-        }
-        
+        }        
         if((!(sx.equals("")||sy.equals("")))&&(isStringNumerical(sx))&&(isStringNumerical(sy))){
             x = Double.parseDouble(sx);
             y = Double.parseDouble(sy);

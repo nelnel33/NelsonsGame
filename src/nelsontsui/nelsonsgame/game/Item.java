@@ -1,8 +1,7 @@
 package nelsontsui.nelsonsgame.game;
+import java.io.Serializable;
 
-import java.util.ArrayList;
-
-public class Item{
+public class Item implements Serializable{
     protected String name;
     protected int quantity;
     

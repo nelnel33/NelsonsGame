@@ -1,7 +1,8 @@
 package nelsontsui.nelsonsgame.game;
+import java.io.Serializable;
 
 
-public class Hitbox{
+public class Hitbox implements Serializable{
     protected Point close;//top left corner; closer to origin.
     protected Point far;//bottom right corner; farther from origin
     

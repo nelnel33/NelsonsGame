@@ -17,6 +17,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import nelsontsui.nelsonsgame.game.DamagableEntity;
@@ -37,6 +38,9 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     
     protected ArrayList<Entity> npcs = new ArrayList<>();
     protected nelsontsui.nelsonsgame.game.Character player;
+    
+    protected boolean playerSet=false;
+    protected boolean placedSomething=false;
     
     protected static final int gridRows = 40;
     protected static final int gridColumns = 74;
@@ -97,12 +101,12 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         this.placement = placement;
         this.dimension = dimension;
         
-        initDefaults();        
+        initDefaults();//must be public called elsewhere;        
         
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
     }
-    public void initDefaults(){        
+    public void initDefaults(){     
         name=defaultName;
         hitpoints=defaultHitpoints;
         damage=defaultDamage;
@@ -163,8 +167,12 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         if(SwingUtilities.isLeftMouseButton(e)){            
             points[py][px] = new Point(placement.getX(),placement.getY());
             createBasedOnId(py,px,points[py][px]);
+            placedSomething=true;
         }
         if(SwingUtilities.isRightMouseButton(e)){
+            if((npcsOnGrid[py][px] instanceof nelsontsui.nelsonsgame.game.Character)&&!(npcsOnGrid[py][px] instanceof NonPlayerCharacter)){
+                playerSet=false;
+            }
             points[py][px] = null;
             npcsOnGrid[py][px]=null;
         }
@@ -176,8 +184,15 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
             npcsOnGrid[r][c] = new Entity(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight());
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("Player")){
-            npcsOnGrid[r][c] = new nelsontsui.nelsonsgame.game.Character(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),
+            if(playerSet==false){
+                npcsOnGrid[r][c] = new nelsontsui.nelsonsgame.game.Character(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),
                     speed,speed,projectileSpeed,name,hitpoints,damage);
+                playerSet=true;
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "You cannot place more than one Player!", "Too Many Players!", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
         }
         //DetailedSelectors-Entity
         else if(currentDetailedSelectorId.equalsIgnoreCase("Entity")){
@@ -268,9 +283,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         }       
         else{
             npcsOnGrid[r][c] = new Entity(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight());
-        }
-        
-        
+        }        
     }
     public void checkForId(){
         //protected EntityTile[] detailedSelectors;
@@ -286,8 +299,60 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
                     currentDetailedSelectorId = defaultDetailedSelectorId;
                 }
             }
+        }        
+    }
+    public void setGameNpcs(){
+        if(!npcs.isEmpty()){//remove all items from npcs
+            for(int k=0;k<npcs.size();k++){
+                npcs.remove(0);
+            }
         }
-        
+        for(int i=0;i<npcsOnGrid.length;i++){//adds all npcs on grid into npcs
+            for(int j=0;j<npcsOnGrid[i].length;j++){
+                if(npcsOnGrid[i][j]!=null){
+                    if((npcsOnGrid[i][j] instanceof nelsontsui.nelsonsgame.game.Character)&&
+                            !(npcsOnGrid[i][j] instanceof NonPlayerCharacter)){
+                        player = (nelsontsui.nelsonsgame.game.Character)npcsOnGrid[i][j];
+                    }
+                    else{
+                        npcs.add(npcsOnGrid[i][j]);
+                    }
+                }
+            }
+        }
+    }
+    public ArrayList<Entity> getNpcs(){//TO USE MUST IMPLEMENT setGameNpcs()!!!!
+       return npcs;
+    }
+    public nelsontsui.nelsonsgame.game.Character getPlayer(){//TO USE MUST IMPLEMENT setGameNpcs()!!!!
+        return player;
+    }
+    public void setNpcs(ArrayList<Entity> npcs){
+        this.npcs = npcs;
+    }
+    public void setPlayer(nelsontsui.nelsonsgame.game.Character player){
+        this.player = player;
+    }
+    public void setGridNpcs(){
+        for(int i=0;i<npcsOnGrid.length;i++){
+            for(int j=0;j<npcsOnGrid[i].length;j++){
+                npcsOnGrid[i][j] = null;
+            }
+        }
+        if(!npcs.isEmpty()){
+            for(int i=0;i<npcs.size();i++){
+                int nx = ((int)npcs.get(i).getX())/10;
+                int ny = ((int)npcs.get(i).getY())/10;
+                npcsOnGrid[ny][nx] = npcs.get(i);
+                
+                int px = ((int)player.getX())/10;
+                int py = ((int)player.getY())/10;
+                npcsOnGrid[py][px] = player;
+                playerSet = true;
+                
+                //System.out.println("Placed "+npcsOnGrid[ny][nx]+"@"+nx+","+ny);
+            }
+        }
     }
     @Override
     public void paintComponent(Graphics g){
@@ -303,12 +368,13 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         }
         for(int z = 0;z<gridRows;z++){
             for(int k = 0;k<gridColumns;k++){
-                Point p = points[z][k];
+                //Point p = points[z][k];
                 Entity e = npcsOnGrid[z][k];
-                if(p==null||e==null){}
+                if(e==null){}
                 else{
                     colorEntities(e,graphic);
-                    graphic.fill(new Rectangle2D.Double(p.getX(),p.getY(),e.getWidth(),e.getHeight()));
+                    graphic.fill(new Rectangle2D.Double(e.getX(),e.getY(),e.getWidth(),e.getHeight()));
+                    //System.out.println("painted"+e+"@"+e.getX()+","+e.getY());
                 }
             }
         }
@@ -343,14 +409,14 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
                 graphic.setColor(new Color(0,0,0));//black
             }                    
         }
+        else if(temp instanceof nelsontsui.nelsonsgame.game.Character){
+            graphic.setColor(new Color(63,131,104));//Cyanish Green     
+        }
         else if(temp instanceof DamagableEntity){
-            graphic.setColor(Color.GRAY);//greenish                    
+            graphic.setColor(Color.GRAY);//grey                    
         }
         else if(temp instanceof SpawnableItem){
             graphic.setColor(new Color(188,101,121));                    
-        }
-        else if(temp instanceof nelsontsui.nelsonsgame.game.Character){
-            graphic.setColor(new Color(63,131,104));//Cyanish Green     
         }
         else{
             graphic.setColor(Color.DARK_GRAY);//greenish                    

@@ -22,18 +22,6 @@ public class Character extends DamagableEntity{
     
     public double DROP_DISTANCE_X;
     public double DROP_DISTANCE_Y;
-    
-    public Character(){
-        //TODO: Default Character is Obstacle || Obstacle is Character with x,y,travelX,travelY,damage=0;
-        super(10,10,50,50,100);
-        travelX=10;
-        travelY=10;
-        name = "WEAKLING";
-        damage = 1;   
-        inventory = null;
-        DROP_DISTANCE_X = width+5;
-        DROP_DISTANCE_Y = width+5;
-    }
     public Character(
               double x,
               double y,

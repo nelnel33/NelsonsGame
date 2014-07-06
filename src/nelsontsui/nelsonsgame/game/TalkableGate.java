@@ -13,7 +13,7 @@ import static nelsontsui.nelsonsgame.game.MapGate.KILL_ALL;
  *
  * @author Nelnel33
  */
-public class TalkableGate extends MapGate {
+public class TalkableGate extends Entity {
     private String speech;
     private boolean flag = true;
     public TalkableGate(
@@ -23,7 +23,7 @@ public class TalkableGate extends MapGate {
             double height, 
             String speech         
             ){
-        super(x, y, width, height, MapGate.REACH_GATE);
+        super(x, y, width, height);
         this.speech = speech;
     }
     public String getSpeech(){
@@ -33,7 +33,6 @@ public class TalkableGate extends MapGate {
     public void setSpeech(String speech){
         this.speech = speech;
     }       
-    @Override
     public boolean canOperate(Entity e){
         if((e.getHitbox().isTouching(this.getHitbox()))&&flag){
             flag = false;
@@ -42,10 +41,6 @@ public class TalkableGate extends MapGate {
         else{
             return false;
         }
-    }
-    @Override
-    public void setOperation(Entity e){
-        //does nothing
     }
     
 }

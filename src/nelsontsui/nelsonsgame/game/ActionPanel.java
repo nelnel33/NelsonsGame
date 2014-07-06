@@ -59,11 +59,22 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         this.edgeX = edgeX;
         this.edgeY = edgeY; 
         
-        //check.start();
         setSize(this.edgeX,this.edgeY);
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
+    }
+    public ArrayList<Entity> getNpcs(){
+        return npcs;
+    }
+    public Character getPlayer(){
+        return Player;
+    }
+    public void setNpcs(ArrayList<Entity> npcs){
+        this.npcs = npcs;
+    }
+    public void setPlayer(Character Player){
+        this.Player = Player;
     }
     public void setInventoryItems(InventoryIcon[] inventoryItems){
         this.inventoryItems = inventoryItems;
@@ -453,6 +464,16 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    public void checkForMapGateOperation(){
+        if(!npcs.isEmpty()){
+            for(int i=0;i<npcs.size();i++){
+                if(npcs.get(i) instanceof MapGate){
+                    MapGate m = (MapGate)npcs.get(i);
+                    m.setOperation(this);
+                }
+            }
+        }
+    }
             
     public void up(){
         if((withinPanelY(Player)!=Hitbox.ABOVE)&&canPlayerMoveUp()){
@@ -588,81 +609,84 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(frameCount%FPS==0){
-            detectForDamage();
-            //System.out.println("Player HP:"+Player.getHitpoints());
-            npcFireProjectile();
-        }   
-        if(frameCount%(10*FPS)==0){
-            regenOverTime();
-        }
-        if(keyPressed[UP]){
-            up();
-        }
-        if(keyPressed[DOWN]){
-            down();
-        }
-        if(keyPressed[LEFT]){
-            left();
-        }
-        if(keyPressed[RIGHT]){
-            right();
-        }
-        if(keyPressed[ATTACK]){
-            attack();
-            //shoot();
-            keyPressed[ATTACK] = false;
-        }
-        if(keyPressed[SHOOT]){
-            shoot();
-            keyPressed[SHOOT] = false;
-        }
-        if(keyPressed[DEFEND]){
-                      
-        }
-        if(keyPressed[HEAL]){
-            heal();
-            keyPressed[HEAL]=false;
-        }
-        if(keyPressed[SELECTFOR]){
-            //increments inventory; does nothing in actionPerformed method
-        }
-        if(keyPressed[SELECTBACK]){
-            //increments inventory; does nothing in actionPerformed method
-        }
-        if(keyPressed[USE]){
-            keyPressed[USE] = false;  
-            if(!Player.inventory.items.isEmpty()){
-                for(int i=0;i<Player.inventory.items.size();i++){
-                    if(Inventory.inventorySelectorIndex==i){
-                        use(i);
-                }
+        if(Player!=null){
+            if(frameCount%FPS==0){
+                detectForDamage();
+                //System.out.println("Player HP:"+Player.getHitpoints());
+                npcFireProjectile();
+            }   
+            if(frameCount%(10*FPS)==0){
+                regenOverTime();
             }
-        }
-        }
-        if(keyPressed[DROP]){
-            keyPressed[DROP] = false;
-            if(!Player.inventory.items.isEmpty()){
-            for(int i=0;i<Player.inventory.items.size();i++){
-                if(Inventory.inventorySelectorIndex==i){
-                    drop(i);                   
+            if(keyPressed[UP]){
+                up();
+            }
+            if(keyPressed[DOWN]){
+                down();
+            }
+            if(keyPressed[LEFT]){
+                left();
+            }
+            if(keyPressed[RIGHT]){
+                right();
+            }
+            if(keyPressed[ATTACK]){
+                attack();
+                //shoot();
+                keyPressed[ATTACK] = false;
+            }
+            if(keyPressed[SHOOT]){
+                shoot();
+                keyPressed[SHOOT] = false;
+            }
+            if(keyPressed[DEFEND]){
+                      
+            }
+            if(keyPressed[HEAL]){
+                heal();
+                keyPressed[HEAL]=false;
+            }
+            if(keyPressed[SELECTFOR]){
+                //increments inventory; does nothing in actionPerformed method
+            }
+            if(keyPressed[SELECTBACK]){
+                //increments inventory; does nothing in actionPerformed method
+            }
+            if(keyPressed[USE]){
+                keyPressed[USE] = false;  
+                if(!Player.inventory.items.isEmpty()){
+                    for(int i=0;i<Player.inventory.items.size();i++){
+                        if(Inventory.inventorySelectorIndex==i){
+                            use(i);
                     }
                 }
             }
-        }     
-        checkHasBeenFired();
-        checkPortals();
-        checkTalkableGates();
-        npcProjectileInflictDamage(); 
-        checkForItems();
-        checkForInventory();
-        Player.inventory.sortInventory();
-        npcProjectileWithinPanel();       
-        projectileWithinPanel();
-        projectileInflictDamage();
-        npcMove();
-        repaint();
-        frameCount++;
+            }
+            if(keyPressed[DROP]){
+                keyPressed[DROP] = false;
+                if(!Player.inventory.items.isEmpty()){
+                for(int i=0;i<Player.inventory.items.size();i++){
+                    if(Inventory.inventorySelectorIndex==i){
+                        drop(i);                   
+                        }
+                    }
+                }
+            }     
+            checkForMapGateOperation();
+            checkHasBeenFired();
+            checkPortals();
+            checkTalkableGates();
+            npcProjectileInflictDamage(); 
+            checkForItems();
+            checkForInventory();
+            projectileWithinPanel();
+            projectileInflictDamage();
+            Player.inventory.sortInventory();
+            npcProjectileWithinPanel();     
+            npcMove();
+            repaint();
+            frameCount++;
+        }
         //System.out.println("framecount:"+frameCount);
     }
 

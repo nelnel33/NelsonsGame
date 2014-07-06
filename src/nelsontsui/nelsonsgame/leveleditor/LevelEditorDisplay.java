@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -299,7 +300,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
             }
         }
     }
-    public void addActions(){
+    private void addActions(){
         defaultOptions.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -310,6 +311,32 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
             @Override
             public void actionPerformed(ActionEvent e){
                 customPanel = new CustomOptionsPanel(LevelEditorDisplay.this,editPanel);
+            }
+        });
+        save.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(editPanel.playerSet){
+                    editPanel.setGameNpcs();
+                    nelsontsui.nelsonsgame.game.Character player = editPanel.getPlayer();
+                    ArrayList<Entity> npcs = editPanel.getNpcs();
+                    FileSelector fileSelector = new FileSelector(FileSelector.SAVE,npcs,player);
+                }
+                else{
+                    JOptionPane.showMessageDialog(LevelEditorDisplay.this, "You must place a Player!", "No Player!", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        importFile.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(editPanel.placedSomething){
+                    JOptionPane.showMessageDialog(LevelEditorDisplay.this, "There are unsaved changes. Are you sure you want to import?", "Unsaved Changes", JOptionPane.INFORMATION_MESSAGE);
+                }
+                FileSelector fileSelector = new FileSelector(FileSelector.IMPORT,new ArrayList<Entity>(),null);
+                editPanel.setNpcs(fileSelector.getNpcs());
+                editPanel.setPlayer(fileSelector.getPlayer());
+                editPanel.setGridNpcs();
             }
         });
     }

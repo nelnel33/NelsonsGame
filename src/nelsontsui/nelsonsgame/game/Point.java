@@ -6,7 +6,9 @@
 
 package nelsontsui.nelsonsgame.game;
     
-public class Point {
+import java.io.Serializable;
+
+public class Point implements Serializable{
     protected double x;
     protected double y;
     public Point(double x, double y){

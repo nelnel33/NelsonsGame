@@ -6,11 +6,8 @@
 
 package nelsontsui.nelsonsgame.game;
 
-/**
- *
- * @author Nelnel33
- */
-public class DimensionDouble {
+import java.io.Serializable;
+public class DimensionDouble implements Serializable{
     protected double width;
     protected double height;
     public DimensionDouble(double width, double height){

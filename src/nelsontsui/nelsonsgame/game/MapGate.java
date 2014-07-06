@@ -6,18 +6,35 @@
 
 package nelsontsui.nelsonsgame.game;
 
+import java.io.File;
 import java.util.ArrayList;
+import nelsontsui.nelsonsgame.leveleditor.ReadFile;
 
 public class MapGate extends Entity{
     private int useCondition;
     private boolean canUse;
+    
+    private File file;
+    private boolean usedToExitMap;
     
     public static final int KILL_ALL = 0;
     public static final int REACH_GATE = 1;
     public MapGate(double x, double y, double width, double height, int useCondition) {
         super(x, y, width, height);
         this.useCondition = useCondition;
+        usedToExitMap = false;
         assignCanUse();
+    }
+    public void setFile(File file){
+        this.file = file;
+        usedToExitMap = true;
+    }
+    public File getFile(){
+        return file;
+    }
+    public void removeFile(){
+        this.file = null;
+        usedToExitMap = false;
     }
     private void assignCanUse(){
         if(useCondition==REACH_GATE){
@@ -52,7 +69,17 @@ public class MapGate extends Entity{
         }
     }
     public void setOperation(Entity e){
-        //set to import map, etc.
+
+    }
+    public void setOperation(ActionPanel action){
+        if(usedToExitMap&&(file!=null)){
+            ReadFile reader = new ReadFile(file);
+            reader.read();
+            ArrayList<Entity> npcs = reader.getNpcs();
+            Character player = reader.getPlayer();
+            action.setNpcs(npcs);
+            action.setPlayer(player);
+        }
     }
     
 }

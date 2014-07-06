@@ -26,7 +26,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     public static final Border blackborder = BorderFactory.createLineBorder(Color.black);   
     
     protected Character Player;
-    protected ArrayList<Entity> npcs;
+    protected ArrayList<Entity> npcs = new ArrayList<>();
     
     //Main Panels
     protected ActionPanel activePanel;
@@ -87,9 +87,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     NelsonWatermark watermark;    
     
     //Ingame Elements/Entities
-    MapGate win;//TODO: Temporary
-    
-   
+    MapGate win;//TODO: Temporary    
 
     public GameDisplay(JButton toStartMenu){
     //super("Nelson's Game"); //JFrame to JPanel
@@ -110,10 +108,32 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     controlButtonAction();    
     miscButtonAction();
     check.start();
-
-    //setResizable(false); //JFrame to JPanel
-    //setVisible(true); //JFrame to JPanel
-    //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //JFrame to JPanel 
+    }
+    
+    public GameDisplay(JButton toStartMenu, ArrayList<Entity> npcs, Character Player){
+    this.toStartMenu = toStartMenu;
+    this.npcs = npcs;
+    this.Player = Player;
+    
+    createBackgroundLayout();    
+    check.addActionListener(activePanel);
+    check.addActionListener(dialogPanel);
+    
+    addWatermark();
+    
+    createStatsLayout();    
+    createControlLayout();
+    createInventoryLayout();
+    
+    controlButtonAction();    
+    miscButtonAction();
+    check.start();
+    }
+    public void setNpcs(ArrayList<Entity> npcs){
+        this.npcs = npcs;
+    }
+    public void setPlayer(Character Player){
+        this.Player = Player;
     }
     public void getFocus(){
         activePanel.requestFocusInWindow();
@@ -214,27 +234,39 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         statsLabel.add(new JLabel("<html><br><b>Statistics<b>:<html>",SwingConstants.CENTER));
         //statsLabel.setBorder(blackborder);
 
-        damageLabel = new JLabel("<html>Damage:<br><br><html>"+Player.getDamage(),SwingConstants.CENTER);
+        damageLabel = new JLabel("<html>Damage:<br><br><html>"
+                +Player.getDamage()
+                ,SwingConstants.CENTER);
         damageDisplay.add(damageLabel);        
         //damageDisplay.setBorder(blackborder);
         
-        hitpointsLabel = new JLabel("<html>Hitpoints:<br><br><html>"+Player.getHitpoints(),SwingConstants.CENTER);
+        hitpointsLabel = new JLabel("<html>Hitpoints:<br><br><html>"
+                +Player.getHitpoints()
+                ,SwingConstants.CENTER);
         hitpointsDisplay.add(hitpointsLabel);
         //hitpointsDisplay.setBorder(blackborder);
         
-        weaponLabel = new JLabel("<html>Weapon:<br><br><html>"+Player.getWeaponDamage(),SwingConstants.CENTER);
+        weaponLabel = new JLabel("<html>Weapon:<br><br><html>"
+                +Player.getWeaponDamage()
+                ,SwingConstants.CENTER);
         weaponDisplay.add(weaponLabel);
         //weaponDisplay.setBorder(blackborder);
         
-        armorLabel = new JLabel("<html>Armor:<br><br><html>"+Player.getArmorHitpoints(),SwingConstants.CENTER);
+        armorLabel = new JLabel("<html>Armor:<br><br><html>"
+                +Player.getArmorHitpoints()
+                ,SwingConstants.CENTER);
         armorDisplay.add(armorLabel);
         //armorDisplay.setBorder(blackborder);
         
-        totalDamageLabel = new JLabel("<html>Total<br>Damage:<br><br> <html>"+Player.getDamage(),SwingConstants.CENTER);
+        totalDamageLabel = new JLabel("<html>Total<br>Damage:<br><br> <html>"
+                +Player.getDamage()
+                ,SwingConstants.CENTER);
         totalDamageDisplay.add(totalDamageLabel);
         //totalDamageDisplay.setBorder(blackborder);
         
-        totalHitpointsLabel = new JLabel("<html>Total<br>Hitpoints:<br><br> <html>"+Player.getHitpoints(),SwingConstants.CENTER);
+        totalHitpointsLabel = new JLabel("<html>Total<br>Hitpoints:<br><br> <html>"
+                +Player.getHitpoints()
+                ,SwingConstants.CENTER);
         totalHitpointsDisplay.add(totalHitpointsLabel);
         //totalHitpointsDisplay.setBorder(blackborder);
         
@@ -242,7 +274,9 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         XPDisplay.add(XPLabel);
         //XPDisplay.setBorder(blackborder);
         
-        levelLabel = new JLabel("<html>Level:<br><br><html>"+Player.getLevel(),SwingConstants.CENTER);
+        levelLabel = new JLabel("<html>Level:<br><br><html>"
+                +Player.getLevel()
+                ,SwingConstants.CENTER);
         levelDisplay.add(levelLabel);
         //levelDisplay.setBorder(blackborder);
         
@@ -347,14 +381,16 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         });        
     }
     private void setStatsText(){
-        damageLabel.setText("<html>Damage:<br><br><html>"+Player.getinitDamage());
-        hitpointsLabel.setText("<html>Hitpoints:<br><br><html>"+Player.getinitHitpoints());
-        weaponLabel.setText("<html>Weapon:<br><br><html>"+Player.getWeaponDamage());
-        armorLabel.setText("<html>Armor:<br><br><html>"+Player.getArmorHitpoints());
-        totalDamageLabel.setText("<html>Total<br>Damage:<br><br> <html>"+Player.getDamage());
-        totalHitpointsLabel.setText("<html>Total<br>Hitpoints:<br><br> <html>"+Player.getHitpoints());
-        XPLabel.setText("<html>XP:<br><br><html>"+"null");
-        levelLabel.setText("<html>Level:<br><br><html>"+Player.getLevel());
+        if(Player!=null){
+            damageLabel.setText("<html>Damage:<br><br><html>"+Player.getinitDamage());
+            hitpointsLabel.setText("<html>Hitpoints:<br><br><html>"+Player.getinitHitpoints());
+            weaponLabel.setText("<html>Weapon:<br><br><html>"+Player.getWeaponDamage());
+            armorLabel.setText("<html>Armor:<br><br><html>"+Player.getArmorHitpoints());
+            totalDamageLabel.setText("<html>Total<br>Damage:<br><br> <html>"+Player.getDamage());
+            totalHitpointsLabel.setText("<html>Total<br>Hitpoints:<br><br> <html>"+Player.getHitpoints());
+            XPLabel.setText("<html>XP:<br><br><html>"+"null");
+            levelLabel.setText("<html>Level:<br><br><html>"+Player.getLevel());
+        }
     }
     
     private void createControlLayout(){
@@ -559,7 +595,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         //System.out.println(Inventory.inventorySelectorIndex);
     }
     private void setInventoryIcons(){
-    if(!Player.inventory.items.isEmpty()){
+    if((Player!=null)&&(!Player.inventory.items.isEmpty())){
         for(int i=0;i<Player.inventory.items.size();i++){
             if(Player.inventory.items.get(i).getQuantity()>0){
                 if(Player.inventory.items.get(i) instanceof Armor){
@@ -587,9 +623,11 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     activePanel.setInventoryItems(inventoryItems);
     }   
     private void inventoryRemoveIcons(){
-        int listSize = Player.inventory.items.size();
-        for(int i=listSize;i<Inventory.MAX_SIZE;i++){
-            inventoryLabels[i].setText(null);
+        if(Player!=null){
+            int listSize = Player.inventory.items.size();
+            for(int i=listSize;i<Inventory.MAX_SIZE;i++){
+                inventoryLabels[i].setText(null);
+            }
         }
     }
     private void createDialogLayout(){
@@ -607,26 +645,11 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         setStatsText();        
         if(dialogPanel.getHasBeenSelected()){
             getFocus();
-           dialogPanel.setHasBeenSelected(false);
-           }
-         
-        lose();        
-        win.checkIfCanUse(activePanel.npcs);        
-        win();
+            dialogPanel.setHasBeenSelected(false);
+            }   
+        //win.checkIfCanUse(activePanel.npcs);        
         
-    }   
-        
-    private void win(){
-        if(win.canOperate(Player)){
-           dialogPanel.message("You Win!!!!");
-        }        
-    }    
-    private void lose(){
-        if(Player.getHitpoints()<=0){
-            dialogPanel.message("You Lose.");
-            check.stop();
-        }
-    }        
+    }          
     private void createMap(){
         createExampleMap();
     } 
@@ -711,5 +734,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         
         Player = p;
         npcs = e;
+            
+            
     }  
 }

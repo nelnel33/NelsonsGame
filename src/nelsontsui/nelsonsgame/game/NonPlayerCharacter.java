@@ -23,13 +23,6 @@ public class NonPlayerCharacter extends Character {
     public static final int BR_ARCHER = 52;
     public static final int BR_TANK = 53;
     public static final int BR_SUBBOSS = 54;
-    
-    
-    public NonPlayerCharacter(){
-        detectionRadius = 30;
-        characterClass = 1;
-        
-    }
     public NonPlayerCharacter(
               double x,
               double y,

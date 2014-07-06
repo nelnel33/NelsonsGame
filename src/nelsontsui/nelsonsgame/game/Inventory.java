@@ -1,8 +1,9 @@
 package nelsontsui.nelsonsgame.game;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Inventory {
+public class Inventory implements Serializable{
     protected ArrayList<Item> items = new ArrayList<>();
     public static final int MAX_SIZE = 9;
     public static final int GRID_ROW = 3;

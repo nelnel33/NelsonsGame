@@ -5,8 +5,9 @@
  */
 
 package nelsontsui.nelsonsgame.game;
+import java.io.Serializable;
 
-public class Entity{
+public class Entity implements Serializable{
     protected double x;
     protected double y;    
     protected double width;

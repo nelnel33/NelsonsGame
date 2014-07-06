@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,6 +26,9 @@ public class MainDisplay extends JFrame implements ActionListener{
     //JDialog that contains howto/instructions
     private HowTo instructions;
     
+    //JDialog that contains Import - file selector
+    private FileSelector importer;
+    
     //JDialog that contains LevelEditor
     private LevelEditorDisplay levelEditor;
     
@@ -45,17 +49,13 @@ public class MainDisplay extends JFrame implements ActionListener{
     private void init(){
         play = new JButton("Play Nelson's Game");
         howTo = new JButton("Instructions");
-        importButton = new JButton("Import");
+        importButton = new JButton("Import and Play!");
         leveleditor = new JButton("Level Editor");
         
         setStartMenuButtonAction();
         setGameDisplayButtonAction();
         startMenu = new StartMenu(play,howTo,importButton,leveleditor);
         add(startMenu);
-    }
-    private void framePlacement(){
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
     }
     private void removeStartMenu(){
         this.remove(startMenu);
@@ -68,7 +68,7 @@ public class MainDisplay extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e){
                 removeStartMenu();
-                swapToGameDisplay();
+                swapToDefaultGameDisplay();
             }
         });  
         howTo.addActionListener(new ActionListener(){
@@ -80,7 +80,15 @@ public class MainDisplay extends JFrame implements ActionListener{
         importButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-
+                FileSelector f = new FileSelector(FileSelector.IMPORT,null,null);
+                if(f.getNpcs()!=null && f.getPlayer()!=null){
+                    ArrayList<Entity> npcs = f.getNpcs();
+                    Character player = f.getPlayer();
+                    removeStartMenu();
+                    swapToGameDisplay(npcs,player);
+                    gameDisplay.setNpcs(npcs);
+                    gameDisplay.setPlayer(player);
+                }
             }
         });
         leveleditor.addActionListener(new ActionListener(){
@@ -104,11 +112,16 @@ public class MainDisplay extends JFrame implements ActionListener{
             }
         });
     }
-    private void swapToGameDisplay(){
+    private void swapToGameDisplay(ArrayList<Entity> e, Character p){
+        gameDisplay = new GameDisplay(toStartMenu,e,p);
+        add(gameDisplay);
+        gameDisplay.getFocus();
+    }
+    private void swapToDefaultGameDisplay(){
         gameDisplay = new GameDisplay(toStartMenu);          
         add(gameDisplay);
         gameDisplay.getFocus();
-    }   
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
