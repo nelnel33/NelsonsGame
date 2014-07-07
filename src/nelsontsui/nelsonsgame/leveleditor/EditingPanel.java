@@ -66,9 +66,8 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     protected final int defaultWeaponDamage=5;
     protected final String defaultItemName="Item";
     protected final int defaultPotionStrength=2;
-    protected final Point defaultPortalExit = new Point(0,0);
-    
-    protected final DimensionDouble defaultDimension = new DimensionDouble(20,20);
+    protected final Point defaultPortalExit = new Point(0,0);    
+    protected final DimensionDouble defaultDimension = new DimensionDouble(10,10);
             
     
     //for characters & npcs
@@ -220,10 +219,10 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
             npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.DEFAULT,false);
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("MainPortalKillAll")){
-            npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(0,0,10,10),Portal.KILL_ALL_NONBOSS,true);
+            npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.KILL_ALL_NONBOSS,true);
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("SubPortalKillAll")){
-            npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(0,0,10,10),Portal.KILL_ALL_NONBOSS,false);
+            npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.KILL_ALL_NONBOSS,false);
         }
         //DetailSelectors - NPCS
         else if(currentDetailedSelectorId.equalsIgnoreCase("Warrior")){
@@ -336,18 +335,20 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
                 npcsOnGrid[i][j] = null;
             }
         }*/
-        npcsOnGrid = new Entity[gridRows][gridColumns];
-        
-        int px = ((int)player.getX())/10;
-        int py = ((int)player.getY())/10;
-        npcsOnGrid[py][px] = player;
-        playerSet = true;
-        if(!npcs.isEmpty()){
-            for(int i=0;i<npcs.size();i++){
-                int nx = ((int)npcs.get(i).getX())/10;
-                int ny = ((int)npcs.get(i).getY())/10;
-                npcsOnGrid[ny][nx] = npcs.get(i);
-                //System.out.println("Placed "+npcsOnGrid[ny][nx]+"@"+nx+","+ny);
+        if(player==null || npcs==null){}
+        else{
+            npcsOnGrid = new Entity[gridRows][gridColumns];        
+            int px = ((int)player.getX())/10;
+            int py = ((int)player.getY())/10;
+            npcsOnGrid[py][px] = player;
+            playerSet = true;
+            if(!npcs.isEmpty()){
+                for(int i=0;i<npcs.size();i++){
+                    int nx = ((int)npcs.get(i).getX())/10;
+                    int ny = ((int)npcs.get(i).getY())/10;
+                    npcsOnGrid[ny][nx] = npcs.get(i);
+                    //System.out.println("Placed "+npcsOnGrid[ny][nx]+"@"+nx+","+ny);
+                }
             }
         }
     }

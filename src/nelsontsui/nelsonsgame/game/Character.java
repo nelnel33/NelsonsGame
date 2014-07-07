@@ -22,6 +22,7 @@ public class Character extends DamagableEntity{
     
     public double DROP_DISTANCE_X;
     public double DROP_DISTANCE_Y;
+
     public Character(
               double x,
               double y,
@@ -133,7 +134,7 @@ public class Character extends DamagableEntity{
         damage++;
     }
     public Projectile loadProjectile(int direction){
-        projectile.add(new Projectile(x,y,width/2,height/2,projectileSpeed,direction)); 
+        projectile.add(new Projectile(x,y,width/3,height/3,projectileSpeed,direction)); 
         canFireNextProjectile=false;
         return projectile.get(projectile.size()-1);
     }

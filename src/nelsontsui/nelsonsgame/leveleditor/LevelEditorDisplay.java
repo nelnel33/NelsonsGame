@@ -330,13 +330,23 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         importFile.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+                int n = -1;
                 if(editPanel.placedSomething){
-                    JOptionPane.showMessageDialog(LevelEditorDisplay.this, "There are unsaved changes. Are you sure you want to import?", "Unsaved Changes", JOptionPane.INFORMATION_MESSAGE);
+                    Object[] options = { "OK", "CANCEL" };
+                    n = JOptionPane.showOptionDialog(LevelEditorDisplay.this, "There are unsaved changes. Are you sure you want to import?", "Unsaved Changes",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null, options, options[0]);
+                    //JOptionPane.showMessageDialog(LevelEditorDisplay.this, "There are unsaved changes. Are you sure you want to import?", "Unsaved Changes", JOptionPane.WARNING_MESSAGE);
                 }
-                FileSelector fileSelector = new FileSelector(FileSelector.IMPORT,new ArrayList<Entity>(),null);
-                editPanel.setNpcs(fileSelector.getNpcs());
-                editPanel.setPlayer(fileSelector.getPlayer());
-                editPanel.setGridNpcs();
+                if(n == JOptionPane.NO_OPTION){              
+                    //does nothing
+                }
+                else{
+                    FileSelector fileSelector = new FileSelector(FileSelector.IMPORT,new ArrayList<Entity>(),null);
+                    editPanel.setNpcs(fileSelector.getNpcs());
+                    editPanel.setPlayer(fileSelector.getPlayer());
+                    editPanel.setGridNpcs();
+                }
+                
             }
         });
     }

@@ -209,30 +209,55 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
         
     public void projectileInflictDamage(){
-        if(!Player.getProjectile().isEmpty()&&!npcs.isEmpty()){
+        if(!(Player.getProjectile().isEmpty() || npcs.isEmpty())){
             for(int i=0;i<npcs.size();i++){
-                if(Player.getProjectile().get(0).getHitbox().isTouching(npcs.get(i).getHitbox())
-                        &&npcs.get(i) instanceof OpaqueEntity){
-                    Player.removeProjectile();
-                    if(npcs.get(i) instanceof DamagableEntity){
-                    Player.shoot((DamagableEntity)npcs.get(i));
-                    System.out.println("npc"+i+" HP:"+((DamagableEntity)npcs.get(i)).getHitpoints());
-                        if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
-                            if(npcs.get(i) instanceof NonPlayerCharacter){
-                                dialogPanel.message(((NonPlayerCharacter)npcs.get(i)).getName()+" has been killed");
+                for(int j=Player.getProjectile().size()-1;j>=0;j--){
+                    if(Player.getProjectile().get(j).getHitbox().isTouching(npcs.get(i).getHitbox())
+                            &&npcs.get(i) instanceof OpaqueEntity){
+                        Player.removeProjectile();
+                        j--;
+                        if(npcs.get(i) instanceof DamagableEntity){
+                            Player.shoot((DamagableEntity)npcs.get(i));
+                            System.out.println("npc"+i+" HP:"+((DamagableEntity)npcs.get(i)).getHitpoints());
+                            if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
+                                if(npcs.get(i) instanceof NonPlayerCharacter){
+                                    dialogPanel.message(((NonPlayerCharacter)npcs.get(i)).getName()+" has been killed");
+                                }
+                                npcs.remove(i);
                             }
-                            npcs.remove(i);
                         }
-                        if(Player.getProjectile().isEmpty()){
-                            break;
-                        }
-                    }
-                    else{
-                        break;
                     }
                 }
             }
-        }  
+        }
+        /*
+        if(!Player.getProjectile().isEmpty()&&!npcs.isEmpty()){
+            for(int i=0;i<npcs.size();i++){
+                for(int j=0;j<Player.getProjectile().size();j++){
+                    if(Player.getProjectile().get(0).getHitbox().isTouching(npcs.get(i).getHitbox())
+                            &&npcs.get(i) instanceof OpaqueEntity){
+                        Player.removeProjectile();
+                        if(npcs.get(i) instanceof DamagableEntity){
+                            Player.shoot((DamagableEntity)npcs.get(i));
+                            System.out.println("npc"+i+" HP:"+((DamagableEntity)npcs.get(i)).getHitpoints());
+                                if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
+                                    if(npcs.get(i) instanceof NonPlayerCharacter){
+                                        dialogPanel.message(((NonPlayerCharacter)npcs.get(i)).getName()+" has been killed");
+                                    }
+                                    npcs.remove(i);
+                            }
+                            if(Player.getProjectile().isEmpty()){
+                                break;
+                            }
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+            }
+        } 
+        */ 
     }
     public void projectileWithinPanel(){
         if(!Player.getProjectile().isEmpty()){
@@ -828,6 +853,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         
         if(!Player.getProjectile().isEmpty()){
             for(int z=0;z<Player.getProjectile().size();z++){
+            graphic.setColor(new Color(63,131,104));
             graphic.fill(new Rectangle2D.Double(Player.getProjectile().get(z).x,Player.getProjectile().get(z).y,
                     Player.getProjectile().get(z).width,Player.getProjectile().get(z).height));
             }

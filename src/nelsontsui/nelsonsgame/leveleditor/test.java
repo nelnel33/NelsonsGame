@@ -9,11 +9,13 @@ package nelsontsui.nelsonsgame.leveleditor;
 import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
+import nelsontsui.nelsonsgame.game.Entity;
 
 
 public class test {
     public static void main(String[] args){
-        JFileChooser fc = new JFileChooser();
+        Entity e = new Entity(10,10,20,20);
+        System.out.println(e.toString());
     }
     
    

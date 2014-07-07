@@ -112,8 +112,8 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         fields[WEAPONDAMAGE] = new JTextField(""+editPanel.weaponDamage);
         fields[ITEMNAME] = new JTextField(""+editPanel.itemName);
         fields[POTIONSTRENGTH] = new JTextField(""+editPanel.potionStrength);
-        fields[DIMENSIONS] = new JTextField(""+editPanel.dimension.getWidth()+","+editPanel.dimension.getHeight());
-        fields[PORTALEXIT] = new JTextField(""+editPanel.portalExit.getX()+","+editPanel.portalExit.getY());
+        fields[DIMENSIONS] = new JTextField(""+(int)editPanel.dimension.getWidth()+","+(int)editPanel.dimension.getHeight());
+        fields[PORTALEXIT] = new JTextField(""+(int)editPanel.portalExit.getX()+","+(int)editPanel.portalExit.getY());
         
         nameOfFields[NAME] = new JLabel("Name of NPCs or Player");
         nameOfFields[HITPOINTS] = new JLabel("Hitpoints of NPCs or Player");
@@ -145,8 +145,8 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         previousValues[ITEMNAME] = new JLabel("Current: "+editPanel.itemName);
             previousValues[ITEMNAME].setToolTipText(editPanel.itemName);
         previousValues[POTIONSTRENGTH] = new JLabel("Current: "+editPanel.potionStrength);
-        previousValues[DIMENSIONS] = new JLabel("Current: ("+editPanel.dimension.getWidth()+","+editPanel.dimension.getHeight()+")");
-        previousValues[PORTALEXIT] = new JLabel("Current: ("+editPanel.portalExit.getX()+","+editPanel.portalExit.getY()+")");
+        previousValues[DIMENSIONS] = new JLabel("Current: ("+(int)editPanel.dimension.getWidth()+","+(int)editPanel.dimension.getHeight()+")");
+        previousValues[PORTALEXIT] = new JLabel("Current: ("+(int)editPanel.portalExit.getX()+","+(int)editPanel.portalExit.getY()+")");
     }
     private void addComponents(){
         for(int i=0;i<TOTAL_FIELDS;i++){

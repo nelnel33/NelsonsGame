@@ -63,23 +63,34 @@ public class MapGate extends Entity{
             return false;
         }
     }
-    public void operate(Entity e){
+    public void operate(Entity e, ActionPanel action){
         if((e.getHitbox().isTouching(this.getHitbox()))&&canUse){
-            setOperation(e);
+            setOperation(action);
         }
     }
-    public void setOperation(Entity e){
-
+     public void operate(Entity e, DialogBox dialog){
+        if((e.getHitbox().isTouching(this.getHitbox()))&&canUse){
+            setOperation(dialog);
+        }
     }
     public void setOperation(ActionPanel action){
-        if(usedToExitMap&&(file!=null)){
+        if(usedToExitMap && (file!=null) ){
             ReadFile reader = new ReadFile(file);
             reader.read();
             ArrayList<Entity> npcs = reader.getNpcs();
             Character player = reader.getPlayer();
-            action.setNpcs(npcs);
-            action.setPlayer(player);
+            if(player!=null && npcs!= null){
+                action.setNpcs(npcs);
+                action.setPlayer(player);
+                System.out.println("Player and Npcs were transfered(MAPGATE)");
+            }
+            else{
+                System.out.println("MapGate failed tor transfer"); 
+            }
         }
+    }
+    public void setOperation(DialogBox dialog){   
+        dialog.message("You Win!!!!!");
     }
     
 }
