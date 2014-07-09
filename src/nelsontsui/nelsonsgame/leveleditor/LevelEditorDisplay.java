@@ -15,11 +15,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import nelsontsui.nelsonsgame.game.Point;
 import nelsontsui.nelsonsgame.game.*;
+import nelsontsui.nelsonsgame.game.Point;
 
 public class LevelEditorDisplay extends JDialog implements ActionListener, MouseListener{   
     //static decs
@@ -70,6 +72,8 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     //misc buttons
     private JButton save;
     private JButton importFile;
+    private JButton analyze;
+    private JButton instructions;
     private JButton defaultOptions;
     private JButton customOptions;
     
@@ -80,8 +84,9 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     
     //text/name
     private JPanel textPanel;
-    private JPanel labelerPanel;
+    private JScrollPane labelerPanel;
     private JLabel labelerLabel;
+    private String labelerText;    
     
     //timer
     Timer check = new Timer((int)ActionPanel.TICK,this);
@@ -147,9 +152,12 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     }
     private void textPanel(){
         textPanel = new JPanel();
+        textPanel.setLayout(new GridLayout(3,1));
+        analyze = new JButton("Analyze");
         //textPanel.setBorder(GameDisplay.blackborder);
         textPanel.add(new JLabel("<html><b>Nelson's Game: <b><html>",SwingConstants.CENTER));
         textPanel.add(new JLabel("<html><b>Level Editor<b><html>",SwingConstants.CENTER));
+        textPanel.add(analyze);
         textPanel.setPreferredSize(new Dimension(120,EntityTile.size));
         textPanel.setBounds(gap,gap+panelHeight+gap,textPanel.getPreferredSize().width,EntityTile.size);
         textPanel.setBackground(new Color(197,179,88));
@@ -159,10 +167,12 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     private void buttonHolderPanelInit(){
         save = new JButton("Save");
         importFile = new JButton("Import");
+        instructions = new JButton("Instructions");        
         saveAndImportButtonHolder = new JPanel();
-        saveAndImportButtonHolder.setLayout(new GridLayout(2,1));
+        saveAndImportButtonHolder.setLayout(new GridLayout(3,1));
         saveAndImportButtonHolder.add(save);
         saveAndImportButtonHolder.add(importFile);
+        saveAndImportButtonHolder.add(instructions);
         saveAndImportButtonHolder.setBackground(new Color(197,179,88));
         
         defaultOptions = new JButton("Default");
@@ -239,9 +249,9 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         }
     }
     private void labelerPanelInit(){
-        labelerPanel = new JPanel();
-        labelerLabel = new JLabel("<html><br>"+"Entity"+"<html>");
-        labelerPanel.add(labelerLabel,SwingConstants.CENTER);
+        setLabelerPanelText();
+        labelerLabel = new JLabel(labelerText);
+        labelerPanel = new JScrollPane(labelerLabel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         labelerPanel.setPreferredSize(new Dimension(detailedSelectorPanelHolder.getPreferredSize().width,
             textPanel.getPreferredSize().height));
         labelerPanel.setBackground(new Color(250,250,210));
@@ -250,9 +260,24 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         
         add(labelerPanel);
     }
+    private void setLabelerPanelText(){
+        int ex = (int)placement.getX()/10;
+        int ey = (int)placement.getY()/10;
+        Entity e = editPanel.npcsOnGrid[ey][ex];
+        if(e==null){
+            labelerText = "";
+        }
+        else{
+            labelerText = StringWrapper.wrapOnSemiColonHTML(e.toString());
+            //System.out.println(labelerText);
+        }
+    }
     private void checkLabelerPanel(){
         if(editPanel.currentDetailedSelectorId!=null){
-            labelerLabel.setText("<html><br>"+editPanel.currentDetailedSelectorId+"<html>");
+            //labelerLabel.setText("<html><br>"+editPanel.currentDetailedSelectorId+"<html>");
+            setLabelerPanelText();
+            labelerLabel.setText(labelerText);
+            labelerPanel.requestFocusInWindow();
         }
     }
     private void addDetailedSelectorButtons(){

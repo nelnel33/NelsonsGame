@@ -1,5 +1,11 @@
 package nelsontsui.nelsonsgame.game;
 
+import nelsontsui.nelsonsgame.game.items.UnusableItem;
+import nelsontsui.nelsonsgame.game.items.HealthPotion;
+import nelsontsui.nelsonsgame.game.items.Weapon;
+import nelsontsui.nelsonsgame.game.items.Bow;
+import nelsontsui.nelsonsgame.game.items.Arrow;
+import nelsontsui.nelsonsgame.game.items.Armor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -25,6 +31,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public static final double FPS = 50;
     public static final double TICK = 1000.0/FPS;
     public static final double DELTA = TICK/1000.0;
+    public static final double INVERSE_DELTA = 1000.0/TICK;
     public long frameCount = 0;
     
     //protected Timer check = new Timer(TICK,this);
@@ -36,6 +43,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     
     private InventoryIcon[] inventoryItems = new InventoryIcon[0];//only declared to prevent nullpointerexception
     private DialogBox dialogPanel;
+    
+    private Entity entity = new Entity();
     
     public static final int hitpointsBarOffset = 6;
     public static final int hitpointsBarHeight = 3;
@@ -390,7 +399,10 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         for(int i=0;i<npcs.size();i++){
             if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())){
                 if(npcs.get(i) instanceof DamagableEntity){
-                    Player.attack((DamagableEntity)npcs.get(i));
+                    if(Player.attack((DamagableEntity)npcs.get(i)) && Player.getHasWeapon()){
+                        dialogPanel.message("You cannot attack a Damagable Entity with a "+
+                            Player.weapon.getName()+" equipped");
+                    }
                     System.out.println("NPC"+i+" HP: "+((DamagableEntity)npcs.get(i)).getHitpoints());
                         if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
                             if(npcs.get(i) instanceof NonPlayerCharacter){
@@ -470,7 +482,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
-    public void checkPortals(){//TODO: Make another portalgate class(portalgate encapsulates another portalgate) created serves as the main portal.
+    public void checkPortals(){
         if(!npcs.isEmpty()){
             for(int i=0;i<npcs.size();i++){
                 if(npcs.get(i) instanceof Portal){
@@ -844,25 +856,16 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     @Override
     public void paintComponent(Graphics g){//TODO: if character=="stringname" then paint component.
         super.paintComponent(g);
-        Graphics2D graphic = (Graphics2D)g;
-        
-        graphic.setColor(new Color(63,131,104));//Cyanish Green
-        graphic.fill(new Rectangle2D.Double(Player.getX(),Player.getY(),Player.getWidth(),Player.getHeight()));
-        drawHitpointsBar(graphic,Player);
-        
-        
-        if(!Player.getProjectile().isEmpty()){
-            for(int z=0;z<Player.getProjectile().size();z++){
-            graphic.setColor(new Color(63,131,104));
-            graphic.fill(new Rectangle2D.Double(Player.getProjectile().get(z).x,Player.getProjectile().get(z).y,
-                    Player.getProjectile().get(z).width,Player.getProjectile().get(z).height));
-            }
-        }
-        
+        Graphics2D graphic = (Graphics2D)g;        
         if(!npcs.isEmpty()){
             for(int i=0;i<npcs.size();i++){
                 Entity temp = npcs.get(i);
-                if(temp instanceof Portal){
+                if(temp.getClass().equals(entity.getClass())){
+                    graphic.setColor(Color.DARK_GRAY);//gray
+                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
+                    
+                }
+                else if(temp instanceof Portal){
                     if(((Portal)temp).isMain){
                         graphic.setColor(new Color(233,118,17));//Orange
                     }
@@ -872,6 +875,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     graphic.fill(new Ellipse2D.Double(npcs.get(i).getX(),npcs.get(i).getY(),npcs.get(i).getWidth(),npcs.get(i).getHeight()));
                 }
                 else if(temp instanceof TalkableGate){
+                    graphic.setColor(Color.DARK_GRAY);
                     graphic.draw(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }
                 else if(temp instanceof MapGate){
@@ -921,8 +925,23 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 else{
                     graphic.setColor(Color.DARK_GRAY);//greenish
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }
-
+                }           
+                drawPlayer(graphic);
+            }
+        }
+    }
+    
+    public void drawPlayer(Graphics2D graphic){
+        //Draw Player and Player's Projectiles
+        graphic.setColor(new Color(63,131,104));//Cyanish Green
+        graphic.fill(new Rectangle2D.Double(Player.getX(),Player.getY(),Player.getWidth(),Player.getHeight()));
+        drawHitpointsBar(graphic,Player);     
+                
+        if(!Player.getProjectile().isEmpty()){
+            for(int z=0;z<Player.getProjectile().size();z++){
+                graphic.setColor(new Color(63,131,104));
+                graphic.fill(new Rectangle2D.Double(Player.getProjectile().get(z).x,Player.getProjectile().get(z).y,
+                Player.getProjectile().get(z).width,Player.getProjectile().get(z).height));
             }
         }
     }

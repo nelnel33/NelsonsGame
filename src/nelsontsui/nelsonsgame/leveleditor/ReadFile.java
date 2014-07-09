@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package nelsontsui.nelsonsgame.leveleditor;
 
 import java.io.File;
@@ -47,12 +41,14 @@ public class ReadFile {
             else{
                 npcs.add(e);
                 }
-            
-            System.out.println("Read "+numberOfObjects+" Objects");
             }
+            System.out.println("Read "+(numberOfObjects)+" Objects");
         }
-        catch(ClassNotFoundException | IOException e){
-            System.out.println(e.getMessage());
+        catch(ClassNotFoundException e){
+            System.out.println("Classnotfound"+e.getMessage());
+        }
+        catch(IOException e){
+            System.out.println("IOEXCEPTION"+e.getMessage());
         }
     }
     public ArrayList<Entity> getNpcs(){

@@ -6,11 +6,15 @@
 
 package nelsontsui.nelsonsgame.game;
 
+import java.io.Externalizable;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
 import nelsontsui.nelsonsgame.leveleditor.ReadFile;
 
-public class MapGate extends Entity{
+public class MapGate extends Entity implements Externalizable{
     private int useCondition;
     private boolean canUse;
     
@@ -19,6 +23,12 @@ public class MapGate extends Entity{
     
     public static final int KILL_ALL = 0;
     public static final int REACH_GATE = 1;
+    
+    private static final long serialVersionUID = 3311L;
+    
+    public MapGate(){
+        super();
+    }
     public MapGate(double x, double y, double width, double height, int useCondition) {
         super(x, y, width, height);
         this.useCondition = useCondition;
@@ -85,12 +95,48 @@ public class MapGate extends Entity{
                 System.out.println("Player and Npcs were transfered(MAPGATE)");
             }
             else{
-                System.out.println("MapGate failed tor transfer"); 
+                System.out.println("MapGate failed to transfer"); 
             }
         }
     }
     public void setOperation(DialogBox dialog){   
         dialog.message("You Win!!!!!");
+    }
+    public String useConditionAsString(int u){
+        if(u==KILL_ALL){
+            return "Kill-All";
+        }
+        else if(u==REACH_GATE){
+            return "Reach-Gate";
+        }
+        else{
+            return "INVALID USE CONDITION";
+        }
+    }
+    @Override
+    public String toString(){
+        return "UseCondition: "+useConditionAsString(useCondition)+"; CanUse: "+canUse+"; FilePath: "+file+"; usedToExitMap: "+usedToExitMap+"; "
+                +super.toString();
+    }
+    
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);   
+        
+        out.writeInt(useCondition);
+        out.writeBoolean(canUse);
+        out.writeObject(file);
+        out.writeBoolean(usedToExitMap);        
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        
+        useCondition = in.readInt();
+        canUse = in.readBoolean();
+        file = (File)in.readObject();
+        usedToExitMap = in.readBoolean();
     }
     
 }

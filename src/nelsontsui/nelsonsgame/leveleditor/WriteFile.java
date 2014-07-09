@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package nelsontsui.nelsonsgame.leveleditor;
 
 import java.io.File;
@@ -51,8 +45,8 @@ public class WriteFile {
                 for(int i=0;i<npcs.size();i++){
                     objectWriter.writeObject(npcs.get(i));
                     objectWriter.flush();
-                    //System.out.println("Wrote "+npcs.size()+" Objects");
                 }
+                System.out.println("Wrote "+(npcs.size()+1)+" Objects");
             }
             objectWriter.close();
         }

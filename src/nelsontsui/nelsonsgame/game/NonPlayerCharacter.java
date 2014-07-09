@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package nelsontsui.nelsonsgame.game;
 
-/**
- *
- * @author Nelnel33
- */
-public class NonPlayerCharacter extends Character {
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+public class NonPlayerCharacter extends Character implements Externalizable {
     protected int detectionRadius;
     protected int characterClass;
     
@@ -23,6 +17,11 @@ public class NonPlayerCharacter extends Character {
     public static final int BR_ARCHER = 52;
     public static final int BR_TANK = 53;
     public static final int BR_SUBBOSS = 54;
+    
+    private static final long serialVersionUID = 335L;
+    public NonPlayerCharacter(){
+        super();
+    }
     public NonPlayerCharacter(
               double x,
               double y,
@@ -59,5 +58,60 @@ public class NonPlayerCharacter extends Character {
         Point far = new Point((h.far.x+detectionRadius),(h.far.y+detectionRadius));
         return new Hitbox(close,far);   
     }
+    public String characterClassAsString(int c){
+        if(c==WARRIOR){
+            return "Warrior";
+        }
+        else if(c==ARCHER){
+            return "Archer";
+        }
+        else if(c==TANK){
+            return "Tank";
+        }
+        else if(c==SUBBOSS){
+            return "Subboss";
+        }
+        else if(c==BOSS){
+            return "Boss";
+        }
+        else if(c==BR_WARRIOR){
+            return "Bossroom-Warrior";
+        }
+        else if(c==BR_ARCHER){
+            return "Bossroom-Archer";
+        }
+        else if(c==BR_TANK){
+            return "Bossroom-Tank";
+        }
+        else if(c==BR_SUBBOSS){
+            return "Bossroom-Subboss";
+        }
+        else{
+            return "INVALID CLASS";
+        }
+    }
+    @Override
+    public String toString(){
+        return "Class: "+characterClassAsString(characterClass)+
+                "; DetectionRadius: "+detectionRadius+"; "+super.toString();
+    }
+    
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+        
+        out.writeInt(detectionRadius);      
+        out.writeInt(characterClass);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        
+        detectionRadius = in.readInt();
+        characterClass = in.readInt();
+    }
+    
+    
    
 }

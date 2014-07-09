@@ -1,8 +1,10 @@
 package nelsontsui.nelsonsgame.game;
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
-
-public class Hitbox implements Serializable{
+public class Hitbox implements Externalizable{
     protected Point close;//top left corner; closer to origin.
     protected Point far;//bottom right corner; farther from origin
     
@@ -13,6 +15,11 @@ public class Hitbox implements Serializable{
     protected static final int LEFT=3;
     protected static final int RIGHT=4;
     protected static final int UNDETERMINED=0;
+    
+    private static final long serialVersionUID = 341L;
+    
+    public Hitbox(){}    
+    
     public Hitbox(Point close, Point far){
         this.close = close;
         this.far = far;
@@ -83,6 +90,20 @@ public class Hitbox implements Serializable{
         else{
             return true;
         }
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(close);
+        out.writeObject(far);
+        out.writeObject(center);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        close = (Point)in.readObject();
+        far = (Point)in.readObject();
+        center = (Point)in.readObject();
     }
 
         

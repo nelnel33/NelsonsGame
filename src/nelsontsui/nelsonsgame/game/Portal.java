@@ -1,8 +1,13 @@
 package nelsontsui.nelsonsgame.game;
 
+import java.io.Externalizable;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
 
-public class Portal extends Entity{
+public class Portal extends Entity implements Externalizable{
     private Entity subportal;
     private boolean canNpcUse;
     private int condition;
@@ -12,6 +17,12 @@ public class Portal extends Entity{
     public static int offsetDistance=10;//must be greater than 1;
     public static int DEFAULT = 100;
     public static int KILL_ALL_NONBOSS = 200;
+    
+    private static final long serialVersionUID = 3313L;
+    
+    public Portal(){
+        super();
+    }
     
     public Portal(//to create subportals
             double x,
@@ -104,6 +115,43 @@ public class Portal extends Entity{
         if(canPlayerUse){
             setCoords(e,subportal);
         } 
+    }
+    public String conditionAsString(int c){
+        if(c==DEFAULT){
+            return "Default";
+        }
+        else if(c==KILL_ALL_NONBOSS){
+            return "Kill-All-NonBosses";
+        }
+        else{
+            return "INVALID CONDITION";
+        }
+    }
+    @Override
+    public String toString(){
+        return "UseCondition: "+conditionAsString(condition)+"; Subportal: "+subportal.toString()+"; "+super.toString();
+    }
+    
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);   
+                
+        out.writeObject(subportal);
+        out.writeBoolean(canNpcUse);
+        out.writeInt(condition);
+        out.writeBoolean(canPlayerUse);
+        out.writeBoolean(isMain);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        
+        subportal = (Entity)in.readObject();
+        canNpcUse = in.readBoolean();
+        condition = in.readInt();
+        canPlayerUse = in.readBoolean();
+        isMain = in.readBoolean();
     }
     
 }

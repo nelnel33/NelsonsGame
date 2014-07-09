@@ -1,17 +1,24 @@
 package nelsontsui.nelsonsgame.game;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
-import java.io.Serializable;
+import nelsontsui.nelsonsgame.game.items.Item;
 
-public class Inventory implements Serializable{
+public class Inventory implements Externalizable{
     protected ArrayList<Item> items = new ArrayList<>();
+    
     public static final int MAX_SIZE = 9;
     public static final int GRID_ROW = 3;
     public static final int GRID_COL = 3;
     
     public static int inventorySelectorIndex = 0;
-    public Inventory(){
-    }
+    
+    private static final long serialVersionUID = 351L;
+    
+    public Inventory(){}
     public static void inventorySelectorIncrement(boolean plusone){
         if(plusone){
             if(inventorySelectorIndex>=MAX_SIZE-1){ //System.out.println("plusuoneTRUE");
@@ -75,6 +82,22 @@ public class Inventory implements Serializable{
                     }                    
                 }
             }
+        }
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeInt(items.size());
+        for(int i=0;i<items.size();i++){
+            out.writeObject(items.get(i));
+        }
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        int itemsize = in.readInt();
+        for(int i=0;i<itemsize;i++){
+            items.add((Item)in.readObject());
         }
     }
     

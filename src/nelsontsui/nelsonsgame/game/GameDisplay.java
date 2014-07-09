@@ -1,4 +1,10 @@
 package nelsontsui.nelsonsgame.game;
+import nelsontsui.nelsonsgame.game.items.HealthPotion;
+import nelsontsui.nelsonsgame.game.items.Weapon;
+import nelsontsui.nelsonsgame.game.items.StrengthPotion;
+import nelsontsui.nelsonsgame.game.items.Bow;
+import nelsontsui.nelsonsgame.game.items.Arrow;
+import nelsontsui.nelsonsgame.game.items.Armor;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -600,22 +606,22 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
             if(Player.inventory.items.get(i).getQuantity()>0){
                 if(Player.inventory.items.get(i) instanceof Armor){
                     if(((Armor)Player.inventory.items.get(i)).getEquipped()){
-                        inventoryLabels[i].setText("<html><b>"+Player.inventory.items.get(i).getName()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<b><html>");
+                        inventoryLabels[i].setText("<html><b>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<b><html>");
                     }
                     else{
-                        inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getName()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
+                        inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
                     }
                 }
                 else if(Player.inventory.items.get(i) instanceof Weapon){
                     if(((Weapon)Player.inventory.items.get(i)).getEquipped()){
-                        inventoryLabels[i].setText("<html><b>"+Player.inventory.items.get(i).getName()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<b><html>");
+                        inventoryLabels[i].setText("<html><b>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<b><html>");
                     }
                     else{
-                        inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getName()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
+                        inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
                     }
                 }
                 else{
-                    inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getName()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
+                    inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
                     }
                 }
             }
@@ -659,9 +665,9 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
-        e.add(new SpawnableItem(30,30,new Weapon("Pencil",1)));
-        e.add(new SpawnableItem(30,30,new Armor("Sombrero",5)));
-        e.add(new SpawnableItem(30,30,new HealthPotion("Gum",3,5)));        
+        e.add(new SpawnableItem(30,30,new Weapon("Mechanical Pencil",1)));
+        e.add(new SpawnableItem(30,30,new Armor("Sombrero of Doom",5)));
+        e.add(new SpawnableItem(30,30,new HealthPotion("Chewy Gum",3,5)));        
         
         Portal one = new Portal(30,50,20,20,new Entity(80,50,20,20),Portal.DEFAULT,true);//portal from spawnroom to room1  
         Portal two = new Portal(80,50,20,20,new Entity(30,50,20,20),Portal.DEFAULT,false);//portal from room1 to spawnroom

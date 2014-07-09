@@ -10,6 +10,36 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import nelsontsui.nelsonsgame.leveleditor.LevelEditorDisplay;
 
+/*
+|=|=SerialVersionUIDs=|=|
+Entity - 331
+OpaqueEntity - 332
+DamagableEntity - 333
+Character - 334
+NonPlayerCharacter - 335
+
+MapGate - 3311
+TalkableGate - 3312
+Portal - 3313
+
+SpawnableItem - 3314
+Item - 33141
+UnusuableItem - 33142
+Armor - 33143
+Weapon - 33144
+Bow - 33145
+Arrow - 33146
+Potion - 33147
+StrengthPotion - 33148
+HealthPotion - 33149
+
+Hitbox - 341
+Point - 342
+
+Inventory - 351
+
+*/
+
 public class MainDisplay extends JFrame implements ActionListener{
     private GameDisplay gameDisplay;
     private StartMenu startMenu;

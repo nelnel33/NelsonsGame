@@ -1,18 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package nelsontsui.nelsonsgame.game;
 
-/**
- *
- * @author Nelnel33
- */
-public class DamagableEntity extends OpaqueEntity {
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+public class DamagableEntity extends OpaqueEntity implements Externalizable{
     protected double initHitpoints;
     protected double hitpoints;
+    
+    private static final long serialVersionUID = 333L;
+    public DamagableEntity(){
+        super();
+    }
     public DamagableEntity(double x,
                            double y,
                            double width,
@@ -36,5 +36,25 @@ public class DamagableEntity extends OpaqueEntity {
     public void heal(double heal){
         hitpoints+=heal;
     }
+    @Override
+    public String toString(){
+        return super.toString()+" initHitpoints: "+initHitpoints+";";
+    }    
     
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+        
+        out.writeDouble(initHitpoints);
+        out.writeDouble(hitpoints);
+        
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        
+        initHitpoints = in.readDouble();
+        hitpoints = in.readDouble();
+    }
 }

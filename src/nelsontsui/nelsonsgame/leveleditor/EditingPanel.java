@@ -6,6 +6,12 @@
 
 package nelsontsui.nelsonsgame.leveleditor;
 
+import nelsontsui.nelsonsgame.game.items.HealthPotion;
+import nelsontsui.nelsonsgame.game.items.Weapon;
+import nelsontsui.nelsonsgame.game.items.StrengthPotion;
+import nelsontsui.nelsonsgame.game.items.Bow;
+import nelsontsui.nelsonsgame.game.items.Arrow;
+import nelsontsui.nelsonsgame.game.items.Armor;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
