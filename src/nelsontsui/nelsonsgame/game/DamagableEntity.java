@@ -10,6 +10,7 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
     protected double hitpoints;
     
     private static final long serialVersionUID = 333L;
+    
     public DamagableEntity(){
         super();
     }
