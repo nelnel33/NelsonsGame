@@ -75,7 +75,7 @@ public class Entity implements Externalizable{
     }
     @Override
     public String toString(){
-        return "Location: ("+x+","+y+"); Size: ("+width+","+height+"); Direction: "+directionAsString(direction)+";";
+        return "Class: "+this.getClass()+"; Location: ("+x+","+y+"); Size: ("+width+","+height+"); Direction: "+directionAsString(direction)+";";
     }
 
     @Override

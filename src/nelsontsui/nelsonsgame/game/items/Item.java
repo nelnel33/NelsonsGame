@@ -15,12 +15,17 @@ public class Item implements Externalizable{
     private static final long serialVersionUID = 33141L;
     
     public Item(){
-        createAbbreviation();
     }
     public Item(String name, int quantity){
         this.name = name;
         this.quantity = quantity;
+        init();
         createAbbreviation();
+    }
+    private void init(){
+        if(quantity<1){
+            quantity = 1;
+        }
     }
     private void createAbbreviation(){
         if(name.length()<=8){
@@ -69,7 +74,7 @@ public class Item implements Externalizable{
     
     @Override
     public String toString(){
-        return "Name: "+name+"; Quantity: "+quantity+";";
+        return "Name: "+name+"; Type:"+this.getClass()+"; Quantity: "+quantity+";";
     }
 
     @Override
@@ -82,5 +87,8 @@ public class Item implements Externalizable{
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         name = (String)in.readObject();
         quantity = in.readInt();
+        
+        init();
+        createAbbreviation();
     }
 }

@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 import nelsontsui.nelsonsgame.leveleditor.LevelEditorDisplay;
 
 /*
@@ -37,7 +40,6 @@ Hitbox - 341
 Point - 342
 
 Inventory - 351
-
 */
 
 public class MainDisplay extends JFrame implements ActionListener{
@@ -67,7 +69,8 @@ public class MainDisplay extends JFrame implements ActionListener{
         super("Nelson's Game");
         
         init();
-
+        
+        setResizable(false);
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -157,7 +160,22 @@ public class MainDisplay extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         repaint();
     }
-    public static void main(String[] args){
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
+        //UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        /*
+        try {
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+        if ("Nimbus".equals(info.getName())) {
+            UIManager.setLookAndFeel(info.getClassName());
+            break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Cannot set desired UI. Default UI was set.");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        */
         MainDisplay main = new MainDisplay();
     }
     

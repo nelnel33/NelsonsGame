@@ -76,10 +76,10 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     
     //Panels in controlsPanel
     private JPanel controlsLabel;
-    private JButton up;
-    private JButton down;
-    private JButton left;
-    private JButton right;
+    private EnhancedButton up;
+    private EnhancedButton down;
+    private EnhancedButton left;
+    private EnhancedButton right;
     private JButton attack;
     private JButton shoot;
     private JButton defend;
@@ -111,7 +111,9 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     createControlLayout();
     createInventoryLayout();
     
-    controlButtonAction();    
+    controlButtonAction();
+    
+    
     miscButtonAction();
     check.start();
     }
@@ -319,10 +321,19 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         //toStartMenu = new JButton("Start Menu");
         howTo = new JButton("Instructions");
         
+        toStartMenu.setBackground(new Color(197,179,88));        
+        toStartMenu.setOpaque(true);
+        howTo.setBackground(new Color(197,179,88));
+        howTo.setOpaque(true);
         saveButton.setBackground(new Color(197,179,88));        
         saveButton.setOpaque(true);
         importButton.setBackground(new Color(197,179,88));
         importButton.setOpaque(true);
+        
+        toStartMenu.setToolTipText(toStartMenu.getText());
+        howTo.setToolTipText(howTo.getText());
+        saveButton.setToolTipText(saveButton.getText());
+        importButton.setToolTipText(importButton.getText());    
         
         buttonPanel.add(toStartMenu);
         buttonPanel.add(howTo);
@@ -405,14 +416,23 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         controlsLabel = new JPanel();//size: (230,150)
         controlsLabel.add(new JLabel("<html><b>Controls<b><html>", SwingConstants.CENTER));
         
-        up = new JButton("▲");
-        down = new JButton("▼");
-        left = new JButton("<");
-        right = new JButton(">");
-        attack = new JButton("Atk");
-        shoot = new JButton("Sht");
-        defend = new JButton("Def");
-        heal = new JButton("Hl");
+        up = new EnhancedButton("▲",activePanel,Entity.UP);
+        down = new EnhancedButton("▼",activePanel,Entity.DOWN);
+        left = new EnhancedButton("<",activePanel,Entity.LEFT);
+        right = new EnhancedButton(">",activePanel,Entity.RIGHT);
+        attack = new JButton("A");
+        shoot = new JButton("S");
+        defend = new JButton("D");
+        heal = new JButton("H");
+        
+        up.setToolTipText("Up");
+        down.setToolTipText("Down");
+        left.setToolTipText("Left");
+        right.setToolTipText("Right");
+        attack.setToolTipText("Attack");
+        shoot.setToolTipText("Shoot");
+        defend.setToolTipText("Defend");
+        heal.setToolTipText("Heal");
         
         up.setBackground(new Color(197,179,88));
         down.setBackground(new Color(197,179,88));
@@ -476,34 +496,11 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         heal.setBounds(gapFromLeftBorderFourthRow+gapx+buttonWidth+gapx+buttonWidth+gapx+buttonWidth, gapFromTopBorderFourthRow,buttonWidth,buttonHeight);
     }
     private void controlButtonAction(){
-        up.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                activePanel.up();
-                activePanel.requestFocusInWindow();
-            }
-        });
-        down.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                activePanel.down();
-                activePanel.requestFocusInWindow();
-            }
-        });;
-        left.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                activePanel.left();
-                activePanel.requestFocusInWindow();
-            }
-        });
-        right.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                activePanel.right();
-                activePanel.requestFocusInWindow();
-            }
-        });
+        //up -- uses EnhancedButton
+        //down -- uses EnhancedButton
+        //left -- uses EnhancedButton
+        //right -- uses EnhancedButton
+        cardinalDirectionButtonAction();
         attack.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -532,6 +529,12 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
                 activePanel.requestFocusInWindow();
             }
         });
+    }
+    private void cardinalDirectionButtonAction(){
+        check.addActionListener(up);
+        check.addActionListener(down);
+        check.addActionListener(left);
+        check.addActionListener(right);
     }
     
     private void createInventoryLayout(){
@@ -652,8 +655,8 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         if(dialogPanel.getHasBeenSelected()){
             getFocus();
             dialogPanel.setHasBeenSelected(false);
-            }   
-        //win.checkIfCanUse(activePanel.npcs);        
+        }   
+                
         
     }          
     private void createMap(){
@@ -661,7 +664,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"You",10000,200);
+        Character p = new Character(0,0,10,10,100,100,300,"Leadwall Habarahsh",100,200);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room

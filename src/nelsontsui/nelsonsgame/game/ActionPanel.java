@@ -531,7 +531,13 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             for(int i=0;i<npcs.size();i++){
                 if(npcs.get(i) instanceof MapGate){
                     MapGate m = (MapGate)npcs.get(i);
-                    m.setOperation(this);
+                    m.checkIfCanUse(npcs);
+                    if(m.usedToExitMap()){
+                        m.operate(Player, this);
+                    }
+                    else{
+                        m.operate(Player,dialogPanel);
+                    }                            
                 }
             }
         }
@@ -856,14 +862,16 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     @Override
     public void paintComponent(Graphics g){//TODO: if character=="stringname" then paint component.
         super.paintComponent(g);
-        Graphics2D graphic = (Graphics2D)g;        
+        Graphics2D graphic = (Graphics2D)g;  
+        
+        //drawPlayer(graphic);
+        
         if(!npcs.isEmpty()){
             for(int i=0;i<npcs.size();i++){
                 Entity temp = npcs.get(i);
                 if(temp.getClass().equals(entity.getClass())){
                     graphic.setColor(Color.DARK_GRAY);//gray
-                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                    
+                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));                    
                 }
                 else if(temp instanceof Portal){
                     if(((Portal)temp).isMain){
@@ -925,10 +933,12 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 else{
                     graphic.setColor(Color.DARK_GRAY);//greenish
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }           
-                drawPlayer(graphic);
+                }                       
             }
         }
+        
+        drawPlayer(graphic);        
+        
     }
     
     public void drawPlayer(Graphics2D graphic){

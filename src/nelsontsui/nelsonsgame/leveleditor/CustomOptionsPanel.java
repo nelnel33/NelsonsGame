@@ -11,13 +11,16 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import nelsontsui.nelsonsgame.game.DimensionDouble;
+import nelsontsui.nelsonsgame.game.FileSelector;
 import nelsontsui.nelsonsgame.game.Point;
 
 public class CustomOptionsPanel extends JDialog implements ActionListener{
@@ -46,7 +49,7 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
     private JPanel nameAndFieldHolder;
     private JPanel previousValueHolder;
     
-    public static final int TOTAL_FIELDS = 14;
+    public static final int TOTAL_FIELDS = 15;
     public static final int NAME=0;
     public static final int HITPOINTS=1;
     public static final int DAMAGE=2;
@@ -61,9 +64,10 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
     public static final int POTIONSTRENGTH=11;
     public static final int DIMENSIONS=12;
     public static final int PORTALEXIT=13;
+    public static final int MAPGATEFILE = 14;
     
     
-    protected JTextField[] fields = new JTextField[TOTAL_FIELDS];
+    protected JComponent[] fields = new JComponent[TOTAL_FIELDS];
     protected JLabel[] nameOfFields = new JLabel[TOTAL_FIELDS];
     protected JLabel[] previousValues = new JLabel[TOTAL_FIELDS];
     protected JLabel[] buffers = new JLabel[TOTAL_FIELDS];
@@ -114,6 +118,8 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         fields[POTIONSTRENGTH] = new JTextField(""+editPanel.potionStrength);
         fields[DIMENSIONS] = new JTextField(""+(int)editPanel.dimension.getWidth()+","+(int)editPanel.dimension.getHeight());
         fields[PORTALEXIT] = new JTextField(""+(int)editPanel.portalExit.getX()+","+(int)editPanel.portalExit.getY());
+        fields[MAPGATEFILE] = new JButton("Click to open a file");
+        
         
         nameOfFields[NAME] = new JLabel("Name of NPCs or Player");
         nameOfFields[HITPOINTS] = new JLabel("Hitpoints of NPCs or Player");
@@ -129,6 +135,7 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         nameOfFields[POTIONSTRENGTH] = new JLabel("Strength of Potion");
         nameOfFields[DIMENSIONS] = new JLabel("Dimension of Entity(Seperated by comma [,])");
         nameOfFields[PORTALEXIT] = new JLabel("Exit Coordinates of Portal(Seperated by comma [,])");
+        nameOfFields[MAPGATEFILE] = new JLabel("File that the MapGate is linked to");
         
         previousValues[NAME] = new JLabel("Current: "+editPanel.name);
             previousValues[NAME].setToolTipText(editPanel.name);
@@ -147,6 +154,8 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         previousValues[POTIONSTRENGTH] = new JLabel("Current: "+editPanel.potionStrength);
         previousValues[DIMENSIONS] = new JLabel("Current: ("+(int)editPanel.dimension.getWidth()+","+(int)editPanel.dimension.getHeight()+")");
         previousValues[PORTALEXIT] = new JLabel("Current: ("+(int)editPanel.portalExit.getX()+","+(int)editPanel.portalExit.getY()+")");
+        previousValues[MAPGATEFILE] = new JLabel("Current: "+editPanel.currentFile);
+            previousValues[MAPGATEFILE].setToolTipText(""+editPanel.currentFile);
     }
     private void addComponents(){
         for(int i=0;i<TOTAL_FIELDS;i++){
@@ -173,6 +182,15 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         add(update);        
     }
     private void updateAddAction(){
+        ((JButton)fields[MAPGATEFILE]).addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                FileSelector cabinet = new FileSelector(FileSelector.IMPORT, null, null);
+                if(cabinet.getFile()!=null){
+                    editPanel.currentFile = cabinet.getFile();
+                }
+            }
+        });
         update.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -182,54 +200,82 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         });
     }
     private void setValues(){
-        if(fields[NAME].getText()!=null){
-            editPanel.name = fields[NAME].getText();
+        if(((JTextField)fields[NAME]).getText()!=null){
+            editPanel.name = ((JTextField)fields[NAME]).getText();
         }
-        if((fields[HITPOINTS]!=null)&&isStringNumerical(fields[HITPOINTS].getText())){
-            editPanel.hitpoints = Integer.parseInt(fields[HITPOINTS].getText());
+        if((((JTextField)fields[HITPOINTS])!=null)&&isStringNumerical(((JTextField)fields[HITPOINTS]).getText())){
+            int hitpoints = Integer.parseInt(((JTextField)fields[HITPOINTS]).getText());
+            if(hitpoints>0){
+                editPanel.hitpoints = hitpoints;
+            }   
         }
-        if((fields[DAMAGE]!=null)&&isStringNumerical(fields[DAMAGE].getText())){
-            editPanel.damage = Integer.parseInt(fields[DAMAGE].getText());
+        if((fields[DAMAGE]!=null) && isStringNumerical(((JTextField)fields[DAMAGE]).getText())){
+            int damage = Integer.parseInt(((JTextField)fields[DAMAGE]).getText());
+            if(damage>0){
+                editPanel.damage = damage;
+            }
         }
-        if((fields[DETECTIONRADIUS]!=null)&&isStringNumerical(fields[DETECTIONRADIUS].getText())){
-            editPanel.detectionRadius = Integer.parseInt(fields[DETECTIONRADIUS].getText());
+        if((fields[DETECTIONRADIUS]!=null)&&isStringNumerical(((JTextField)fields[DETECTIONRADIUS]).getText())){
+            int detection = Integer.parseInt(((JTextField)fields[DETECTIONRADIUS]).getText());
+            if(detection>0){
+                editPanel.detectionRadius = detection;
+            }
         }
-        if((fields[PROJECTILESPEED]!=null)&&isStringNumerical(fields[PROJECTILESPEED].getText())){
-            editPanel.projectileSpeed = Integer.parseInt(fields[PROJECTILESPEED].getText());
+        if((fields[PROJECTILESPEED]!=null)&&isStringNumerical(((JTextField)fields[PROJECTILESPEED]).getText())){
+            int projectilespeed = Integer.parseInt(((JTextField)fields[PROJECTILESPEED]).getText());
+            if(projectilespeed>0){
+                editPanel.projectileSpeed = projectilespeed;
+            }
         }
-        if((fields[SPEED]!=null)&&isStringNumerical(fields[SPEED].getText())){
-            editPanel.speed = Integer.parseInt(fields[SPEED].getText());
+        if((fields[SPEED]!=null)&&isStringNumerical(((JTextField)fields[SPEED]).getText())){
+            int speed = Integer.parseInt(((JTextField)fields[SPEED]).getText());
+            if(speed>0){
+                editPanel.speed = speed;
+            }
         }
         if(fields[TALKABLESPEECH]!=null){
-            editPanel.talkableSpeech = fields[TALKABLESPEECH].getText();
+            editPanel.talkableSpeech = ((JTextField)fields[TALKABLESPEECH]).getText();
         }
-        if((fields[QUANTITY]!=null)&&isStringNumerical(fields[QUANTITY].getText())){
-            editPanel.quantity = Integer.parseInt(fields[QUANTITY].getText());
+        if((fields[QUANTITY]!=null)&&isStringNumerical(((JTextField)fields[QUANTITY]).getText())){
+            int quantity = Integer.parseInt(((JTextField)fields[QUANTITY]).getText());
+            if(quantity>0){
+                editPanel.quantity = quantity;
+            }
         }
-        if((fields[ARMORPROTECTION]!=null)&&isStringNumerical(fields[ARMORPROTECTION].getText())){
-            editPanel.armorProtection = Integer.parseInt(fields[ARMORPROTECTION].getText());
+        if((fields[ARMORPROTECTION]!=null)&&isStringNumerical(((JTextField)fields[ARMORPROTECTION]).getText())){
+            int armor = Integer.parseInt(((JTextField)fields[ARMORPROTECTION]).getText());
+            if(armor>0){
+                editPanel.armorProtection = armor;
+            }
         }
-        if((fields[WEAPONDAMAGE]!=null)&&isStringNumerical(fields[WEAPONDAMAGE].getText())){
-            editPanel.weaponDamage = Integer.parseInt(fields[WEAPONDAMAGE].getText());
+        if((fields[WEAPONDAMAGE]!=null)&&isStringNumerical(((JTextField)fields[WEAPONDAMAGE]).getText())){
+            int weapon = Integer.parseInt(((JTextField)fields[WEAPONDAMAGE]).getText());
+            if(weapon>0){
+                editPanel.weaponDamage = weapon;
+            }
         }
         if(fields[ITEMNAME]!=null){
-            editPanel.itemName = fields[ITEMNAME].getText();
+            editPanel.itemName = ((JTextField)fields[ITEMNAME]).getText();
         }
-        if((fields[POTIONSTRENGTH]!=null)&&isStringNumerical(fields[POTIONSTRENGTH].getText())){
-            editPanel.potionStrength = Integer.parseInt(fields[POTIONSTRENGTH].getText());
+        if((fields[POTIONSTRENGTH]!=null)&&isStringNumerical(((JTextField)fields[POTIONSTRENGTH]).getText())){
+            int potion = Integer.parseInt(((JTextField)fields[POTIONSTRENGTH]).getText());
+            if(potion>0){
+                editPanel.potionStrength = Integer.parseInt(((JTextField)fields[POTIONSTRENGTH]).getText());
+            }
         }
         if(fields[DIMENSIONS]!=null){
-            DimensionDouble d = decodeDimension(fields[DIMENSIONS].getText());
+            DimensionDouble d = decodeDimension(((JTextField)fields[DIMENSIONS]).getText());
             if(d!=null){
                 editPanel.dimension = d;
             }
         } 
         if(fields[PORTALEXIT]!=null){
-            Point p = decodeCoords(fields[PORTALEXIT].getText());
+            Point p = decodeCoords(((JTextField)fields[PORTALEXIT]).getText());
             if(p!=null){
                 editPanel.portalExit = p;
             }
-        }       
+        }
+        //fields[MAPGATEFILE] @ updateAddActions();
     }
     private Point decodeCoords(String s){
         double x;

@@ -92,7 +92,7 @@ public class NonPlayerCharacter extends Character implements Externalizable {
     }
     @Override
     public String toString(){
-        return "Class: "+characterClassAsString(characterClass)+
+        return "CharacterClass: "+characterClassAsString(characterClass)+
                 "; DetectionRadius: "+detectionRadius+"; "+super.toString();
     }
     

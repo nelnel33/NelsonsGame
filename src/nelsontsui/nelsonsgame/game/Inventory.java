@@ -74,8 +74,10 @@ public class Inventory implements Externalizable{
         for(int j=0;j<items.size();j++){
             if(i==j){}
             else{
-                if((items.get(i).getName().equalsIgnoreCase(items.get(j).getName()))
-                        &&(items.get(i).getClass().equals(items.get(j).getClass()))){
+                if(items.get(i) == null || items.get(i).getName() == null){items.remove(i);}
+                else if(items.get(j) == null || items.get(j).getName() == null){items.remove(j);}
+                else if((items.get(i).getName().equalsIgnoreCase(items.get(j).getName()))
+                        && (items.get(i).getClass().equals(items.get(j).getClass()))){
                         items.get(i).addQuantity(items.get(j).getQuantity());
                         items.remove(j);
                         j--;

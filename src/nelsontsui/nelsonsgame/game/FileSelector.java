@@ -24,8 +24,13 @@ public class FileSelector extends JFileChooser{
     private int response;
     
     public static final int SAVE = 10;
-    public static final int IMPORT = 20;
+    public static final int IMPORT = 20;   
+    
     public static final String EXTENSION = ".nel";
+    
+    public static final String home = System.getProperty("user.home");
+    public static final String filesep = "/";
+    
     public FileSelector(int operation, ArrayList<Entity> npcs, Character player){ 
         this.operation = operation;
         this.npcs = npcs;
@@ -38,7 +43,7 @@ public class FileSelector extends JFileChooser{
         setVisible(true);
     }
     private void init(){    
-        fileSelector = new JFileChooser();     
+        fileSelector = new JFileChooser(home);     
         filter = new FileNameExtensionFilter("NELSON Files","nel");
         fileSelector.setFileFilter(filter);
         

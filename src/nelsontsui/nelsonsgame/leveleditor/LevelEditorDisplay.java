@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -110,6 +112,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
        haveSelectorsBeenClicked();
        labelerPanelInit();
        addActions();
+       addCloseButtonAction();
        
        getContentPane().setBackground(new Color(55,198,164));
        
@@ -120,9 +123,29 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                gap+panelHeight+gap+selectorPanel.getHeight()+gap+gap+gap));
        setResizable(false);
        setVisible(true);
-       setDefaultCloseOperation(DISPOSE_ON_CLOSE);   
+       setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);   
        pack();
        setLocationRelativeTo(null);
+    }
+    private void addCloseButtonAction(){
+        this.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                int n = -1;
+                if(editPanel.placedSomething){
+                    Object[] options = { "OK", "CANCEL" };
+                    n = JOptionPane.showOptionDialog(LevelEditorDisplay.this, "There are unsaved changes. Are you sure you want to close the window?", "Unsaved Changes",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null, options, options[0]);        
+                }
+                if(n == JOptionPane.NO_OPTION){              
+                    //does nothing
+                }
+                else{
+                    e.getWindow().dispose();
+                }
+            }
+        });
     }
     private void editingPanelInit(){
         cursor = new Point(0.0,0.0);
@@ -251,7 +274,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     private void labelerPanelInit(){
         setLabelerPanelText();
         labelerLabel = new JLabel(labelerText);
-        labelerPanel = new JScrollPane(labelerLabel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        labelerPanel = new JScrollPane(labelerLabel,JScrollPane.VERTICAL_SCROLLBAR_NEVER,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         labelerPanel.setPreferredSize(new Dimension(detailedSelectorPanelHolder.getPreferredSize().width,
             textPanel.getPreferredSize().height));
         labelerPanel.setBackground(new Color(250,250,210));
@@ -290,11 +313,13 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         detailedSelectors[ENTITY][2] = new EntityTile("Damagable","DamagableEntity");
         detailedSelectors[ENTITY][3] = new EntityTile("Talk Gate","TalkableGate");
         detailedSelectors[ENTITY][4] = new EntityTile("Map Gate(Default)","MapGateReachGate"); 
-        detailedSelectors[ENTITY][5] = new EntityTile("Map Gate(Kill-All)","MapGateKillAll");        
-        detailedSelectors[ENTITY][6] = new EntityTile("Main Portal(Default)","MainPortalDefault");
-        detailedSelectors[ENTITY][7] = new EntityTile("Sub-Portal(Default)","SubPortalDefault");
-        detailedSelectors[ENTITY][8] = new EntityTile("Main Portal(Kill-All)","MainPortalKillAll");
-        detailedSelectors[ENTITY][9] = new EntityTile("Sub-Portal(Kill-All)","SubPortalKillAll");
+        detailedSelectors[ENTITY][5] = new EntityTile("Exit Map(Default)","MapGateReachGateExit");
+        detailedSelectors[ENTITY][6] = new EntityTile("Map Gate(Kill-All)","MapGateKillAll"); 
+        detailedSelectors[ENTITY][7] = new EntityTile("Exit Map(Kill-All)","MapGateKillAllExit");
+        detailedSelectors[ENTITY][8] = new EntityTile("Main Portal(Default)","MainPortalDefault");
+        detailedSelectors[ENTITY][9] = new EntityTile("Sub-Portal(Default)","SubPortalDefault");
+        detailedSelectors[ENTITY][10] = new EntityTile("Main Portal(Kill-All)","MainPortalKillAll");
+        detailedSelectors[ENTITY][11] = new EntityTile("Sub-Portal(Kill-All)","SubPortalKillAll");
         
         //detailedSelectors[NONPLAYERCHARACTER];
         detailedSelectors[NONPLAYERCHARACTER][0] = new EntityTile("Warrior","Warrior");

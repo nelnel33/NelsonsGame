@@ -21,6 +21,8 @@ public class MapGate extends Entity implements Externalizable{
     private File file;
     private boolean usedToExitMap;
     
+    private boolean done = false;
+    
     public static final int KILL_ALL = 0;
     public static final int REACH_GATE = 1;
     
@@ -35,9 +37,14 @@ public class MapGate extends Entity implements Externalizable{
         usedToExitMap = false;
         assignCanUse();
     }
+    public boolean usedToExitMap(){
+        return usedToExitMap;
+    }
     public void setFile(File file){
-        this.file = file;
-        usedToExitMap = true;
+        if(file!=null){
+            this.file = file;        
+            usedToExitMap = true;
+        }
     }
     public File getFile(){
         return file;
@@ -74,13 +81,15 @@ public class MapGate extends Entity implements Externalizable{
         }
     }
     public void operate(Entity e, ActionPanel action){
-        if((e.getHitbox().isTouching(this.getHitbox()))&&canUse){
+        if((e.getHitbox().isTouching(this.getHitbox())) && canUse && !done){
             setOperation(action);
+            done = true;
         }
     }
      public void operate(Entity e, DialogBox dialog){
-        if((e.getHitbox().isTouching(this.getHitbox()))&&canUse){
+        if((e.getHitbox().isTouching(this.getHitbox())) && canUse && !done){
             setOperation(dialog);
+            done = true;
         }
     }
     public void setOperation(ActionPanel action){
@@ -101,6 +110,10 @@ public class MapGate extends Entity implements Externalizable{
     }
     public void setOperation(DialogBox dialog){   
         dialog.message("You Win!!!!!");
+        dialog.message("You Win!!!!!");
+        dialog.message("You Win!!!!!");
+        dialog.message("You Win!!!!!");
+        System.out.println("You won.");
     }
     public String useConditionAsString(int u){
         if(u==KILL_ALL){

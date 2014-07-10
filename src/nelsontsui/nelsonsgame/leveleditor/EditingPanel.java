@@ -6,12 +6,6 @@
 
 package nelsontsui.nelsonsgame.leveleditor;
 
-import nelsontsui.nelsonsgame.game.items.HealthPotion;
-import nelsontsui.nelsonsgame.game.items.Weapon;
-import nelsontsui.nelsonsgame.game.items.StrengthPotion;
-import nelsontsui.nelsonsgame.game.items.Bow;
-import nelsontsui.nelsonsgame.game.items.Arrow;
-import nelsontsui.nelsonsgame.game.items.Armor;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,10 +16,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import nelsontsui.nelsonsgame.game.*;
 import nelsontsui.nelsonsgame.game.DamagableEntity;
 import nelsontsui.nelsonsgame.game.DimensionDouble;
 import nelsontsui.nelsonsgame.game.Entity;
@@ -35,7 +31,12 @@ import nelsontsui.nelsonsgame.game.Point;
 import nelsontsui.nelsonsgame.game.Portal;
 import nelsontsui.nelsonsgame.game.Projectile;
 import nelsontsui.nelsonsgame.game.SpawnableItem;
-import nelsontsui.nelsonsgame.game.*;
+import nelsontsui.nelsonsgame.game.items.Armor;
+import nelsontsui.nelsonsgame.game.items.Arrow;
+import nelsontsui.nelsonsgame.game.items.Bow;
+import nelsontsui.nelsonsgame.game.items.HealthPotion;
+import nelsontsui.nelsonsgame.game.items.StrengthPotion;
+import nelsontsui.nelsonsgame.game.items.Weapon;
 
 public class EditingPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener{       
     protected Point cursor;//where the cursor is;
@@ -74,6 +75,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     protected final int defaultPotionStrength=2;
     protected final Point defaultPortalExit = new Point(0,0);    
     protected final DimensionDouble defaultDimension = new DimensionDouble(10,10);
+    protected final File defaultCurrentFile = new File("null");
             
     
     //for characters & npcs
@@ -93,6 +95,8 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     protected int potionStrength;
     //for portals
     protected Point portalExit;
+    //for mapgates
+    protected File currentFile;
 
     public static final int TOP_LEFT = 100;
     public static final int TOP_RIGHT = 200;
@@ -126,6 +130,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         potionStrength=defaultPotionStrength;        
         portalExit = defaultPortalExit;
         dimension = defaultDimension;
+        currentFile = defaultCurrentFile;
     }
     public Point getEditCursor(){
         return cursor;
@@ -215,8 +220,20 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         else if(currentDetailedSelectorId.equalsIgnoreCase("MapGateReachGate")){
             npcsOnGrid[r][c] = new MapGate(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),MapGate.REACH_GATE);
         }
+        else if(currentDetailedSelectorId.equalsIgnoreCase("MapGateReachGateExit")){
+            npcsOnGrid[r][c] = new MapGate(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),MapGate.REACH_GATE);
+            if(currentFile.getName()!=null){
+                ((MapGate)npcsOnGrid[r][c]).setFile(currentFile);
+            }
+        }
         else if(currentDetailedSelectorId.equalsIgnoreCase("MapGateKillAll")){
             npcsOnGrid[r][c] = new MapGate(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),MapGate.KILL_ALL);
+        }
+        else if(currentDetailedSelectorId.equalsIgnoreCase("MapGateKillAllExit")){
+            npcsOnGrid[r][c] = new MapGate(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),MapGate.KILL_ALL);
+            if(currentFile.getName()!=null){
+                ((MapGate)npcsOnGrid[r][c]).setFile(currentFile);
+            }
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("MainPortalDefault")){
             npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.DEFAULT,true);

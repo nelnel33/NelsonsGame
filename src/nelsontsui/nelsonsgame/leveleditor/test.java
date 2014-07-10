@@ -35,8 +35,10 @@ public class test {
         //System.out.println(StringWrapper.wrapOnSemiColonHTML(c.toString()));
         //System.out.println(StringWrapper.wrapOnSemiColon(c.toString()));
         
-        System.out.println(Math.pow(2, 63));
-        System.out.println(Math.pow(2,31));
+        //System.out.println(Math.pow(2, 63));
+        //System.out.println(Math.pow(2,31));
+        System.out.println(System.getProperty("user.home"));
+        System.out.println("user.home");
         
         
         

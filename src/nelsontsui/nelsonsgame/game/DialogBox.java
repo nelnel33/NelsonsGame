@@ -6,12 +6,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 public class DialogBox extends JPanel implements ActionListener{
     private ArrayList<String> text;
@@ -24,7 +26,7 @@ public class DialogBox extends JPanel implements ActionListener{
         setLayout(new GridLayout(1,1));
         setPreferredSize(new Dimension(width,height));
         
-        textArea = new JTextArea();
+        textArea = new JTextArea(100,40);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setPreferredSize(new Dimension(width,height));
@@ -41,8 +43,8 @@ public class DialogBox extends JPanel implements ActionListener{
         });
         
         JScrollPane scrollPane = new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(width,height));   
-
+        scrollPane.setPreferredSize(new Dimension(width,height));  
+        
         //Add Components to this panel.
         GridBagConstraints c = new GridBagConstraints();
         c.gridwidth = GridBagConstraints.REMAINDER;
@@ -64,8 +66,9 @@ public class DialogBox extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(textArea.getLineCount()>textArea.getRows()){
-            textArea.setRows(textArea.getLineCount());
+            textArea.setRows(textArea.getRows()+100);
         }
+        revalidate();
         repaint();
     }
     
