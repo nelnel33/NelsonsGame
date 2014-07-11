@@ -6,7 +6,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
 import nelsontsui.nelsonsgame.game.items.Armor;
-import nelsontsui.nelsonsgame.game.items.Bow;
+import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
 import nelsontsui.nelsonsgame.game.items.Item;
 import nelsontsui.nelsonsgame.game.items.Weapon;
 
@@ -130,7 +130,7 @@ public class Character extends DamagableEntity implements Externalizable{
     }
     public boolean attack(DamagableEntity other){
         if(this.hasWeapon){
-            if(!(this.weapon instanceof Bow)){
+            if(!(this.weapon instanceof ProjectileWeapon)){
                 int d = (int)(Math.random()*this.damage);
                 other.hurt(d); 
                 return false;
@@ -144,7 +144,7 @@ public class Character extends DamagableEntity implements Externalizable{
     }
     public void shoot(DamagableEntity other){
         if(this.hasWeapon){
-            if(this.weapon instanceof Bow){
+            if(this.weapon instanceof ProjectileWeapon){
                 int d = (int)(Math.random()*this.damage);
                 other.hurt(d);        
             }

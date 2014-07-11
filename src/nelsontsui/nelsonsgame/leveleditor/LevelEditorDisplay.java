@@ -90,11 +90,15 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     private JLabel labelerLabel;
     private String labelerText;    
     
+    //AnalysisPanel
+    private AnalysisPanel analysis;
+    private String analysisText;
+    
     //timer
-    Timer check = new Timer((int)ActionPanel.TICK,this);
+    private Timer check = new Timer((int)ActionPanel.TICK,this);
     
     //JDialog for customoptions
-    CustomOptionsPanel customPanel;
+    private CustomOptionsPanel customPanel;
     
     public LevelEditorDisplay(JFrame owner){
        super(owner, "Nelson's Game: Level Editor");
@@ -111,7 +115,6 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
        addDetailedSelectorButtons();
        haveSelectorsBeenClicked();
        labelerPanelInit();
-       addActions();
        addCloseButtonAction();
        
        getContentPane().setBackground(new Color(55,198,164));
@@ -119,11 +122,13 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
        check.addActionListener(editPanel);
        check.start();
        
+       addActions();
+       
        setPreferredSize(new Dimension(gap+panelWidth+gap+detailedSelectorPanelHolder.getWidth()+gap,
                gap+panelHeight+gap+selectorPanel.getHeight()+gap+gap+gap));
        setResizable(false);
        setVisible(true);
-       setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);   
+       setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);   
        pack();
        setLocationRelativeTo(null);
     }
@@ -288,20 +293,21 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         int ey = (int)placement.getY()/10;
         Entity e = editPanel.npcsOnGrid[ey][ex];
         if(e==null){
+            //analysisText = "";
             labelerText = "";
         }
         else{
+            analysisText = e.toString();
             labelerText = StringWrapper.wrapOnSemiColonHTML(e.toString());
-            //System.out.println(labelerText);
         }
     }
     private void checkLabelerPanel(){
-        if(editPanel.currentDetailedSelectorId!=null){
+        //if(editPanel.currentDetailedSelectorId!=null){
             //labelerLabel.setText("<html><br>"+editPanel.currentDetailedSelectorId+"<html>");
             setLabelerPanelText();
             labelerLabel.setText(labelerText);
             labelerPanel.requestFocusInWindow();
-        }
+        //}
     }
     private void addDetailedSelectorButtons(){
         //detailedSelectors[PLAYER_CHARACTER];
@@ -335,8 +341,8 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
         //detailedSelectors[ITEM];                
         detailedSelectors[ITEM][0] = new EntityTile("Armor","Armor");
         detailedSelectors[ITEM][1] = new EntityTile("Weapon","Weapon");
-        detailedSelectors[ITEM][2] = new EntityTile("Bow","Bow");
-        detailedSelectors[ITEM][3] = new EntityTile("Arrow","Arrow");
+        detailedSelectors[ITEM][2] = new EntityTile("ProjectileWeapon","ProjectileWeapon");
+        detailedSelectors[ITEM][3] = new EntityTile("Ammo","Ammo");
         detailedSelectors[ITEM][4] = new EntityTile("H-Pot","HealthPotion");
         detailedSelectors[ITEM][5] = new EntityTile("S-Pot","StrengthPotion");
         
@@ -399,6 +405,18 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                 
             }
         });
+        analyze.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                analysis = new AnalysisPanel(LevelEditorDisplay.this);
+                check.addActionListener(analysis);
+            }
+        });
+    }
+    private void updateAnalysisPanel(){
+        if(analysis!=null && analysisText != null){
+            analysis.setText(analysisText);
+        }
     }
     public void checkIfCanToggle(){
         selectors[PLAYER_CHARACTER].canToggle(selectors);
@@ -516,6 +534,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        updateAnalysisPanel();
         checkIfCanToggle();        
         checkIfCanToggle();
         setPointPanelText();  

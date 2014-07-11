@@ -64,6 +64,14 @@ public class MainDisplay extends JFrame implements ActionListener{
     //JDialog that contains LevelEditor
     private LevelEditorDisplay levelEditor;
     
+    //Win, Lose, and General Messages
+    public static final String winMessageMain = "\nYOU WON!";
+    public static final String genMessage = "Press \'Start Menu\' to return to the Start Menu";
+    public static final String loseMessageMain = "\nYou Lose. :(";
+    
+    public static final String winMessageCruel = "\nWoohoo, you won. \nI'm not impressed. \nFor the record. \nThis was not in anyway impressive.";
+    public static final String loseMessageCruel = "\nYou lost... \nhow many times has this been? \nI lost count.";
+    
     
     public MainDisplay(){
         super("Nelson's Game");

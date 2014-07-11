@@ -32,8 +32,8 @@ import nelsontsui.nelsonsgame.game.Portal;
 import nelsontsui.nelsonsgame.game.Projectile;
 import nelsontsui.nelsonsgame.game.SpawnableItem;
 import nelsontsui.nelsonsgame.game.items.Armor;
-import nelsontsui.nelsonsgame.game.items.Arrow;
-import nelsontsui.nelsonsgame.game.items.Bow;
+import nelsontsui.nelsonsgame.game.items.Ammo;
+import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
 import nelsontsui.nelsonsgame.game.items.HealthPotion;
 import nelsontsui.nelsonsgame.game.items.StrengthPotion;
 import nelsontsui.nelsonsgame.game.items.Weapon;
@@ -291,11 +291,11 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         else if(currentDetailedSelectorId.equalsIgnoreCase("Weapon")){
             npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Weapon(itemName,weaponDamage));
         }
-        else if(currentDetailedSelectorId.equalsIgnoreCase("Bow")){
-            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Bow(itemName,weaponDamage));
+        else if(currentDetailedSelectorId.equalsIgnoreCase("ProjectileWeapon")){
+            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new ProjectileWeapon(itemName,weaponDamage));
         }
-        else if(currentDetailedSelectorId.equalsIgnoreCase("Arrow")){
-            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Arrow(itemName,quantity));
+        else if(currentDetailedSelectorId.equalsIgnoreCase("Ammo")){
+            npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new Ammo(itemName,quantity));
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("HealthPotion")){
             npcsOnGrid[r][c] = new SpawnableItem(p.getX(),p.getY(),new HealthPotion(itemName,quantity,potionStrength));

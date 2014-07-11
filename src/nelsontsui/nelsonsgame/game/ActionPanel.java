@@ -3,8 +3,8 @@ package nelsontsui.nelsonsgame.game;
 import nelsontsui.nelsonsgame.game.items.UnusableItem;
 import nelsontsui.nelsonsgame.game.items.HealthPotion;
 import nelsontsui.nelsonsgame.game.items.Weapon;
-import nelsontsui.nelsonsgame.game.items.Bow;
-import nelsontsui.nelsonsgame.game.items.Arrow;
+import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
+import nelsontsui.nelsonsgame.game.items.Ammo;
 import nelsontsui.nelsonsgame.game.items.Armor;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -101,7 +101,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                                 &&withinPanelX(npcs.get(i))!=Hitbox.RIGHT){
                             npcs.get(i).setX(npcs.get(i).getX()-((NonPlayerCharacter)npcs.get(i)).getTravelX());
                         }
-                        if(Player.getHitbox().isLeft(npcs.get(i).getHitbox())
+                        if(Player.getHitbox().isLeft(npcs.get(i).getHitbox())//isLeft
                                 &&canNpcMoveLeft(npcs.get(i))
                                 &&withinPanelX(npcs.get(i))!=Hitbox.LEFT){
                             npcs.get(i).setX(npcs.get(i).getX()+((NonPlayerCharacter)npcs.get(i)).getTravelX());
@@ -578,18 +578,24 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public void shoot(){
         boolean hasBow = false;
         boolean hasArrow = false;
+        boolean isCompatible = false;
         int index=100;//Arbitrary number just to check.
         
         for(int i=0;i<Player.inventory.items.size();i++){
             if(Player.getHasWeapon()){
-                if(Player.inventory.items.get(i) instanceof Bow){
+                if(Player.inventory.items.get(i) instanceof ProjectileWeapon){
                     if(Player.weapon.equals(Player.inventory.items.get(i))){
                         hasBow = true;
                     }
                 }
-                if(Player.inventory.items.get(i) instanceof Arrow){
+                if(Player.inventory.items.get(i) instanceof Ammo){
                     hasArrow = true;
                     index = i;                
+                    if(hasArrow
+                            &&(Player.weapon instanceof ProjectileWeapon)
+                            &&(Player.inventory.items.get(i) instanceof Ammo)){
+                        isCompatible = ((ProjectileWeapon)Player.weapon).isCompatible((Ammo)Player.inventory.items.get(i));
+                    }
                 }
                 if(hasBow&&hasArrow){
                     break;
@@ -597,7 +603,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
         
-        if(hasBow&&(index!=100)){
+        if(hasBow&&(index!=100)&&isCompatible){
             Player.loadProjectile(Player.getDirection());
             Player.inventory.useItem(index,Player);
             for(int i=0;i<Player.getProjectile().size();i++){

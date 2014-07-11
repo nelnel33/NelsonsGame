@@ -10,11 +10,11 @@ import javax.swing.JTextArea;
 public class TextPopUp extends JDialog{
     private JTextArea text;
     private JScrollPane pane;
-    public TextPopUp(JFrame owner, String title, JTextArea text){
+    public TextPopUp(JDialog owner, String title){
         super(owner,title);    
-        this.text = text;
+        this.text = new JTextArea();
         
-        showInstructions();
+        showPane();
         
         getContentPane().setBackground(new Color(250,250,210));
         
@@ -26,7 +26,13 @@ public class TextPopUp extends JDialog{
         pack();
         setLocationRelativeTo(owner);
     }
-    private void showInstructions(){
+    public void setText(JTextArea t){
+        this.text = t;
+    }
+    public void setText(String t){
+        this.text.setText(t);
+    }
+    private void showPane(){
         text.setLineWrap(true);
         text.setWrapStyleWord(true);  
         text.setEditable(false);

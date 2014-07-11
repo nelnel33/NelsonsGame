@@ -3,20 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/items/Potion.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/DialogBox.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/leveleditor/AnalysisPanel.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/leveleditor/WriteFile.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/MainDisplay.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/items/HealthPotion.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/leveleditor/ReadFile.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/Entity.java</file>
+            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/items/ProjectileWeapon.java</file>
+            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/items/Ammo.java</file>
             <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/GameDisplay.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/items/Item.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/items/StrengthPotion.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/leveleditor/CustomOptionsPanel.java</file>
+            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/Hitbox.java</file>
             <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/leveleditor/EditingPanel.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/EnhancedButton.java</file>
+            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/leveleditor/LevelEditorDisplay.java</file>
+            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/ActionPanel.java</file>
         </group>
     </open-files>
 </project-private>

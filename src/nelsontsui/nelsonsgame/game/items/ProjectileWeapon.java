@@ -11,16 +11,19 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-public class Arrow extends UnusableItem implements Externalizable{
+public class ProjectileWeapon extends Weapon implements Externalizable{
     
-    private static final long serialVersionUID = 33146L;
+    private static final long serialVersionUID = 33145L;
     
-    public Arrow(){
+    public ProjectileWeapon(){
         super();
     }
-    public Arrow(String name, int quantity) {
-        super(name, quantity);
-    }   
+    public ProjectileWeapon(String name, int damage){
+        super(name,damage);
+    }
+    public boolean isCompatible(Ammo ammo){
+        return ammo instanceof Ammo;
+    }
     @Override
     public String toString(){
         return super.toString();

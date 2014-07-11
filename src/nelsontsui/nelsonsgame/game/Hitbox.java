@@ -56,10 +56,10 @@ public class Hitbox implements Externalizable{
         return this.close.y>=o.close.y;
     }
     public boolean isRight(Hitbox o){
-        return this.far.x<=o.far.x;
+        return this.close.x<=o.close.x;
     }
     public boolean isLeft(Hitbox o){
-        return this.close.x>=o.close.x;
+        return this.far.x>=o.far.x;
     }
     public boolean isStrictlyAbove(Hitbox o){
         return this.far.y<=o.close.y;

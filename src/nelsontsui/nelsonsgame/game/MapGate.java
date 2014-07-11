@@ -109,11 +109,9 @@ public class MapGate extends Entity implements Externalizable{
         }
     }
     public void setOperation(DialogBox dialog){   
-        dialog.message("You Win!!!!!");
-        dialog.message("You Win!!!!!");
-        dialog.message("You Win!!!!!");
-        dialog.message("You Win!!!!!");
-        System.out.println("You won.");
+        dialog.message(MainDisplay.winMessageCruel);
+        dialog.message(MainDisplay.genMessage);
+        System.out.println("reached gate; won;");
     }
     public String useConditionAsString(int u){
         if(u==KILL_ALL){

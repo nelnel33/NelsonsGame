@@ -2,8 +2,8 @@ package nelsontsui.nelsonsgame.game;
 import nelsontsui.nelsonsgame.game.items.HealthPotion;
 import nelsontsui.nelsonsgame.game.items.Weapon;
 import nelsontsui.nelsonsgame.game.items.StrengthPotion;
-import nelsontsui.nelsonsgame.game.items.Bow;
-import nelsontsui.nelsonsgame.game.items.Arrow;
+import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
+import nelsontsui.nelsonsgame.game.items.Ammo;
 import nelsontsui.nelsonsgame.game.items.Armor;
 import java.awt.*;
 import java.awt.Color;
@@ -85,6 +85,9 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     private JButton defend;
     private JButton heal;
     
+    //check if lost or won
+    WinLose winLose;
+    
     //Changable static variables
     public static final int edgeX = 740;
     public static final int edgeY = 400;
@@ -112,6 +115,8 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     createInventoryLayout();
     
     controlButtonAction();
+    
+    initWinLose();
     
     
     miscButtonAction();
@@ -639,6 +644,11 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
             }
         }
     }
+    private void inventorySetToolTipText(){
+        for(int i=0;i<Player.inventory.items.size();i++){
+            inventoryLabels[i].setToolTipText(Player.inventory.items.get(i).getName());
+        }
+    }
     private void createDialogLayout(){
         
     }
@@ -646,12 +656,20 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     private void createActionLayout(){
         
     }
+    private void initWinLose(){
+        winLose = new WinLose();
+    }
+    private void checkIfWinOrLose(){
+        winLose.operate(Player, check, dialogPanel);
+    }
     @Override
     public void actionPerformed(ActionEvent e) {   
         setInventoryColor();
         setInventoryIcons();
+        inventorySetToolTipText();
         inventoryRemoveIcons();
-        setStatsText();        
+        setStatsText();    
+        checkIfWinOrLose();
         if(dialogPanel.getHasBeenSelected()){
             getFocus();
             dialogPanel.setHasBeenSelected(false);
@@ -695,7 +713,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new NonPlayerCharacter(30,310,10,10,50,50,200,"Arlpha",2,5,40,NonPlayerCharacter.ARCHER));        
         e.add(new SpawnableItem(0,380,new Weapon("BigStick",4)));
         e.add(new SpawnableItem(0,200,new Armor("T-Shirt",30)));
-        e.add(new SpawnableItem(30,300,new Arrow("Rocks",50)));
+        e.add(new SpawnableItem(30,300,new Ammo("Rocks",50)));
         e.add(new SpawnableItem(100,340,new HealthPotion("Donuts",5,5)));
         
         e.add(new DamagableEntity(450,2,10,36,2));//breakable entity/door of room 2 to room 3
@@ -714,7 +732,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new NonPlayerCharacter(360,330,10,10,50,50,200,"Arlpha",2,10,200,NonPlayerCharacter.ARCHER));        
         e.add(new NonPlayerCharacter(240,180,15,15,50,50,300,"Derlta",10,50,100,NonPlayerCharacter.SUBBOSS));
         
-        e.add(new SpawnableItem(200,200,new Bow("Slingshot",3)));
+        e.add(new SpawnableItem(200,200,new ProjectileWeapon("Slingshot",3)));
         e.add(new SpawnableItem(450,231,new Weapon("Sword",10)));
         e.add(new SpawnableItem(440,340,new Armor("Shield",100)));
         e.add(new SpawnableItem(300,350,new HealthPotion("H-Pot",10,20)));

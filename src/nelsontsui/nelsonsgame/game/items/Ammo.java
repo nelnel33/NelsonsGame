@@ -11,16 +11,16 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-public class Bow extends Weapon implements Externalizable{
+public class Ammo extends UnusableItem implements Externalizable{
     
-    private static final long serialVersionUID = 33145L;
+    private static final long serialVersionUID = 33146L;
     
-    public Bow(){
+    public Ammo(){
         super();
     }
-    public Bow(String name, int damage){
-        super(name,damage);
-    }    
+    public Ammo(String name, int quantity) {
+        super(name, quantity);
+    }   
     @Override
     public String toString(){
         return super.toString();
