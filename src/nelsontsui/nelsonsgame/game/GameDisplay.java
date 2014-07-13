@@ -682,7 +682,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"Leadwall Habarahsh",100,200);
+        Character p = new Character(0,0,10,10,100,100,300,"Leadwall Habarahsh",90,2);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
