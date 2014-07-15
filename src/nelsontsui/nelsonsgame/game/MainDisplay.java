@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -48,6 +49,8 @@ public class MainDisplay extends JFrame implements ActionListener{
     
     //Button passed to GameDisplay
     private JButton toStartMenu;
+    private JButton restartButton;
+    private JButton importButtonGameDisplay;
     
     //Buttons in the start menu
     private JButton play;
@@ -63,6 +66,9 @@ public class MainDisplay extends JFrame implements ActionListener{
     
     //JDialog that contains LevelEditor
     private LevelEditorDisplay levelEditor;
+    
+    //Warning Message 
+    private boolean canBeClicked;
     
     //Win, Lose, and General Messages
     public static final String winMessageMain = "\nYOU WON!";
@@ -144,22 +150,63 @@ public class MainDisplay extends JFrame implements ActionListener{
     }
     private void setGameDisplayButtonAction(){
         toStartMenu = new JButton("Start Menu");
+        restartButton = new JButton("Restart");
+        importButtonGameDisplay = new JButton("Import");
         toStartMenu.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                removeGameDisplay();
-                swapToStartMenu();
-                MainDisplay.this.repaint();
+                if(warningMessage()){
+                    removeGameDisplay();
+                    swapToStartMenu();
+                    MainDisplay.this.repaint();
+                }
+            }
+        });
+        restartButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(warningMessage()){
+                    removeGameDisplay();
+                    swapToDefaultGameDisplay();
+                    MainDisplay.this.repaint();
+                }
+            }
+        });   
+        importButtonGameDisplay.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                FileSelector f = new FileSelector(FileSelector.IMPORT,null,null);
+                if(f.getNpcs()!=null && f.getPlayer()!=null){
+                    ArrayList<Entity> npcs = f.getNpcs();
+                    Character player = f.getPlayer();
+                    removeGameDisplay();
+                    swapToGameDisplay(npcs,player);
+                    gameDisplay.setNpcs(npcs);
+                    gameDisplay.setPlayer(player);
+                }
             }
         });
     }
+    private boolean warningMessage(){
+        int n = -1;         
+        Object[] options = { "OK", "CANCEL" };
+            n = JOptionPane.showOptionDialog(MainDisplay.this, "Are you sure you want to exit the level?", "Exit Level?",
+            JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null, options, options[0]);       
+        if(n == JOptionPane.NO_OPTION){              
+            return false;
+        }
+        else{
+            return true;
+        }
+                
+    }
     private void swapToGameDisplay(ArrayList<Entity> e, Character p){
-        gameDisplay = new GameDisplay(toStartMenu,e,p);
+        gameDisplay = new GameDisplay(toStartMenu,restartButton,importButtonGameDisplay,e,p);
         add(gameDisplay);
         gameDisplay.getFocus();
     }
     private void swapToDefaultGameDisplay(){
-        gameDisplay = new GameDisplay(toStartMenu);          
+        gameDisplay = new GameDisplay(toStartMenu,restartButton,importButtonGameDisplay);          
         add(gameDisplay);
         gameDisplay.getFocus();
     }

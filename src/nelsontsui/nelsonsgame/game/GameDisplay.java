@@ -62,7 +62,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     
     //buttonPanel(below in the statsPanel; below "Statistics:")
     private JPanel buttonPanel;
-    private JButton saveButton;
+    private JButton restartButton;
     private JButton importButton;
     private JButton toStartMenu;
     private JButton howTo;
@@ -98,9 +98,11 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     //Ingame Elements/Entities
     MapGate win;//TODO: Temporary    
 
-    public GameDisplay(JButton toStartMenu){
+    public GameDisplay(JButton toStartMenu, JButton restartButton, JButton importButton){
     //super("Nelson's Game"); //JFrame to JPanel
     this.toStartMenu = toStartMenu;
+    this.restartButton = restartButton;
+    this.importButton = importButton;
         
     createMap();
     
@@ -116,15 +118,16 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     
     controlButtonAction();
     
-    initWinLose();
-    
+    initWinLose();    
     
     miscButtonAction();
     check.start();
     }
     
-    public GameDisplay(JButton toStartMenu, ArrayList<Entity> npcs, Character Player){
+    public GameDisplay(JButton toStartMenu, JButton restartButton, JButton importButton, ArrayList<Entity> npcs, Character Player){
     this.toStartMenu = toStartMenu;
+    this.restartButton = restartButton;
+    this.importButton = importButton;
     this.npcs = npcs;
     this.Player = Player;
     
@@ -138,7 +141,10 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     createControlLayout();
     createInventoryLayout();
     
-    controlButtonAction();    
+    controlButtonAction();  
+            
+    initWinLose();
+    
     miscButtonAction();
     check.start();
     }
@@ -321,8 +327,8 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         buttonPanel.setLayout(new GridLayout(4,1));
         buttonPanel.setBackground(new Color(197,179,88));
         
-        saveButton = new JButton("Save");
-        importButton = new JButton("Import");
+        //restartButton = new JButton("Save");
+        //importButton = new JButton("Import");
         //toStartMenu = new JButton("Start Menu");
         howTo = new JButton("Instructions");
         
@@ -330,41 +336,43 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         toStartMenu.setOpaque(true);
         howTo.setBackground(new Color(197,179,88));
         howTo.setOpaque(true);
-        saveButton.setBackground(new Color(197,179,88));        
-        saveButton.setOpaque(true);
+        restartButton.setBackground(new Color(197,179,88));        
+        restartButton.setOpaque(true);
         importButton.setBackground(new Color(197,179,88));
         importButton.setOpaque(true);
         
         toStartMenu.setToolTipText(toStartMenu.getText());
         howTo.setToolTipText(howTo.getText());
-        saveButton.setToolTipText(saveButton.getText());
+        restartButton.setToolTipText(restartButton.getText()+" - Only works for Campaign");
         importButton.setToolTipText(importButton.getText());    
         
         buttonPanel.add(toStartMenu);
         buttonPanel.add(howTo);
         buttonPanel.add(importButton);
-        buttonPanel.add(saveButton);
+        buttonPanel.add(restartButton);
     }
     private void miscButtonAction(){
-        saveButton.addActionListener(new ActionListener(){
+        
+        restartButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.requestFocusInWindow();
             }
         });
+        
         importButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 activePanel.requestFocusInWindow();
             }
         });
-        /*
+        
         toStartMenu.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 activePanel.requestFocusInWindow();
             }
         });
-        */
+        
         howTo.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
@@ -646,7 +654,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     }
     private void inventorySetToolTipText(){
         for(int i=0;i<Player.inventory.items.size();i++){
-            inventoryLabels[i].setToolTipText(Player.inventory.items.get(i).getName());
+            inventoryItems[i].setToolTipText(Player.inventory.items.get(i).getName());
         }
     }
     private void createDialogLayout(){
@@ -682,7 +690,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"Leadwall Habarahsh",90,2);
+        Character p = new Character(0,0,10,10,100,100,300,"You",90,2);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room

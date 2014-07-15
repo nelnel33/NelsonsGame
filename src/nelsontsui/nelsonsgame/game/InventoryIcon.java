@@ -29,28 +29,18 @@ public class InventoryIcon extends JPanel implements MouseListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        int mouse = e.getButton();
-        if(SwingUtilities.isLeftMouseButton(e)){
-            //isButton1 = true;
-            //System.out.println("clicked button1");
-        }
-        if(SwingUtilities.isRightMouseButton(e)){
-            //isButton2 = true;
-            //System.out.println("clicked button2");
-        }
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
     public void mouseReleased(MouseEvent e) {
         int mouse = e.getButton();
         if(SwingUtilities.isLeftMouseButton(e)){
             isButton1 = true;
-            //System.out.println("rel button1");
+            System.out.println("rel button1");
         }
         if(SwingUtilities.isRightMouseButton(e)){
             isButton2 = true;
-            //System.out.println("rel button2");
+            System.out.println("rel button2");
         }
     }
     

@@ -746,6 +746,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     }
                 }
             }  
+            checkForInventory();
             npcProjectileInflictDamage();
             npcMove();
             npcProjectileWithinPanel();            
@@ -754,7 +755,6 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             checkPortals();
             checkTalkableGates(); 
             checkForItems();
-            checkForInventory();
             projectileWithinPanel();
             projectileInflictDamage();
             Player.inventory.sortInventory();    
