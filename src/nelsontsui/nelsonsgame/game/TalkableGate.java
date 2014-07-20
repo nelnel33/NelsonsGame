@@ -42,6 +42,12 @@ public class TalkableGate extends Entity implements Externalizable{
             return false;
         }
     }
+    
+    public static String description(){
+        return "TalkableGate: A non-solid object/entity. When you step over it, it speaks in the dialog box;"
+                + "Recommended Use: Boss Dialog, Instructions for level;";
+    }
+    
     @Override
     public String toString(){
         return "Speech: "+speech+"; "+super.toString();

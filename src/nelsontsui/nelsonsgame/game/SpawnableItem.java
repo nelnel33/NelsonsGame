@@ -4,7 +4,6 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
 import nelsontsui.nelsonsgame.game.items.Item;
 
 public class SpawnableItem extends Entity implements Externalizable{
@@ -29,6 +28,15 @@ public class SpawnableItem extends Entity implements Externalizable{
     public void setItems(Item items){
         this.items = items;
     }
+    
+    public static String description(){
+        return "SpawnableItem;A non-solid object that contains an item;";
+    }
+    
+    public String instanceDescription(){
+        return "SpawnableItem;A non-solid object that contains;"+items.instanceDescription();
+    }
+    
     @Override
     public String toString(){
         return items.toString()+" "+super.toString();

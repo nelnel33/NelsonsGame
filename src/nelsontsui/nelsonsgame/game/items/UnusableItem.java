@@ -14,6 +14,11 @@ public class UnusableItem extends Item{
     public UnusableItem(String name, int quantity) {
         super(name, quantity);
     }
+    
+    @Override
+    public String instanceDescription(){
+        return "UnusableItem;A generic, non-perishable item;Recommened Use: Armor/Weapons";
+    }
     @Override
     public String toString(){
         return super.toString();
@@ -22,7 +27,6 @@ public class UnusableItem extends Item{
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
     }
-
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);

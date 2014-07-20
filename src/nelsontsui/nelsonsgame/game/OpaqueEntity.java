@@ -15,6 +15,11 @@ public class OpaqueEntity extends Entity implements Externalizable{
     public OpaqueEntity(double x, double y, double width, double height) {
         super(x, y, width, height);
     }
+    
+    public static String description(){
+        return "OpaqueEntity;A solid object that has a location and size;Recommended Use: Walls";
+    }
+    
     @Override
     public String toString(){
         return super.toString();

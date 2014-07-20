@@ -19,6 +19,8 @@ public class EntityTile extends JPanel implements MouseListener{
     private String entityName;
     private String id;
     
+    private EntityTile[] buttons;
+    
     public static final int size = 50;//size*size = dimension of button
     
     public EntityTile(String entityName, String id){           
@@ -50,23 +52,36 @@ public class EntityTile extends JPanel implements MouseListener{
     public boolean getClicked(){
         return clicked;
     }
+    public void setButtons(EntityTile[] e){
+        buttons = e;
+    }
     public void canToggle(EntityTile[] e){
+        buttons = e;
         for(int i=0;i<e.length;i++){
             if(e[i]==null){}
             else if(e[i].clicked&&!this.equals(e[i])){
                 canToggle = false;
                 return;
-            }
-            
+            }            
         }
         canToggle = true;
     }    
+    public void untoggleOthers(EntityTile[] e){
+        for(int i=0;i<e.length;i++){
+            if(e[i]==null){}
+            else if(e[i].clicked&&!this.equals(e[i])){
+                e[i].clicked = false;
+                e[i].setBackground(new Color(250,250,210));
+            }  
+        }
+    }
     @Override
     public void mouseReleased(MouseEvent e) {
         if(SwingUtilities.isLeftMouseButton(e)){
-            if(clicked == false&&canToggle){
+            if(clicked == false){
                 clicked = true;
                 this.setBackground(Color.CYAN);
+                untoggleOthers(buttons);
             }
             else{
                 clicked = false;

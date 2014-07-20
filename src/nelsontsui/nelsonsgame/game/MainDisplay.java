@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import nelsontsui.nelsonsgame.leveleditor.LevelEditorDisplay;
+import nelsontsui.nelsonsgame.leveleditor.ReadFile;
 
 /*
 |=|=SerialVersionUIDs=|=|
@@ -46,6 +48,15 @@ Inventory - 351
 public class MainDisplay extends JFrame implements ActionListener{
     private GameDisplay gameDisplay;
     private StartMenu startMenu;
+    
+    //is the level the default level
+    private boolean isDefaultLevel;
+    
+    //Entities passed to GameDisplay
+    private ArrayList<Entity> npcs;
+    private Character player;
+    private File currentFile;
+    
     
     //Button passed to GameDisplay
     private JButton toStartMenu;
@@ -88,7 +99,7 @@ public class MainDisplay extends JFrame implements ActionListener{
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(1000,610));        
+        //setPreferredSize(new Dimension(1000,610));        
         pack();
         //framePlacement();
         setLocationRelativeTo(null);
@@ -116,6 +127,7 @@ public class MainDisplay extends JFrame implements ActionListener{
             public void actionPerformed(ActionEvent e){
                 removeStartMenu();
                 swapToDefaultGameDisplay();
+                isDefaultLevel = true;
             }
         });  
         howTo.addActionListener(new ActionListener(){
@@ -129,12 +141,14 @@ public class MainDisplay extends JFrame implements ActionListener{
             public void actionPerformed(ActionEvent e){
                 FileSelector f = new FileSelector(FileSelector.IMPORT,null,null);
                 if(f.getNpcs()!=null && f.getPlayer()!=null){
-                    ArrayList<Entity> npcs = f.getNpcs();
-                    Character player = f.getPlayer();
+                    npcs = f.getNpcs();
+                    player = f.getPlayer();
+                    currentFile = f.getFile();
                     removeStartMenu();
                     swapToGameDisplay(npcs,player);
                     gameDisplay.setNpcs(npcs);
                     gameDisplay.setPlayer(player);
+                    isDefaultLevel = false;
                 }
             }
         });
@@ -166,9 +180,26 @@ public class MainDisplay extends JFrame implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e){
                 if(warningMessage()){
-                    removeGameDisplay();
-                    swapToDefaultGameDisplay();
-                    MainDisplay.this.repaint();
+                    if(isDefaultLevel){
+                        removeGameDisplay();
+                        swapToDefaultGameDisplay();
+                        MainDisplay.this.repaint();
+                    }
+                    else{
+                        ReadFile read = new ReadFile(currentFile);
+                        read.read();
+                        if(read.getNpcs()==null || read.getPlayer()==null){
+                            JOptionPane.showMessageDialog(
+                                    MainDisplay.this, "File cannot be found! Please import the level again.", "File cannot be found", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else{
+                            removeGameDisplay();
+                            npcs = read.getNpcs();
+                            player = read.getPlayer();                        
+                            swapToGameDisplay(npcs,player);
+                            MainDisplay.this.repaint();
+                        }                       
+                    }
                 }
             }
         });   
@@ -177,18 +208,18 @@ public class MainDisplay extends JFrame implements ActionListener{
             public void actionPerformed(ActionEvent e){
                 FileSelector f = new FileSelector(FileSelector.IMPORT,null,null);
                 if(f.getNpcs()!=null && f.getPlayer()!=null){
-                    ArrayList<Entity> npcs = f.getNpcs();
-                    Character player = f.getPlayer();
+                    npcs = f.getNpcs();
+                    player = f.getPlayer();
+                    currentFile = f.getFile();
                     removeGameDisplay();
                     swapToGameDisplay(npcs,player);
-                    gameDisplay.setNpcs(npcs);
-                    gameDisplay.setPlayer(player);
+                    isDefaultLevel = false;
                 }
             }
         });
     }
     private boolean warningMessage(){
-        int n = -1;         
+        int n;
         Object[] options = { "OK", "CANCEL" };
             n = JOptionPane.showOptionDialog(MainDisplay.this, "Are you sure you want to exit the level?", "Exit Level?",
             JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null, options, options[0]);       

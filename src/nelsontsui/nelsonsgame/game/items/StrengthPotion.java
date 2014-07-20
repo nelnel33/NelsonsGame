@@ -22,6 +22,11 @@ public class StrengthPotion extends Potion implements Externalizable{
     }
     
     @Override
+    public String instanceDescription(){
+        return "StrengthPotion;A potion to increase a player's strength;Recommened Use:Steroids/Coffee";
+    }
+    
+    @Override
     public String toString(){
         return super.toString();
     }

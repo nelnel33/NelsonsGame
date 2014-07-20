@@ -90,6 +90,15 @@ public class NonPlayerCharacter extends Character implements Externalizable {
             return "INVALID CLASS";
         }
     }
+    
+    public static String description(){
+        return "NonPlayerCharacter;A solid entity that is controlled by the computer;Recommended Use: Computer Controlled Character;";
+    }
+    
+    public String instanceDescription(){
+        return NonPlayerCharacter.description()+characterClassAsString(characterClass);
+    }
+    
     @Override
     public String toString(){
         return "CharacterClass: "+characterClassAsString(characterClass)+

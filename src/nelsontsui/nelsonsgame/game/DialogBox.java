@@ -21,6 +21,7 @@ public class DialogBox extends JPanel implements ActionListener{
     private boolean hasBeenSelected;
     
     public final static String newline = "\n";
+    public final static String bp = ">>";
     
     public DialogBox(int width, int height, Color color){
         setLayout(new GridLayout(1,1));

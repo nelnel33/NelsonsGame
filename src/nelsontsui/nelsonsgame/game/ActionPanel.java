@@ -7,10 +7,8 @@ import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
 import nelsontsui.nelsonsgame.game.items.Ammo;
 import nelsontsui.nelsonsgame.game.items.Armor;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -19,8 +17,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 /*
 *NPCS attack once a second
@@ -932,12 +928,20 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     graphic.setColor(Color.GRAY);//greenish
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }
+                else if(temp instanceof MapGate || temp instanceof TalkableGate){
+                    graphic.setColor(new Color(192,192,192));
+                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
+                }
                 else if(temp instanceof SpawnableItem){
                     graphic.setColor(new Color(188,101,121));
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }
+                else if(temp instanceof OpaqueEntity){
+                    graphic.setColor(Color.DARK_GRAY);
+                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
+                }
                 else{
-                    graphic.setColor(Color.DARK_GRAY);//greenish
+                    graphic.setColor(new Color(0,204,0));//greenish
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }                       
             }

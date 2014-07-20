@@ -165,7 +165,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     
     private void createBackgroundLayout(){
     setLayout(null);
-    setPreferredSize(new Dimension(1000,610));
+    setPreferredSize(new Dimension(1000,600));
     //getContentPane().  //JFrame to JPanel
             setBackground(new Color(55,198,164));
     
@@ -759,7 +759,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new SpawnableItem(660,160,new StrengthPotion("S-Pot",1,5)));
         
         //BOSSROOM//
-        e.add(new NonPlayerCharacter(600,330,50,50,50,50,200,"Al-ee Sa-ya-nee Dah Pack-ee",30,200,200,NonPlayerCharacter.BOSS));
+        e.add(new NonPlayerCharacter(600,330,30,30,50,50,200,"Al-ee Sa-ya-nee Dah Pack-ee",100,200,200,NonPlayerCharacter.BOSS));
         win = new MapGate(700,360,20,20,MapGate.KILL_ALL);
         e.add(win);
         e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Omerga",10,50,100,NonPlayerCharacter.BR_SUBBOSS));

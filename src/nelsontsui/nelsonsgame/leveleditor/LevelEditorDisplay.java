@@ -7,23 +7,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import nelsontsui.nelsonsgame.game.*;
 import nelsontsui.nelsonsgame.game.Point;
+import nelsontsui.nelsonsgame.game.Character;
 
 public class LevelEditorDisplay extends JDialog implements ActionListener, MouseListener{   
     //static decs
@@ -125,7 +124,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
        addActions();
        
        setPreferredSize(new Dimension(gap+panelWidth+gap+detailedSelectorPanelHolder.getWidth()+gap,
-               gap+panelHeight+gap+selectorPanel.getHeight()+gap+gap+gap));
+              gap+panelHeight+gap+selectorPanel.getHeight()+gap+gap+gap));
        setResizable(false);
        setVisible(true);
        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);   
@@ -312,39 +311,96 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     private void addDetailedSelectorButtons(){
         //detailedSelectors[PLAYER_CHARACTER];
         detailedSelectors[PLAYER_CHARACTER][0] = new EntityTile("Player","Player");
+            detailedSelectors[PLAYER_CHARACTER][0].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(Character.description()));
+        
         
         //detailedSelectors[ENTITY];
         detailedSelectors[ENTITY][0] = new EntityTile("Entity","Entity");
+            detailedSelectors[ENTITY][0].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(Entity.description()));
         detailedSelectors[ENTITY][1] = new EntityTile("Opaque","OpaqueEntity");
+            detailedSelectors[ENTITY][1].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(OpaqueEntity.description()));
         detailedSelectors[ENTITY][2] = new EntityTile("Damagable","DamagableEntity");
+            detailedSelectors[ENTITY][2].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(DamagableEntity.description()));
         detailedSelectors[ENTITY][3] = new EntityTile("Talk Gate","TalkableGate");
+            detailedSelectors[ENTITY][3].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(TalkableGate.description()));
         detailedSelectors[ENTITY][4] = new EntityTile("Map Gate(Default)","MapGateReachGate"); 
+            detailedSelectors[ENTITY][4].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(MapGate.description()));
         detailedSelectors[ENTITY][5] = new EntityTile("Exit Map(Default)","MapGateReachGateExit");
+            detailedSelectors[ENTITY][5].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(MapGate.description()));
         detailedSelectors[ENTITY][6] = new EntityTile("Map Gate(Kill-All)","MapGateKillAll"); 
+            detailedSelectors[ENTITY][6].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(MapGate.description()));
         detailedSelectors[ENTITY][7] = new EntityTile("Exit Map(Kill-All)","MapGateKillAllExit");
+            detailedSelectors[ENTITY][7].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(MapGate.description()));
         detailedSelectors[ENTITY][8] = new EntityTile("Main Portal(Default)","MainPortalDefault");
+            detailedSelectors[ENTITY][8].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(Portal.description()));
         detailedSelectors[ENTITY][9] = new EntityTile("Sub-Portal(Default)","SubPortalDefault");
+            detailedSelectors[ENTITY][9].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(Portal.description()));
         detailedSelectors[ENTITY][10] = new EntityTile("Main Portal(Kill-All)","MainPortalKillAll");
+            detailedSelectors[ENTITY][10].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(Portal.description()));
         detailedSelectors[ENTITY][11] = new EntityTile("Sub-Portal(Kill-All)","SubPortalKillAll");
+            detailedSelectors[ENTITY][11].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(Portal.description()));
         
         //detailedSelectors[NONPLAYERCHARACTER];
         detailedSelectors[NONPLAYERCHARACTER][0] = new EntityTile("Warrior","Warrior");
+            detailedSelectors[NONPLAYERCHARACTER][0].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
         detailedSelectors[NONPLAYERCHARACTER][1] = new EntityTile("BR-War","BossroomWarrior");
+            detailedSelectors[NONPLAYERCHARACTER][1].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
         detailedSelectors[NONPLAYERCHARACTER][2] = new EntityTile("Archer","Archer");
+            detailedSelectors[NONPLAYERCHARACTER][2].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
         detailedSelectors[NONPLAYERCHARACTER][3] = new EntityTile("BR-Arch","BossroomArcher");
+            detailedSelectors[NONPLAYERCHARACTER][3].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
         detailedSelectors[NONPLAYERCHARACTER][4] = new EntityTile("Tank","Tank");
+            detailedSelectors[NONPLAYERCHARACTER][4].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
         detailedSelectors[NONPLAYERCHARACTER][5] = new EntityTile("BR-Tank","BossroomTank");
+            detailedSelectors[NONPLAYERCHARACTER][5].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
         detailedSelectors[NONPLAYERCHARACTER][6] = new EntityTile("Subboss","Subboss");
+            detailedSelectors[NONPLAYERCHARACTER][6].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
         detailedSelectors[NONPLAYERCHARACTER][7] = new EntityTile("BR-Sub","BossroomSubboss");
+            detailedSelectors[NONPLAYERCHARACTER][7].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
         detailedSelectors[NONPLAYERCHARACTER][8] = new EntityTile("Boss","Boss");
+            detailedSelectors[NONPLAYERCHARACTER][8].setToolTipText(
+                    StringWrapper.wrapOnSemiColonHTML(NonPlayerCharacter.description()));
                 
         //detailedSelectors[ITEM];                
         detailedSelectors[ITEM][0] = new EntityTile("Armor","Armor");
+            detailedSelectors[ITEM][0].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(SpawnableItem.description()));
         detailedSelectors[ITEM][1] = new EntityTile("Weapon","Weapon");
+            detailedSelectors[ITEM][1].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(SpawnableItem.description()));
         detailedSelectors[ITEM][2] = new EntityTile("ProjectileWeapon","ProjectileWeapon");
+            detailedSelectors[ITEM][2].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(SpawnableItem.description()));
         detailedSelectors[ITEM][3] = new EntityTile("Ammo","Ammo");
+            detailedSelectors[ITEM][3].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(SpawnableItem.description()));
         detailedSelectors[ITEM][4] = new EntityTile("H-Pot","HealthPotion");
+            detailedSelectors[ITEM][4].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(SpawnableItem.description()));
         detailedSelectors[ITEM][5] = new EntityTile("S-Pot","StrengthPotion");
+            detailedSelectors[ITEM][5].setToolTipText(
+                StringWrapper.wrapOnSemiColonHTML(SpawnableItem.description()));
         
         for(int i=0;i<TOTAL_SELECTORS;i++){
             for(int j=0;j<detailedSelectors[i].length;j++){
@@ -377,6 +433,10 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                     nelsontsui.nelsonsgame.game.Character player = editPanel.getPlayer();
                     ArrayList<Entity> npcs = editPanel.getNpcs();
                     FileSelector fileSelector = new FileSelector(FileSelector.SAVE,npcs,player);
+                    //System.out.println(fileSelector.getResponse());
+                    if(fileSelector.getResponse() == JFileChooser.APPROVE_OPTION){
+                        editPanel.placedSomething = false;
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(LevelEditorDisplay.this, "You must place a Player!", "No Player!", JOptionPane.WARNING_MESSAGE);
@@ -405,11 +465,16 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                 
             }
         });
+        instructions.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                LevelEditorInstructions instructions = new LevelEditorInstructions(LevelEditorDisplay.this);                
+            }
+        });
         analyze.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 analysis = new AnalysisPanel(LevelEditorDisplay.this);
-                check.addActionListener(analysis);
             }
         });
     }
@@ -429,6 +494,21 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
                 if(detailedSelectors[i][j]==null){}
                 else{
                 detailedSelectors[i][j].canToggle(detailedSelectors[i]);
+                }
+            }
+        }
+    }
+    public void setOtherEntityTiles(){
+        selectors[PLAYER_CHARACTER].setButtons(selectors);
+        selectors[ENTITY].setButtons(selectors);
+        selectors[NONPLAYERCHARACTER].setButtons(selectors);
+        selectors[ITEM].setButtons(selectors);
+        
+        for(int i=0;i<TOTAL_SELECTORS;i++){
+            for(int j=0;j<TOTAL_DETAILEDSELECTORS;j++){
+                if(detailedSelectors[i][j]==null){}
+                else{
+                detailedSelectors[i][j].setButtons(detailedSelectors[i]);
                 }
             }
         }
@@ -534,9 +614,9 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        updateAnalysisPanel();
-        checkIfCanToggle();        
-        checkIfCanToggle();
+        updateAnalysisPanel();      
+        //checkIfCanToggle();
+        setOtherEntityTiles();
         setPointPanelText();  
         checkLabelerPanel();
         validate();

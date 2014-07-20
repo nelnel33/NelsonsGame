@@ -43,21 +43,32 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     protected Point placement;//where the entity will be placed
     protected DimensionDouble dimension;//how large the entity will be (dimension by dimension)
     
+    //written to and read from
     protected ArrayList<Entity> npcs = new ArrayList<>();
     protected nelsontsui.nelsonsgame.game.Character player;
     
+    //check if JOptionPane should be prompted
     protected boolean playerSet=false;
     protected boolean placedSomething=false;
     
+    //for the grid itself
     protected static final int gridRows = 40;
     protected static final int gridColumns = 74;
     protected Point[][] points = new Point[gridRows][gridColumns];
     protected DimensionDouble[][] dimensions = new DimensionDouble[gridRows][gridColumns]; 
     protected Entity[][] npcsOnGrid = new Entity[gridRows][gridColumns];
     
+    //what has been selected
     protected EntityTile[] detailedSelectors = new EntityTile[LevelEditorDisplay.TOTAL_DETAILEDSELECTORS];
     protected String currentDetailedSelectorId;
     
+    //dragger/highlighter
+    protected Point originalPoint;
+    protected Entity highlighter;
+    protected boolean mousePressed;       
+    protected boolean mouseDragged;
+    
+    //default entity that has been selected
     protected final String defaultDetailedSelectorId = "Entity";
     
     //defaultOptions
@@ -164,20 +175,70 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         placement.setX(x-modx);
         placement.setY(y-mody);
     }
-     @Override
+    @Override
     public void mouseMoved(MouseEvent e) {
         cursor.setX(e.getX());
         cursor.setY(e.getY());
         cursorToPlacement(cursor);
     }
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
         int py = (int)(placement.getY()/10);
         int px = (int)(placement.getX()/10);
         if(SwingUtilities.isLeftMouseButton(e)){            
-            points[py][px] = new Point(placement.getX(),placement.getY());
-            createBasedOnId(py,px,points[py][px]);
-            placedSomething=true;
+            originalPoint = new Point(placement.getX(),placement.getY());
+            mousePressed = true;
+            System.out.println("pressed @"+originalPoint.getX()+","+originalPoint.getY());
+        }
+    }
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if(SwingUtilities.isLeftMouseButton(e) && mousePressed){      
+            int ox = (int)originalPoint.getX();
+            int oy = (int)originalPoint.getY();
+            Point temp = cursorToDimension(new Point(e.getX(),e.getY()));
+            double width = (temp.getX())-ox;
+            double height = (temp.getY())-oy;
+            //if(ox!=placement.getX() && oy!=placement.getY()){
+                highlighter = new Entity(ox,oy,width,height);
+                highlighter = reorientEntity(highlighter);
+                mouseDragged = true;
+                System.out.println("drag from point:"+originalPoint.getX()+","+originalPoint.getY()+" to dimen:"+width+","+height);
+            //}
+        }
+    }
+    public Point cursorToDimension(Point c){
+        double x = c.getX();
+        double y = c.getY();
+        double modx = x%10;
+        double mody = y%10;    
+        double newx = (x-modx)+10;
+        double newy = (y-mody)+10;
+        return new Point(newx,newy);
+    }
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        int py = (int)(placement.getY()/10);
+        int px = (int)(placement.getX()/10);
+        if(SwingUtilities.isLeftMouseButton(e)){  
+            if(mousePressed&&mouseDragged){
+                int ox = (int)highlighter.getX();
+                int oy = (int)highlighter.getY();
+                double width = highlighter.getWidth();
+                double height = highlighter.getHeight();
+                mousePressed = false;
+                mouseDragged = false;
+                createBasedOnId(oy/10,ox/10,new Point(ox,oy),new DimensionDouble(width,height));
+                placedSomething = true;
+                highlighter = null;
+                originalPoint = null;
+                System.out.println("rel @"+px+","+py+"; point: "+ox+","+oy+"; dimen:"+width+","+height);
+            }
+            else{
+                points[py][px] = new Point(placement.getX(),placement.getY());
+                createBasedOnId(py,px,points[py][px],dimension);
+                placedSomething=true;
+            }
         }
         if(SwingUtilities.isRightMouseButton(e)){
             if((npcsOnGrid[py][px] instanceof nelsontsui.nelsonsgame.game.Character)&&!(npcsOnGrid[py][px] instanceof NonPlayerCharacter)){
@@ -187,9 +248,55 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
             npcsOnGrid[py][px]=null;
         }
     }  
-    //private Entity createLinkForPortal(){}
-    
-    public void createBasedOnId(int r, int c, Point p){
+    public int determineSupposedPointOrigin(Point origin, Point released){
+        if(origin.getX()-released.getX()<0){
+            if(origin.getY()-released.getY()<0){
+                return TOP_LEFT;
+            }
+            else{
+                return BOTTOM_LEFT;
+            }
+        }
+        else{
+            if(origin.getY()-released.getY()<0){
+                return TOP_RIGHT;
+            }
+            else{
+                return BOTTOM_RIGHT;
+            }
+        }
+    }
+    public Entity reorientEntity(Entity e){
+        int x = (int)e.getX();
+        int y = (int)e.getY();
+        int width = (int)e.getWidth();
+        int height = (int)e.getHeight();        
+        int rx = x+width;
+        int ry = y+height;
+        int aw = Math.abs(width);
+        int ah = Math.abs(height);
+        Point origin = new Point(x,y);
+        Point rel = new Point(rx,ry);
+        int po = determineSupposedPointOrigin(origin,rel);
+        
+        if(po == TOP_LEFT){
+            return e;
+        }
+        else if(po == BOTTOM_LEFT){
+            return new Entity(rx,ry,aw,ah);
+        }
+        else if(po == TOP_RIGHT){
+            return new Entity(rx,y,aw,ah);
+        }
+        else if(po == BOTTOM_RIGHT){
+            return new Entity(rx,ry,aw,ah);
+        }
+        else{
+            System.out.println("CANNOT REORIENT");
+            return null;
+        }
+    }
+    public void createBasedOnId(int r, int c, Point p, DimensionDouble dimension){
         if(currentDetailedSelectorId==null){
             npcsOnGrid[r][c] = new Entity(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight());
         }
@@ -387,6 +494,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         for(int j=10;j<gridRows*10;j+=10){
             graphic.drawLine(0,j,gridColumns*10,j);
         }
+        drawHighlighter(highlighter,graphic);
         for(int z = 0;z<gridRows;z++){
             for(int k = 0;k<gridColumns;k++){
                 //Point p = points[z][k];
@@ -398,6 +506,12 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
                     //System.out.println("painted"+e+"@"+e.getX()+","+e.getY());
                 }
             }
+        }
+    }
+    public void drawHighlighter(Entity e, Graphics2D graphic){
+        if(highlighter!=null){
+            graphic.setColor(Color.MAGENTA);
+            graphic.fill(new Rectangle2D.Double(highlighter.getX(),highlighter.getY(),highlighter.getWidth(),highlighter.getHeight()));
         }
     }
     public void colorEntities(Entity temp, Graphics2D graphic){
@@ -436,11 +550,17 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         else if(temp instanceof DamagableEntity){
             graphic.setColor(Color.GRAY);//grey                    
         }
+        else if(temp instanceof MapGate || temp instanceof TalkableGate){
+            graphic.setColor(new Color(192,192,192));
+        }
         else if(temp instanceof SpawnableItem){
             graphic.setColor(new Color(188,101,121));                    
         }
+        else if(temp instanceof OpaqueEntity){
+            graphic.setColor(Color.DARK_GRAY);
+        }
         else{
-            graphic.setColor(Color.DARK_GRAY);//greenish                    
+            graphic.setColor(new Color(0,204,0));//greenish                    
         }
     }
     
@@ -448,16 +568,9 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void mouseClicked(MouseEvent e) {}
     @Override
-    public void mousePressed(MouseEvent e) {}
-    
-    
-    
-    @Override
     public void mouseEntered(MouseEvent e) {}
     @Override
     public void mouseExited(MouseEvent e) {}
-    @Override
-    public void mouseDragged(MouseEvent e) {}
 
     @Override
     public void actionPerformed(ActionEvent e) {

@@ -37,6 +37,11 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
     public void heal(double heal){
         hitpoints+=heal;
     }
+    
+    public static String description(){
+        return "DamagableEntity;An solid entity that has hitpoints;Recommended Use: Physical gate/door;";
+    }
+    
     @Override
     public String toString(){
         return super.toString()+" initHitpoints: "+initHitpoints+";";

@@ -208,6 +208,10 @@ public class Character extends DamagableEntity implements Externalizable{
         }
     }
     
+    public  static String description(){
+        return "Character;A solid entity that has health and damage;Recommended Use: Player";
+    }
+    
     @Override
     public String toString(){
         return "Name: "+name+"; "+super.toString()+" Damage: "+damage+"; Speed: ("+travelX*ActionPanel.INVERSE_DELTA+","+travelY*ActionPanel.INVERSE_DELTA+"); ProjectileSpeed: "+projectileSpeed*ActionPanel.INVERSE_DELTA+";";

@@ -32,6 +32,12 @@ public class HealthPotion extends Potion implements Externalizable{
                 e.heal((e.getinitHitpoints()+e.getArmorHitpoints())-e.getHitpoints());
             }
     }
+    
+    @Override
+    public String instanceDescription(){
+        return "HealthPotion;Used to heal the player;Recommened Use: Food/Potions;";
+    }
+    
     @Override
     public String toString(){
         return super.toString();

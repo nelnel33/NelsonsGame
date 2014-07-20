@@ -30,6 +30,13 @@ public class Armor extends UnusableItem implements Externalizable{
     public void setEquipped(boolean e){
         equipped = e;
     }
+    
+    @Override
+    public String instanceDescription(){
+        return "Armor;Protection for the player, increases a players health by x amount;Recommened Use: Armor;";
+    }
+    
+    @Override
     public String toString(){
         return super.toString()+" Protection: "+protection+";";
     }

@@ -27,29 +27,29 @@ public class HowTo extends JDialog{
     private void showInstructions(){
         howto = new JTextArea(
                         "||Controls||" +DialogBox.newline+
-                        "Arrow Keys - Up,Down,Left,Right" +DialogBox.newline+
-                        "A - attack"+DialogBox.newline+
-                        "S - shoot"+DialogBox.newline+
-                        "D - defend"+DialogBox.newline+
-                        "H - heal"+DialogBox.newline+
-                        "Q - inventory selector[backwards]"+DialogBox.newline+
-                        "W - inventory selector[forwards]"+DialogBox.newline+
-                        "E/Mouse 1[Left Click] - use"+DialogBox.newline+
-                        "R/Mouse 2[Right Click - drop"+DialogBox.newline+
+                        DialogBox.bp+"Arrow Keys - Up,Down,Left,Right" +DialogBox.newline+
+                        DialogBox.bp+"A - attack"+DialogBox.newline+
+                        DialogBox.bp+"S - shoot"+DialogBox.newline+
+                        DialogBox.bp+"D - defend"+DialogBox.newline+
+                        DialogBox.bp+"H - heal"+DialogBox.newline+
+                        DialogBox.bp+"Q - inventory selector[backwards]"+DialogBox.newline+
+                        DialogBox.bp+"W - inventory selector[forwards]"+DialogBox.newline+
+                        DialogBox.bp+"E/Mouse 1[Left Click] - use"+DialogBox.newline+
+                        DialogBox.bp+"R/Mouse 2[Right Click - drop"+DialogBox.newline+
                         DialogBox.newline+
                         "||Color Identification||"+DialogBox.newline+
-                        "Warrior - red"+DialogBox.newline+
-                        "Archer - light green"+DialogBox.newline+
-                        "Tank - dark green"+DialogBox.newline+
-                        "Sub-Boss - purple"+DialogBox.newline+
-                        "Boss - black"+DialogBox.newline+
-                        "Dark Grey - walls"+DialogBox.newline+
-                        "Grey - doors[damagable walls]"+DialogBox.newline+
-                        "Pink - items"+DialogBox.newline+
-                        "Orange/Blue - main/sub - portals"+DialogBox.newline+
+                        DialogBox.bp+"Warrior - red"+DialogBox.newline+
+                        DialogBox.bp+"Archer - light green"+DialogBox.newline+
+                        DialogBox.bp+"Tank - dark green"+DialogBox.newline+
+                        DialogBox.bp+"Sub-Boss - purple"+DialogBox.newline+
+                        DialogBox.bp+"Boss - black"+DialogBox.newline+
+                        DialogBox.bp+"Dark Grey - walls"+DialogBox.newline+
+                        DialogBox.bp+"Grey - doors[damagable walls]"+DialogBox.newline+
+                        DialogBox.bp+"Pink - items"+DialogBox.newline+
+                        DialogBox.bp+"Orange/Blue - main/sub - portals"+DialogBox.newline+
                         DialogBox.newline+
                         "||Objective||"+DialogBox.newline+
-                        "Make it to the black circle and you win!" );
+                        DialogBox.bp+"Make it to the black circle and you win!" );
         howto.setLineWrap(true);
         howto.setWrapStyleWord(true);  
         howto.setEditable(false);

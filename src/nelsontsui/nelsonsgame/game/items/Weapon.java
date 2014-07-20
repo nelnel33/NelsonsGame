@@ -30,9 +30,17 @@ public class Weapon extends UnusableItem implements Externalizable{
     public void setEquipped(boolean e){
         equipped = e;
     }
+    
+    @Override
+    public String instanceDescription(){
+        return "Weapon;A generic weapon that increases the player's damage;Recommened Use: Sword/Dagger;";
+    }
+    
+    @Override
     public String toString(){
         return super.toString()+" Damage: "+damage+";";
     }
+
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);

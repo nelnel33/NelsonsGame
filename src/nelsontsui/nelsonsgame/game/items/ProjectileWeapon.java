@@ -25,6 +25,10 @@ public class ProjectileWeapon extends Weapon implements Externalizable{
         return ammo instanceof Ammo;
     }
     @Override
+    public String instanceDescription(){
+        return "ProjectileWeapon;A weapon for firing projectiles;Recommened Use: Gun/Bow";
+    }
+    @Override
     public String toString(){
         return super.toString();
     }

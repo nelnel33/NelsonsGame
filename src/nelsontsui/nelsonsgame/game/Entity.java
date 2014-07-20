@@ -73,6 +73,11 @@ public class Entity implements Externalizable{
             return "INVALID DIRECTION";
         }
     }
+    
+    public static String description(){
+        return "Entity;A non-solid object that has no attributes other than a location and size;Recommended Use: Pathway;";
+    }
+    
     @Override
     public String toString(){
         return "Class: "+this.getClass()+"; Location: ("+x+","+y+"); Size: ("+width+","+height+"); Direction: "+directionAsString(direction)+";";

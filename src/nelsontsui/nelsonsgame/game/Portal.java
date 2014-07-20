@@ -127,6 +127,12 @@ public class Portal extends Entity implements Externalizable{
             return "INVALID CONDITION";
         }
     }
+    
+    public static String description(){
+        return "Portal;A non-solid entity/object uses to teleport characters from one location to another;Recommended Use: Portal;"
+                + "Click the \'Custom\' button on the bottom to set the exit location of the portal;";
+    }
+    
     @Override
     public String toString(){
         return "UseCondition: "+conditionAsString(condition)+"; Subportal: "+subportal.toString()+"; "+super.toString();

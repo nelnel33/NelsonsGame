@@ -26,9 +26,16 @@ public class Potion extends Item implements Externalizable{
     public void setStrength(double strength){
         this.strength = strength;
     }
+    @Override
     public String toString(){
         return "PotionStrength: "+strength+"; "+super.toString();
     }
+    
+    @Override
+    public String instanceDescription(){
+        return "Potion;A generic potion;Recommened Use: Decoy potion";
+    }
+    
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);

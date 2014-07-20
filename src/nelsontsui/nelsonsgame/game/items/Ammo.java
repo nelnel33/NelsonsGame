@@ -21,6 +21,12 @@ public class Ammo extends UnusableItem implements Externalizable{
     public Ammo(String name, int quantity) {
         super(name, quantity);
     }   
+    
+    @Override
+    public String instanceDescription(){
+        return "Ammo;Ammunition for a Projectile Weapon;Recommended Use: Arrows;";
+    }
+    
     @Override
     public String toString(){
         return super.toString();

@@ -85,4 +85,7 @@ public class FileSelector extends JFileChooser{
     public String getFileName(){
         return fileName;
     }
+    public int getResponse(){
+        return response;
+    }
 }

@@ -72,6 +72,10 @@ public class Item implements Externalizable{
     }
     public void ability(Character e){}//override if needed
     
+    public String instanceDescription(){
+        return "Item;A generic item;Recommened Use: Decoy item";
+    }
+    
     @Override
     public String toString(){
         return "Name: "+name+"; Type:"+this.getClass()+"; Quantity: "+quantity+";";

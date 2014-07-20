@@ -124,6 +124,12 @@ public class MapGate extends Entity implements Externalizable{
             return "INVALID USE CONDITION";
         }
     }
+    
+    public static String description(){
+        return "MapGate;A non-solid object that is used to exit the map or display that you have won;"
+                + "Recommended Use: Level linker;";
+    }
+    
     @Override
     public String toString(){
         return "UseCondition: "+useConditionAsString(useCondition)+"; CanUse: "+canUse+"; FilePath: "+file+"; usedToExitMap: "+usedToExitMap+"; "
