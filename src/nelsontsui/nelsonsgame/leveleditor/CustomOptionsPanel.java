@@ -211,9 +211,7 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         }
         if((fields[DAMAGE]!=null) && isStringNumerical(((JTextField)fields[DAMAGE]).getText())){
             int damage = Integer.parseInt(((JTextField)fields[DAMAGE]).getText());
-            if(damage>0){
-                editPanel.damage = damage;
-            }
+            editPanel.damage = damage;
         }
         if((fields[DETECTIONRADIUS]!=null)&&isStringNumerical(((JTextField)fields[DETECTIONRADIUS]).getText())){
             int detection = Integer.parseInt(((JTextField)fields[DETECTIONRADIUS]).getText());
@@ -223,15 +221,12 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         }
         if((fields[PROJECTILESPEED]!=null)&&isStringNumerical(((JTextField)fields[PROJECTILESPEED]).getText())){
             int projectilespeed = Integer.parseInt(((JTextField)fields[PROJECTILESPEED]).getText());
-            if(projectilespeed>0){
-                editPanel.projectileSpeed = projectilespeed;
-            }
+            editPanel.projectileSpeed = projectilespeed;
+            
         }
         if((fields[SPEED]!=null)&&isStringNumerical(((JTextField)fields[SPEED]).getText())){
             int speed = Integer.parseInt(((JTextField)fields[SPEED]).getText());
-            if(speed>0){
-                editPanel.speed = speed;
-            }
+            editPanel.speed = speed;
         }
         if(fields[TALKABLESPEECH]!=null){
             editPanel.talkableSpeech = ((JTextField)fields[TALKABLESPEECH]).getText();

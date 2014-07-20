@@ -44,7 +44,7 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
     
     @Override
     public String toString(){
-        return super.toString()+" initHitpoints: "+initHitpoints+";";
+        return super.toString()+" initHitpoints: "+initHitpoints+"; hitpoints: "+hitpoints+";";
     }    
     
     @Override
