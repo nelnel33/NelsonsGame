@@ -105,6 +105,4 @@ public class Hitbox implements Externalizable{
         far = (Point)in.readObject();
         center = (Point)in.readObject();
     }
-
-        
 }
