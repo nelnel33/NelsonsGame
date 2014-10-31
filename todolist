@@ -11,10 +11,12 @@ Things to Implement — To Do List
 	⁃	Works fine when touching the wall and moving up and down. But you get stuck when touching the wall and moving left and right.
 	4.	Move character methods and logic into their own classes. i.e) npcMove and canNpcMove into NonPlayerCharacter Class or canMoveUp into Character Class
 	5.	Rework access modifiers. 
-	⁃	TOP USING protected
+	⁃	STOP USING protected
 	⁃	Change so classes start using private modifiers
 	6.	Reorganize classes 
 	⁃	i.e. Entity classes are not in same package as GUI classes
 	7.	Reorganize components of LevelEditor
 	⁃	If you cannot import your own image, making specific tiles instead of generic tile. 
 	⁃	i.e. instead of Entity, you have: grass, carpet, pavement.
+	8.	Make it so when an NPC/Player is hit, it flashes a different color to show that damage has been taken.
+	-	Could also show damage dealt on hit(damage dealt on NPC/Player by flashing it on sprite/icon).
