@@ -246,23 +246,5 @@ public class MainDisplay extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         repaint();
     }
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
-        //UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        /*
-        try {
-            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-            UIManager.setLookAndFeel(info.getClassName());
-            break;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Cannot set desired UI. Default UI was set.");
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        */
-        MainDisplay main = new MainDisplay();
-    }
     
 }

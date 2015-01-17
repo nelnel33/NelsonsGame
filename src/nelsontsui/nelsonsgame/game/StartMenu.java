@@ -14,6 +14,7 @@ public class StartMenu extends JPanel{
     private JButton leveleditor; //func set in MainDisplay
     private JPanel buttonHolder;
     private NelsonWatermark watermark;
+    private NelsonTitle title;
     
     private JPanel[] buffer = new JPanel[8];
     public StartMenu(JButton play,JButton howTo, JButton importButton, JButton leveleditor){
@@ -28,6 +29,7 @@ public class StartMenu extends JPanel{
         }
         
         setButtonHolderLayout();
+        addTitle();
         addWatermark();
         
         setLayout(null);
@@ -71,6 +73,12 @@ public class StartMenu extends JPanel{
         watermark = new NelsonWatermark();
         watermark.setBounds(0,570,1020,20);
         add(watermark);
+    }
+    
+    private void addTitle(){
+        title = new NelsonTitle();
+        title.setBounds(314,170,372,80);
+        add(title);
     }
     
 }
