@@ -494,7 +494,6 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         for(int j=10;j<gridRows*10;j+=10){
             graphic.drawLine(0,j,gridColumns*10,j);
         }
-        drawHighlighter(highlighter,graphic);
         for(int z = 0;z<gridRows;z++){
             for(int k = 0;k<gridColumns;k++){
                 //Point p = points[z][k];
@@ -507,6 +506,8 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
                 }
             }
         }
+        
+        drawHighlighter(highlighter,graphic);
     }
     public void drawHighlighter(Entity e, Graphics2D graphic){
         if(highlighter!=null){

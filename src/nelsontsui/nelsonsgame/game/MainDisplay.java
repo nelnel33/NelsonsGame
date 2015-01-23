@@ -57,7 +57,6 @@ public class MainDisplay extends JFrame implements ActionListener{
     private Character player;
     private File currentFile;
     
-    
     //Button passed to GameDisplay
     private JButton toStartMenu;
     private JButton restartButton;

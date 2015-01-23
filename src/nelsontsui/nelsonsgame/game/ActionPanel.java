@@ -92,25 +92,29 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             if(npcs.get(i) instanceof NonPlayerCharacter){
                 if(canNpcAct((NonPlayerCharacter)npcs.get(i))){
                     if(!npcs.get(i).getHitbox().isTouching(Player.getHitbox())){
-                        if(Player.getHitbox().isRight(npcs.get(i).getHitbox())
-                                &&canNpcMoveRight(npcs.get(i))
-                                &&withinPanelX(npcs.get(i))!=Hitbox.RIGHT){
-                            npcs.get(i).setX(npcs.get(i).getX()-((NonPlayerCharacter)npcs.get(i)).getTravelX());
-                        }
-                        if(Player.getHitbox().isLeft(npcs.get(i).getHitbox())//isLeft
+                        if(Player.getHitbox().isStrictlyLeft(npcs.get(i).getHitbox())
                                 &&canNpcMoveLeft(npcs.get(i))
+                                &&withinPanelX(npcs.get(i))!=Hitbox.RIGHT){
+                            //npcs.get(i).setX(npcs.get(i).getX()-((NonPlayerCharacter)npcs.get(i)).getTravelX());
+                            ((NonPlayerCharacter)npcs.get(i)).moveLeft();//moveLeft
+                        }
+                        if(Player.getHitbox().isStrictlyRight(npcs.get(i).getHitbox())//isLeft
+                                &&canNpcMoveRight(npcs.get(i))
                                 &&withinPanelX(npcs.get(i))!=Hitbox.LEFT){
-                            npcs.get(i).setX(npcs.get(i).getX()+((NonPlayerCharacter)npcs.get(i)).getTravelX());
+                            //npcs.get(i).setX(npcs.get(i).getX()+((NonPlayerCharacter)npcs.get(i)).getTravelX());
+                            ((NonPlayerCharacter)npcs.get(i)).moveRight();//moveRight
                         } 
-                        if(Player.getHitbox().isBelow(npcs.get(i).getHitbox())
+                        if(Player.getHitbox().isStrictlyBelow(npcs.get(i).getHitbox())
                                 &&canNpcMoveDown(npcs.get(i))
                                 &&withinPanelY(npcs.get(i))!=Hitbox.BELOW){
-                            npcs.get(i).setY(npcs.get(i).getY()+((NonPlayerCharacter)npcs.get(i)).getTravelY());                        
+                            //npcs.get(i).setY(npcs.get(i).getY()+((NonPlayerCharacter)npcs.get(i)).getTravelY());      
+                            ((NonPlayerCharacter)npcs.get(i)).moveDown();
                         }
-                        if(Player.getHitbox().isAbove(npcs.get(i).getHitbox())
+                        if(Player.getHitbox().isStrictlyAbove(npcs.get(i).getHitbox())
                                 &&canNpcMoveUp(npcs.get(i))
                                 &&withinPanelY(npcs.get(i))!=Hitbox.ABOVE){
-                            npcs.get(i).setY(npcs.get(i).getY()-((NonPlayerCharacter)npcs.get(i)).getTravelY());
+                            //npcs.get(i).setY(npcs.get(i).getY()-((NonPlayerCharacter)npcs.get(i)).getTravelY());
+                            ((NonPlayerCharacter)npcs.get(i)).moveUp();
                         }                      
                     }
                 }
@@ -123,8 +127,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             else{
                 if(npcs.get(i) instanceof OpaqueEntity){
                     if(e.getHitbox().isTouching(npcs.get(i).getHitbox())
-                       &&npcs.get(i).getHitbox().isAbove(e.getHitbox())){
-                    return false;
+                       &&e.getHitbox().isStrictlyBelow(npcs.get(i).getHitbox())){
+                        return false;
                     } 
                 }
             }
@@ -137,8 +141,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             else{
                 if(npcs.get(i) instanceof OpaqueEntity){
                     if(e.getHitbox().isTouching(npcs.get(i).getHitbox())
-                       &&npcs.get(i).getHitbox().isBelow(e.getHitbox())){
-                    return false;
+                       &&e.getHitbox().isStrictlyAbove(npcs.get(i).getHitbox())){
+                        return false;
                     } 
                 }
             }
@@ -151,8 +155,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             else{
                 if(npcs.get(i) instanceof OpaqueEntity){
                     if(e.getHitbox().isTouching(npcs.get(i).getHitbox())
-                       &&npcs.get(i).getHitbox().isLeft(e.getHitbox())){
-                    return false;
+                       &&e.getHitbox().isStrictlyRight(npcs.get(i).getHitbox())){
+                        return false;
                     } 
                 }
             }
@@ -165,8 +169,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             else{
                 if(npcs.get(i) instanceof OpaqueEntity){
                     if(e.getHitbox().isTouching(npcs.get(i).getHitbox())
-                       &&npcs.get(i).getHitbox().isRight(e.getHitbox())){
-                    return false;
+                       &&e.getHitbox().isStrictlyLeft(npcs.get(i).getHitbox())){
+                        return false;
                     } 
                 }
             }
@@ -412,9 +416,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
     public boolean canPlayerMoveUp(){
         for(int i=0;i<npcs.size();i++){
-            if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                &&!Player.getHitbox().isAbove(npcs.get(i).getHitbox())
-                &&npcs.get(i) instanceof OpaqueEntity){
+            if(npcs.get(i) instanceof OpaqueEntity
+                &&Player.getHitbox().isTouching(npcs.get(i).getHitbox())
+                &&Player.getHitbox().isStrictlyBelow(npcs.get(i).getHitbox())){
                 return false;
             }            
         }
@@ -422,9 +426,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
     public boolean canPlayerMoveDown(){
         for(int i=0;i<npcs.size();i++){
-            if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                &&!Player.getHitbox().isBelow(npcs.get(i).getHitbox())
-                &&npcs.get(i) instanceof OpaqueEntity){
+            if(npcs.get(i) instanceof OpaqueEntity
+                &&Player.getHitbox().isTouching(npcs.get(i).getHitbox())
+                &&Player.getHitbox().isStrictlyAbove(npcs.get(i).getHitbox())){
                 return false;
             }            
         }
@@ -432,9 +436,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
     public boolean canPlayerMoveLeft(){        
         for(int i=0;i<npcs.size();i++){
-            if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                &&!Player.getHitbox().isRight(npcs.get(i).getHitbox())
-                &&npcs.get(i) instanceof OpaqueEntity){
+            if(npcs.get(i) instanceof OpaqueEntity
+                &&Player.getHitbox().isTouching(npcs.get(i).getHitbox())
+                &&Player.getHitbox().isStrictlyRight(npcs.get(i).getHitbox())){
                 return false;
             }            
         }
@@ -442,9 +446,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
     public boolean canPlayerMoveRight(){        
         for(int i=0;i<npcs.size();i++){
-            if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                &&!Player.getHitbox().isLeft(npcs.get(i).getHitbox())
-                &&npcs.get(i) instanceof OpaqueEntity){
+            if(npcs.get(i) instanceof OpaqueEntity
+                &&Player.getHitbox().isTouching(npcs.get(i).getHitbox())
+                &&Player.getHitbox().isStrictlyLeft(npcs.get(i).getHitbox())){
                 return false;
             }            
         }
@@ -488,6 +492,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                             ((Portal)npcs.get(i)).determineCanPlayerUse(npcs);
                             ((Portal)npcs.get(i)).teleport(Player);
                             if(((Portal)npcs.get(i)).canNpcUse()){
+                                System.out.println(((Portal)npcs.get(i)).canNpcUse());
                                 ((Portal)npcs.get(i)).teleport(npcs.get(j));
                             }
                         }
@@ -540,33 +545,41 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
             
     public void up(){
-        if((withinPanelY(Player)!=Hitbox.ABOVE)&&canPlayerMoveUp()){
+        if((withinPanelY(Player)!=Hitbox.ABOVE)&&
+                canPlayerMoveUp()){
         //System.out.print("Moved from: ("+Player.getX()+","+Player.getY()+") ");
-        Player.setY(Player.getY()-Player.getTravelY());
+        //Player.setY(Player.getY()-Player.getTravelY());
+            Player.moveUp();
         //System.out.println("to: ("+Player.getX()+","+Player.getY()+") ");
         } 
         Player.setDirection(Entity.UP);
     }
     public void down(){
-        if(((withinPanelY(Player)!=Hitbox.BELOW)&&canPlayerMoveDown())){
+        if(((withinPanelY(Player)!=Hitbox.BELOW)&&
+                canPlayerMoveDown())){
         //System.out.print("Moved from: ("+Player.getX()+","+Player.getY()+") ");
-        Player.setY(Player.getY()+Player.getTravelY());
+        //Player.setY(Player.getY()+Player.getTravelY());
+            Player.moveDown();
         //System.out.println("to: ("+Player.getX()+","+Player.getY()+") ");  
         }    
         Player.setDirection(Entity.DOWN);
     }
     public void left(){
-        if(((withinPanelX(Player)!=Hitbox.LEFT)&&canPlayerMoveLeft())){
+        if(((withinPanelX(Player)!=Hitbox.LEFT)&&
+                canPlayerMoveLeft())){
         //System.out.print("Moved from: ("+Player.getX()+","+Player.getY()+") ");
-        Player.setX(Player.getX()-Player.getTravelX());
+        //Player.setX(Player.getX()-Player.getTravelX());
+            Player.moveLeft();
         //System.out.println("to: ("+Player.getX()+","+Player.getY()+")");
         }        
         Player.setDirection(Entity.LEFT);
     }
     public void right(){
-        if(((withinPanelX(Player)!=Hitbox.RIGHT)&&canPlayerMoveRight())){
+        if(((withinPanelX(Player)!=Hitbox.RIGHT)&&
+                canPlayerMoveRight())){
         //System.out.print("Moved from: ("+Player.getX()+","+Player.getY()+") ");
-        Player.setX(Player.getX()+Player.getTravelX());
+        //Player.setX(Player.getX()+Player.getTravelX());
+            Player.moveRight();
         //System.out.println("to: ("+Player.getX()+","+Player.getY()+")");
         } 
         Player.setDirection(Entity.RIGHT);
@@ -913,6 +926,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BOSS){
                         graphic.setColor(new Color(0,0,0));//black
                     }
+                    changeColorWhenHit(graphic,(NonPlayerCharacter)npcs.get(i));
                     graphic.fill(new Rectangle2D.Double(npcs.get(i).getX(),npcs.get(i).getY(),npcs.get(i).getWidth(),npcs.get(i).getHeight()));
                     if(!((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty()){
                         for(int z=0;z<((NonPlayerCharacter)npcs.get(i)).getProjectile().size();z++){
@@ -922,10 +936,10 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     }
                     
                     drawHitpointsBar(graphic,(NonPlayerCharacter)temp);
-                    
                 }
                 else if(temp instanceof DamagableEntity){
                     graphic.setColor(Color.GRAY);//greenish
+                    changeColorWhenHit(graphic,(DamagableEntity)(npcs.get(i)));
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
                 }
                 else if(temp instanceof MapGate || temp instanceof TalkableGate){
@@ -943,7 +957,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 else{
                     graphic.setColor(new Color(0,204,0));//greenish
                     graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }                       
+                }  
+                
             }
         }
         
@@ -977,6 +992,13 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         else{
             g.fill(new Rectangle2D.Double(
                     d.getX(),d.getHitbox().far.y+hitpointsBarOffset,hitpointsBarWidth,hitpointsBarHeight));
+        }
+    }
+    
+    public void changeColorWhenHit(Graphics2D g, DamagableEntity p){
+        if(p.hasBeenHit()){
+            g.setColor(Color.ORANGE);
+            p.setHasBeenHit(false);
         }
     }
 

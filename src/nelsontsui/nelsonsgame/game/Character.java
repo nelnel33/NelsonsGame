@@ -140,6 +140,7 @@ public class Character extends DamagableEntity implements Externalizable{
             int d = (int)(Math.random()*this.damage);
             other.hurt(d); 
         }
+        other.setHasBeenHit(true);
         return true;
     }
     public void shoot(DamagableEntity other){
@@ -148,6 +149,7 @@ public class Character extends DamagableEntity implements Externalizable{
                 int d = (int)(Math.random()*this.damage);
                 other.hurt(d);        
             }
+            other.setHasBeenHit(true);
         }
     }
     public void gainHitpoint(){
@@ -208,7 +210,20 @@ public class Character extends DamagableEntity implements Externalizable{
         }
     }
     
-    public  static String description(){
+    public void moveUp(){
+        this.y-=travelY;
+    }
+    public void moveDown(){
+        this.y+=travelY;
+    }
+    public void moveLeft(){
+        this.x-=travelX;
+    }
+    public void moveRight(){
+        this.x+=travelX;
+    }
+    
+    public static String description(){
         return "Character;A solid entity that has health and damage;Recommended Use: Player";
     }
     

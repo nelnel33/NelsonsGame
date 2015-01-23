@@ -690,7 +690,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"You",90,2);
+        Character p = new Character(0,0,10,10,100,100,300,"You",10000,200);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
@@ -749,7 +749,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         
         e.add(new OpaqueEntity(460,195,280,10));
         
-        Portal three = new Portal(720,175,20,20,new Entity(720,380,20,20),Portal.KILL_ALL_NONBOSS,true);//portal to bossroom(1way)
+        Portal three = new Portal(720,176,20,20,new Entity(720,380,20,20),Portal.KILL_ALL_NONBOSS,true);//portal to bossroom(1way)
         e.add(three);
         
         e.add(new NonPlayerCharacter(680,50,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.SUBBOSS));

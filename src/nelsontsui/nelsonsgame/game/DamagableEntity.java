@@ -9,6 +9,8 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
     protected double initHitpoints;
     protected double hitpoints;
     
+    private boolean hasBeenHit;
+    
     private static final long serialVersionUID = 333L;
     
     public DamagableEntity(){
@@ -30,6 +32,12 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
     }
     public void setHitpoints(double hitpoints){
         this.hitpoints = hitpoints;
+    }
+    public boolean hasBeenHit(){
+        return hasBeenHit;
+    }
+    public void setHasBeenHit(boolean hasBeenHit){
+        this.hasBeenHit = hasBeenHit;
     }
     public void hurt(double damage){
         hitpoints-=damage;
