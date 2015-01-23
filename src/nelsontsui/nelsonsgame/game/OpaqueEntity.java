@@ -1,11 +1,17 @@
 package nelsontsui.nelsonsgame.game;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 public class OpaqueEntity extends Entity implements Externalizable{   
+    
+    public static final String CLASSNAME = "Opaque Entity";
+    public static final String DESCRIPTION = "A solid object that has a location and size;Recommended Use: Walls";
     
     private static final long serialVersionUID = 332L;
     
@@ -16,8 +22,14 @@ public class OpaqueEntity extends Entity implements Externalizable{
         super(x, y, width, height);
     }
     
-    public static String description(){
-        return "OpaqueEntity;A solid object that has a location and size;Recommended Use: Walls";
+    @Override
+    public String className(){
+        return CLASSNAME;
+    }
+    
+    @Override
+    public String description(){
+        return DESCRIPTION;
     }
     
     @Override
@@ -33,6 +45,12 @@ public class OpaqueEntity extends Entity implements Externalizable{
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
+    }
+    
+    @Override
+    public void render(Graphics2D graphic){
+        graphic.setColor(Color.DARK_GRAY);
+        graphic.fill(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
     }
     
 }

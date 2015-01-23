@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import nelsontsui.nelsonsgame.game.Character;
 import nelsontsui.nelsonsgame.game.Entity;
 import nelsontsui.nelsonsgame.game.FileSelector;
+import nelsontsui.nelsonsgame.game.Level;
+import nelsontsui.nelsonsgame.game.Player;
 
 public class WriteFile {
     private String formalFileName;
-    private ArrayList<Entity> npcs;
-    private Character player;
+    private Level level;
+    private ArrayList<Entity> entities;
+    private Player player;
     private File file;
     
     private File currentFile;
@@ -23,9 +26,10 @@ public class WriteFile {
     private int numberOfObjects;
     
     public static String EXTENSION = FileSelector.EXTENSION;
-    public WriteFile(File file, ArrayList<Entity> npcs, Character player){
-        this.npcs = npcs;
-        this.player = player;     
+    public WriteFile(File file, Level level){
+        this.level = level;
+        this.entities = level.getEntities();
+        this.player = level.getPlayer();     
         this.file = file;
         formalFileName = getFileName(file.getPath())+EXTENSION;     
         
@@ -35,18 +39,18 @@ public class WriteFile {
         try{            
             objectWriter = new ObjectOutputStream(new FileOutputStream(formalFileName));
             
-            numberOfObjects = npcs.size()+1;
+            numberOfObjects = entities.size()+1;
             objectWriter.writeInt(numberOfObjects);//amount of objects in the nel file
             System.out.println("Wrote "+numberOfObjects+" as Integer");
             
             objectWriter.writeObject(player);
             objectWriter.flush();
-            if(!npcs.isEmpty()){
-                for(int i=0;i<npcs.size();i++){
-                    objectWriter.writeObject(npcs.get(i));
+            if(!entities.isEmpty()){
+                for(int i=0;i<entities.size();i++){
+                    objectWriter.writeObject(entities.get(i));
                     objectWriter.flush();
                 }
-                System.out.println("Wrote "+(npcs.size()+1)+" Objects");
+                System.out.println("Wrote "+(entities.size()+1)+" Objects");
             }
             objectWriter.close();
         }

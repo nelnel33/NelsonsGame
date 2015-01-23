@@ -12,8 +12,9 @@ import nelsontsui.nelsonsgame.leveleditor.WriteFile;
 public class FileSelector extends JFileChooser{
     public static final String newline = "\n";
     
-    ArrayList<Entity> npcs = new ArrayList<>();
-    Character player;
+    private Level level;    
+    private ArrayList<Entity> entities = new ArrayList<>();
+    private Player player;
     
     private String fileName;
     private File file;
@@ -31,10 +32,17 @@ public class FileSelector extends JFileChooser{
     public static final String home = System.getProperty("user.home");
     public static final String filesep = "/";
     
-    public FileSelector(int operation, ArrayList<Entity> npcs, Character player){ 
+    public FileSelector(int operation, Level level){ 
         this.operation = operation;
-        this.npcs = npcs;
-        this.player = player;
+        this.level = level;
+        if(level == null){
+            this.entities = new ArrayList();
+            this.player = null;
+        }
+        else{
+            this.entities = level.getEntities();
+            this.player = level.getPlayer();
+        }
         
         init();
         respondToAction();
@@ -60,23 +68,29 @@ public class FileSelector extends JFileChooser{
             fileName = fileSelector.getName(file); 
             if(operation == SAVE){
                 file.delete();
-                WriteFile write = new WriteFile(file,npcs,player);                
+                WriteFile write = new WriteFile(file,level);                
                 write.write();
+                System.out.println(level);
             }            
             if(operation == IMPORT){
                 ReadFile read = new ReadFile(file);
                 read.read();
-                npcs = read.getNpcs();
+                level = read.getLevel();
+                entities = read.getEntities();
                 player = read.getPlayer();
             }
             System.out.println(file);
             System.out.println(fileName);
         } 
     }
-    public ArrayList<Entity> getNpcs(){
-        return npcs;
+
+    public Level getLevel() {
+        return level;
     }
-    public Character getPlayer(){
+    public ArrayList<Entity> getEntities(){
+        return entities;
+    }
+    public Player getPlayer(){
         return player;
     }
     public File getFile(){

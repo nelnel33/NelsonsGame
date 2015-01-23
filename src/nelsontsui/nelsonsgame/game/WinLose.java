@@ -1,6 +1,5 @@
 package nelsontsui.nelsonsgame.game;
 
-import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
 public class WinLose{

@@ -5,7 +5,16 @@
  */
 
 package nelsontsui.nelsonsgame.game;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+
 public class Projectile extends Entity{
+    
+    public static final String CLASSNAME = "Projectile";
+    public static final String DESCRIPTION = "Object that travels across the screen";
+    
     private double speed;
     private int direction;
     private boolean hasBeenFired;
@@ -38,5 +47,10 @@ public class Projectile extends Entity{
     }
     public boolean hasBeenFired(){
         return hasBeenFired;
+    }
+    
+    public void render(Graphics2D graphic, Color color){
+        graphic.setColor(color);
+        graphic.fill(new Ellipse2D.Double(this.x,this.y,this.width,this.height));
     }
 }

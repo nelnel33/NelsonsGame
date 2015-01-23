@@ -3,13 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/NelsonTitle.java</file>
             <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/GameDisplay.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/DamagableEntity.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/Character.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/Hitbox.java</file>
             <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/ActionPanel.java</file>
-            <file>file:/Users/Nelnel33/NetBeansProjects/NelsonsGame/src/nelsontsui/nelsonsgame/game/MainDisplay.java</file>
         </group>
     </open-files>
 </project-private>

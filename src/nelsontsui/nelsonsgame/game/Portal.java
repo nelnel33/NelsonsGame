@@ -1,5 +1,8 @@
 package nelsontsui.nelsonsgame.game;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.io.Externalizable;
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +11,11 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 
 public class Portal extends Entity implements Externalizable{
+    
+    public static final String CLASSNAME = "Portal";
+    public static final String DESCRIPTION = "A non-solid entity/object uses to teleport characters from one location to another;Recommended Use: Portal;"
+                + "Click the \'Custom\' button on the bottom to set the exit location of the portal;";
+    
     private Entity subportal;
     private boolean canNpcUse;
     private int condition;
@@ -100,7 +108,7 @@ public class Portal extends Entity implements Externalizable{
     }
     private void setCoords(Entity e, Entity p){
                 if(e.getHitbox().isTouching(this.getHitbox())){
-                    if(p.getX()<GameDisplay.edgeX/2){
+                    if(p.getX()<GameDisplay.ACTIONPANEL_WIDTH/2){
                         e.setX(p.getX()+p.getWidth()+offsetDistance);
                         e.setY(p.getY());
                     }
@@ -128,9 +136,14 @@ public class Portal extends Entity implements Externalizable{
         }
     }
     
-    public static String description(){
-        return "Portal;A non-solid entity/object uses to teleport characters from one location to another;Recommended Use: Portal;"
-                + "Click the \'Custom\' button on the bottom to set the exit location of the portal;";
+    @Override
+    public String className(){
+        return CLASSNAME;
+    }
+    
+    @Override
+    public String description(){
+        return DESCRIPTION;
     }
     
     @Override
@@ -158,6 +171,17 @@ public class Portal extends Entity implements Externalizable{
         condition = in.readInt();
         canPlayerUse = in.readBoolean();
         isMain = in.readBoolean();
+    }
+    
+    @Override
+    public void render(Graphics2D graphic){
+        if(this.isMain){
+            graphic.setColor(new Color(233,118,17));//Orange
+        }
+        else{
+            graphic.setColor(new Color(43,127,223));//Blue
+        }
+        graphic.fill(new Ellipse2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
     }
     
 }

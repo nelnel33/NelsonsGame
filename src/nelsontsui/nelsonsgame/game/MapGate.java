@@ -6,6 +6,9 @@
 
 package nelsontsui.nelsonsgame.game;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.io.Externalizable;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +18,11 @@ import java.util.ArrayList;
 import nelsontsui.nelsonsgame.leveleditor.ReadFile;
 
 public class MapGate extends Entity implements Externalizable{
+    
+    public static final String CLASSNAME = "Map Gate";
+    public static final String DESCRIPTION = "A non-solid object that is used to exit the map or display that you have won;"
+                + "Recommended Use: Level linker;";
+    
     private int useCondition;
     private boolean canUse;
     
@@ -96,8 +104,8 @@ public class MapGate extends Entity implements Externalizable{
         if(usedToExitMap && (file!=null) ){
             ReadFile reader = new ReadFile(file);
             reader.read();
-            ArrayList<Entity> npcs = reader.getNpcs();
-            Character player = reader.getPlayer();
+            ArrayList<Entity> npcs = reader.getEntities();
+            Player player = reader.getPlayer();
             if(player!=null && npcs!= null){
                 action.setNpcs(npcs);
                 action.setPlayer(player);
@@ -125,9 +133,14 @@ public class MapGate extends Entity implements Externalizable{
         }
     }
     
-    public static String description(){
-        return "MapGate;A non-solid object that is used to exit the map or display that you have won;"
-                + "Recommended Use: Level linker;";
+    @Override
+    public String className(){
+        return CLASSNAME;
+    }
+    
+    @Override
+    public String description(){
+        return DESCRIPTION;
     }
     
     @Override
@@ -154,6 +167,12 @@ public class MapGate extends Entity implements Externalizable{
         canUse = in.readBoolean();
         file = (File)in.readObject();
         usedToExitMap = in.readBoolean();
+    }
+    
+    @Override
+    public void render(Graphics2D graphic){
+        graphic.setColor(Color.black);
+        graphic.draw(new Ellipse2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
     }
     
 }

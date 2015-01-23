@@ -7,15 +7,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import nelsontsui.nelsonsgame.game.Entity;
 import nelsontsui.nelsonsgame.game.Character;
+import nelsontsui.nelsonsgame.game.Entity;
 import nelsontsui.nelsonsgame.game.FileSelector;
+import nelsontsui.nelsonsgame.game.Level;
 import nelsontsui.nelsonsgame.game.NonPlayerCharacter;
+import nelsontsui.nelsonsgame.game.Player;
 
 public class ReadFile {
     private String formalFileName;
-    private ArrayList<Entity> npcs = new ArrayList<>();
-    private nelsontsui.nelsonsgame.game.Character player;
+    private ArrayList<Entity> entities;
+    private Player player;
+    private Level level;
     private File file;
     
     ObjectInputStream objectReader;
@@ -26,23 +29,25 @@ public class ReadFile {
     public ReadFile(File file){
         this.file = file;
         formalFileName = getFileName(file.getPath())+EXTENSION;
+        entities = new ArrayList<>();
     }
     public void read(){
         try{
-        objectReader = new ObjectInputStream(new FileInputStream(formalFileName));
-        numberOfObjects = objectReader.readInt();
-        System.out.println("Read "+numberOfObjects+" As Integer");
-        for(int i=0;i<numberOfObjects;i++){
-            Entity e = (Entity)objectReader.readObject();
-            if(!(e instanceof NonPlayerCharacter)
-                    &&(e instanceof Character)){
-                player = (Character)e;
+            objectReader = new ObjectInputStream(new FileInputStream(formalFileName));
+            numberOfObjects = objectReader.readInt();
+            System.out.println("Read "+numberOfObjects+" As Integer");
+        
+            for(int i=0;i<numberOfObjects;i++){
+                Entity e = (Entity)objectReader.readObject();
+                if((e instanceof Player)){
+                    player = (Player)e;
+                    }
+                else{
+                    entities.add(e);
+                    }
                 }
-            else{
-                npcs.add(e);
-                }
-            }
             System.out.println("Read "+(numberOfObjects)+" Objects");
+            level = new Level(player,entities); 
         }
         catch(ClassNotFoundException e){
             System.out.println("Classnotfound"+e.getMessage());
@@ -51,12 +56,16 @@ public class ReadFile {
             System.out.println("IOEXCEPTION"+e.getMessage());
         }
     }
-    public ArrayList<Entity> getNpcs(){
-        return npcs;
+    public ArrayList<Entity> getEntities(){
+        return entities;
     }
-    public Character getPlayer(){
+    public Player getPlayer(){
         return player;
     }
+    public Level getLevel(){
+        return level;
+    }
+    
     private String getFileName(String s){
         String non="";//part that isn't extension
         String ext="";//extension

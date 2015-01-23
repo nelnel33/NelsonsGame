@@ -25,7 +25,7 @@ import nelsontsui.nelsonsgame.game.Point;
 
 public class CustomOptionsPanel extends JDialog implements ActionListener{
     /*
-    //for characters & npcs
+    //for characters & entities
     protected String name=defaultName;
     protected double hitpoints=defaultHitpoints;
     protected double damage=defaultDamage;
@@ -185,7 +185,7 @@ public class CustomOptionsPanel extends JDialog implements ActionListener{
         ((JButton)fields[MAPGATEFILE]).addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                FileSelector cabinet = new FileSelector(FileSelector.IMPORT, null, null);
+                FileSelector cabinet = new FileSelector(FileSelector.IMPORT, null);
                 if(cabinet.getFile()!=null){
                     editPanel.currentFile = cabinet.getFile();
                 }

@@ -1,13 +1,20 @@
 package nelsontsui.nelsonsgame.game;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Externalizable;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 
 public class TalkableGate extends Entity implements Externalizable{
+    
+    public static final String CLASSNAME = "TalkableGate";
+    public static final String DESCRIPTION = "A non-solid object/entity. When you step over it, it speaks in the dialog box;"
+                + "Recommended Use: Boss Dialog, Instructions for level;"; 
+    
     private String speech;
     private boolean flag = true;
     
@@ -43,9 +50,14 @@ public class TalkableGate extends Entity implements Externalizable{
         }
     }
     
-    public static String description(){
-        return "TalkableGate: A non-solid object/entity. When you step over it, it speaks in the dialog box;"
-                + "Recommended Use: Boss Dialog, Instructions for level;";
+    @Override
+    public String className(){
+        return CLASSNAME;
+    }
+    
+    @Override
+    public String description(){
+        return DESCRIPTION;
     }
     
     @Override
@@ -64,5 +76,11 @@ public class TalkableGate extends Entity implements Externalizable{
         super.readExternal(in);
         
         speech = (String)in.readObject();
+    }
+    
+    @Override
+    public void render(Graphics2D graphic){
+        graphic.setColor(Color.DARK_GRAY);
+        graphic.draw(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
     }
 }

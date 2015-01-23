@@ -1,10 +1,17 @@
 package nelsontsui.nelsonsgame.game;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 public class Entity implements Externalizable{
+    
+    public static final String CLASSNAME = "Entity";
+    public static final String DESCRIPTION = "A non-solid object that has no attributes other than a location and size; Recommended Use: Pathway;";
+    
     protected double x;
     protected double y;    
     protected double width;
@@ -74,8 +81,12 @@ public class Entity implements Externalizable{
         }
     }
     
-    public static String description(){
-        return "Entity;A non-solid object that has no attributes other than a location and size;Recommended Use: Pathway;";
+    public String className(){
+        return CLASSNAME;
+    }
+    
+    public String description(){
+        return DESCRIPTION;
     }
     
     @Override
@@ -99,5 +110,10 @@ public class Entity implements Externalizable{
         width = in.readDouble();
         height = in.readDouble();
         direction = in.readInt();
+    }
+    
+    public void render(Graphics2D graphic){
+        graphic.setColor(new Color(0,204,0));//greenish
+        graphic.fill(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
     }
 }

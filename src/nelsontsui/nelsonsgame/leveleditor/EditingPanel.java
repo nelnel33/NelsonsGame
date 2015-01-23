@@ -44,8 +44,9 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     protected DimensionDouble dimension;//how large the entity will be (dimension by dimension)
     
     //written to and read from
-    protected ArrayList<Entity> npcs = new ArrayList<>();
-    protected nelsontsui.nelsonsgame.game.Character player;
+    private Level level;
+    protected ArrayList<Entity> entities = new ArrayList<>();
+    protected Player player;
     
     //check if JOptionPane should be prompted
     protected boolean playerSet=false;
@@ -89,7 +90,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     protected final File defaultCurrentFile = new File("null");
             
     
-    //for characters & npcs
+    //for characters & entities
     protected String name;
     protected int hitpoints;
     protected int damage;
@@ -302,7 +303,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("Player")){
             if(playerSet==false){
-                npcsOnGrid[r][c] = new nelsontsui.nelsonsgame.game.Character(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),
+                npcsOnGrid[r][c] = new Player(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),
                     speed,speed,projectileSpeed,name,hitpoints,damage);
                 playerSet=true;
             }
@@ -431,32 +432,40 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         }        
     }
     public void setGameNpcs(){
-        npcs = new ArrayList<>();
-        for(int i=0;i<npcsOnGrid.length;i++){//adds all npcs on grid into npcs
+        entities = new ArrayList<>();
+        for(int i=0;i<npcsOnGrid.length;i++){//adds all entities on grid into entities
             for(int j=0;j<npcsOnGrid[i].length;j++){
                 if(npcsOnGrid[i][j]!=null){
-                    if((npcsOnGrid[i][j] instanceof nelsontsui.nelsonsgame.game.Character)&&
+                    if((npcsOnGrid[i][j] instanceof Player)&&
                             !(npcsOnGrid[i][j] instanceof NonPlayerCharacter)){
-                        player = (nelsontsui.nelsonsgame.game.Character)npcsOnGrid[i][j];
+                        player = (Player)npcsOnGrid[i][j];
                     }
                     else{
-                        npcs.add(npcsOnGrid[i][j]);
+                        entities.add(npcsOnGrid[i][j]);
                     }
                 }
             }
         }
     }
-    public ArrayList<Entity> getNpcs(){//TO USE MUST IMPLEMENT setGameNpcs()!!!!
-       return npcs;
+    public ArrayList<Entity> getEntities(){//TO USE MUST IMPLEMENT setGameNpcs()!!!!
+       return entities;
     }
-    public nelsontsui.nelsonsgame.game.Character getPlayer(){//TO USE MUST IMPLEMENT setGameNpcs()!!!!
+    public Player getPlayer(){//TO USE MUST IMPLEMENT setGameNpcs()!!!!
         return player;
     }
-    public void setNpcs(ArrayList<Entity> npcs){
-        this.npcs = npcs;
+    public Level getLevel(){
+        return level;
     }
-    public void setPlayer(nelsontsui.nelsonsgame.game.Character player){
+    public void setEntities(ArrayList<Entity> entities){
+        this.entities = entities;
+    }
+    public void setPlayer(Player player){
         this.player = player;
+    }
+    public void setLevel(Level level){
+        this.level = level;
+        setPlayer(level.getPlayer());
+        setEntities(level.getEntities());
     }
     public void setGridNpcs(){
         /*
@@ -465,18 +474,18 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
                 npcsOnGrid[i][j] = null;
             }
         }*/
-        if(player==null || npcs==null){}
+        if(player==null || entities==null){}
         else{
             npcsOnGrid = new Entity[gridRows][gridColumns];        
             int px = ((int)player.getX())/10;
             int py = ((int)player.getY())/10;
             npcsOnGrid[py][px] = player;
             playerSet = true;
-            if(!npcs.isEmpty()){
-                for(int i=0;i<npcs.size();i++){
-                    int nx = ((int)npcs.get(i).getX())/10;
-                    int ny = ((int)npcs.get(i).getY())/10;
-                    npcsOnGrid[ny][nx] = npcs.get(i);
+            if(!entities.isEmpty()){
+                for(int i=0;i<entities.size();i++){
+                    int nx = ((int)entities.get(i).getX())/10;
+                    int ny = ((int)entities.get(i).getY())/10;
+                    npcsOnGrid[ny][nx] = entities.get(i);
                     //System.out.println("Placed "+npcsOnGrid[ny][nx]+"@"+nx+","+ny);
                 }
             }

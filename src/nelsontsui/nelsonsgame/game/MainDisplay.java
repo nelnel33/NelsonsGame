@@ -53,8 +53,9 @@ public class MainDisplay extends JFrame implements ActionListener{
     private boolean isDefaultLevel;
     
     //Entities passed to GameDisplay
-    private ArrayList<Entity> npcs;
-    private Character player;
+    private Level level;
+    private ArrayList<Entity> entities;
+    private Player player;
     private File currentFile;
     
     //Button passed to GameDisplay
@@ -138,15 +139,18 @@ public class MainDisplay extends JFrame implements ActionListener{
         importButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                FileSelector f = new FileSelector(FileSelector.IMPORT,null,null);
-                if(f.getNpcs()!=null && f.getPlayer()!=null){
-                    npcs = f.getNpcs();
+                FileSelector f = new FileSelector(FileSelector.IMPORT,null);
+                System.out.println( f.getPlayer());
+                if(f.getEntities()!=null && f.getPlayer()!=null){
+                    level = f.getLevel();
+                    entities = f.getEntities();
                     player = f.getPlayer();
                     currentFile = f.getFile();
                     removeStartMenu();
-                    swapToGameDisplay(npcs,player);
-                    gameDisplay.setNpcs(npcs);
-                    gameDisplay.setPlayer(player);
+                    swapToGameDisplay(level);
+                    gameDisplay.setLevel(level);
+                    gameDisplay.setEntities(level.getEntities());
+                    gameDisplay.setPlayer(level.getPlayer());
                     isDefaultLevel = false;
                 }
             }
@@ -187,15 +191,15 @@ public class MainDisplay extends JFrame implements ActionListener{
                     else{
                         ReadFile read = new ReadFile(currentFile);
                         read.read();
-                        if(read.getNpcs()==null || read.getPlayer()==null){
+                        if(read.getEntities()==null || read.getPlayer()==null){
                             JOptionPane.showMessageDialog(
                                     MainDisplay.this, "File cannot be found! Please import the level again.", "File cannot be found", JOptionPane.ERROR_MESSAGE);
                         }
                         else{
                             removeGameDisplay();
-                            npcs = read.getNpcs();
+                            entities = read.getEntities();
                             player = read.getPlayer();                        
-                            swapToGameDisplay(npcs,player);
+                            swapToGameDisplay(level);
                             MainDisplay.this.repaint();
                         }                       
                     }
@@ -205,13 +209,14 @@ public class MainDisplay extends JFrame implements ActionListener{
         importButtonGameDisplay.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                FileSelector f = new FileSelector(FileSelector.IMPORT,null,null);
-                if(f.getNpcs()!=null && f.getPlayer()!=null){
-                    npcs = f.getNpcs();
+                FileSelector f = new FileSelector(FileSelector.IMPORT,null);
+                if(f.getEntities()!=null && f.getPlayer()!=null){
+                    level = f.getLevel();
+                    entities = f.getEntities();
                     player = f.getPlayer();
                     currentFile = f.getFile();
                     removeGameDisplay();
-                    swapToGameDisplay(npcs,player);
+                    swapToGameDisplay(level);
                     isDefaultLevel = false;
                 }
             }
@@ -230,8 +235,8 @@ public class MainDisplay extends JFrame implements ActionListener{
         }
                 
     }
-    private void swapToGameDisplay(ArrayList<Entity> e, Character p){
-        gameDisplay = new GameDisplay(toStartMenu,restartButton,importButtonGameDisplay,e,p);
+    private void swapToGameDisplay(Level level){
+        gameDisplay = new GameDisplay(toStartMenu,restartButton,importButtonGameDisplay,level);
         add(gameDisplay);
         gameDisplay.getFocus();
     }

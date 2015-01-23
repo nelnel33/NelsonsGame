@@ -31,8 +31,9 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     private Insets border;
     public static final Border blackborder = BorderFactory.createLineBorder(Color.black);   
     
-    protected Character Player;
-    protected ArrayList<Entity> npcs = new ArrayList<>();
+    private Level level;
+    protected Character player;
+    protected ArrayList<Entity> entities = new ArrayList<>();
     
     //Main Panels
     protected ActionPanel activePanel;
@@ -89,8 +90,8 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     WinLose winLose;
     
     //Changable static variables
-    public static final int edgeX = 740;
-    public static final int edgeY = 400;
+    public static final int ACTIONPANEL_WIDTH = 740;
+    public static final int ACTIONPANEL_HEIGHT = 400;
     
     //Watermark
     NelsonWatermark watermark;    
@@ -124,12 +125,13 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     check.start();
     }
     
-    public GameDisplay(JButton toStartMenu, JButton restartButton, JButton importButton, ArrayList<Entity> npcs, Character Player){
+    public GameDisplay(JButton toStartMenu, JButton restartButton, JButton importButton, Level level){
     this.toStartMenu = toStartMenu;
     this.restartButton = restartButton;
     this.importButton = importButton;
-    this.npcs = npcs;
-    this.Player = Player;
+    this.level = level;
+    this.player = level.getPlayer();
+    this.entities = level.getEntities();
     
     createBackgroundLayout();    
     check.addActionListener(activePanel);
@@ -148,11 +150,14 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     miscButtonAction();
     check.start();
     }
-    public void setNpcs(ArrayList<Entity> npcs){
-        this.npcs = npcs;
+    public void setLevel(Level level){
+        this.level = level;
+    }
+    public void setEntities(ArrayList<Entity> entities){
+        this.entities = entities;
     }
     public void setPlayer(Character Player){
-        this.Player = Player;
+        this.player = Player;
     }
     public void getFocus(){
         activePanel.requestFocusInWindow();
@@ -169,7 +174,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     //getContentPane().  //JFrame to JPanel
             setBackground(new Color(55,198,164));
     
-    activePanel = new ActionPanel(Player,npcs,edgeX,edgeY);
+    activePanel = new ActionPanel(level);
     
     statsPanel = new JPanel();
     inventoryPanel = new JPanel();
@@ -254,37 +259,37 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         //statsLabel.setBorder(blackborder);
 
         damageLabel = new JLabel("<html>Damage:<br><br><html>"
-                +Player.getDamage()
+                +player.getDamage()
                 ,SwingConstants.CENTER);
         damageDisplay.add(damageLabel);        
         //damageDisplay.setBorder(blackborder);
         
         hitpointsLabel = new JLabel("<html>Hitpoints:<br><br><html>"
-                +Player.getHitpoints()
+                +player.getHitpoints()
                 ,SwingConstants.CENTER);
         hitpointsDisplay.add(hitpointsLabel);
         //hitpointsDisplay.setBorder(blackborder);
         
         weaponLabel = new JLabel("<html>Weapon:<br><br><html>"
-                +Player.getWeaponDamage()
+                +player.getWeaponDamage()
                 ,SwingConstants.CENTER);
         weaponDisplay.add(weaponLabel);
         //weaponDisplay.setBorder(blackborder);
         
         armorLabel = new JLabel("<html>Armor:<br><br><html>"
-                +Player.getArmorHitpoints()
+                +player.getArmorHitpoints()
                 ,SwingConstants.CENTER);
         armorDisplay.add(armorLabel);
         //armorDisplay.setBorder(blackborder);
         
         totalDamageLabel = new JLabel("<html>Total<br>Damage:<br><br> <html>"
-                +Player.getDamage()
+                +player.getDamage()
                 ,SwingConstants.CENTER);
         totalDamageDisplay.add(totalDamageLabel);
         //totalDamageDisplay.setBorder(blackborder);
         
         totalHitpointsLabel = new JLabel("<html>Total<br>Hitpoints:<br><br> <html>"
-                +Player.getHitpoints()
+                +player.getHitpoints()
                 ,SwingConstants.CENTER);
         totalHitpointsDisplay.add(totalHitpointsLabel);
         //totalHitpointsDisplay.setBorder(blackborder);
@@ -294,7 +299,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         //XPDisplay.setBorder(blackborder);
         
         levelLabel = new JLabel("<html>Level:<br><br><html>"
-                +Player.getLevel()
+                +player.getLevel()
                 ,SwingConstants.CENTER);
         levelDisplay.add(levelLabel);
         //levelDisplay.setBorder(blackborder);
@@ -411,15 +416,15 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         });        
     }
     private void setStatsText(){
-        if(Player!=null){
-            damageLabel.setText("<html>Damage:<br><br><html>"+Player.getinitDamage());
-            hitpointsLabel.setText("<html>Hitpoints:<br><br><html>"+Player.getinitHitpoints());
-            weaponLabel.setText("<html>Weapon:<br><br><html>"+Player.getWeaponDamage());
-            armorLabel.setText("<html>Armor:<br><br><html>"+Player.getArmorHitpoints());
-            totalDamageLabel.setText("<html>Total<br>Damage:<br><br> <html>"+Player.getDamage());
-            totalHitpointsLabel.setText("<html>Total<br>Hitpoints:<br><br> <html>"+Player.getHitpoints());
+        if(player!=null){
+            damageLabel.setText("<html>Damage:<br><br><html>"+player.getinitDamage());
+            hitpointsLabel.setText("<html>Hitpoints:<br><br><html>"+player.getinitHitpoints());
+            weaponLabel.setText("<html>Weapon:<br><br><html>"+player.getWeaponDamage());
+            armorLabel.setText("<html>Armor:<br><br><html>"+player.getArmorHitpoints());
+            totalDamageLabel.setText("<html>Total<br>Damage:<br><br> <html>"+player.getDamage());
+            totalHitpointsLabel.setText("<html>Total<br>Hitpoints:<br><br> <html>"+player.getHitpoints());
             XPLabel.setText("<html>XP:<br><br><html>"+"null");
-            levelLabel.setText("<html>Level:<br><br><html>"+Player.getLevel());
+            levelLabel.setText("<html>Level:<br><br><html>"+player.getLevel());
         }
     }
     
@@ -617,27 +622,27 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         //System.out.println(Inventory.inventorySelectorIndex);
     }
     private void setInventoryIcons(){
-    if((Player!=null)&&(!Player.inventory.items.isEmpty())){
-        for(int i=0;i<Player.inventory.items.size();i++){
-            if(Player.inventory.items.get(i).getQuantity()>0){
-                if(Player.inventory.items.get(i) instanceof Armor){
-                    if(((Armor)Player.inventory.items.get(i)).getEquipped()){
-                        inventoryLabels[i].setText("<html><b>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<b><html>");
+    if((player!=null)&&(!player.inventory.items.isEmpty())){
+        for(int i=0;i<player.inventory.items.size();i++){
+            if(player.inventory.items.get(i).getQuantity()>0){
+                if(player.inventory.items.get(i) instanceof Armor){
+                    if(((Armor)player.inventory.items.get(i)).getEquipped()){
+                        inventoryLabels[i].setText("<html><b>"+player.inventory.items.get(i).getAbbreviation()+"<br>"+player.inventory.items.get(i).getQuantity()+"<b><html>");
                     }
                     else{
-                        inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
+                        inventoryLabels[i].setText("<html>"+player.inventory.items.get(i).getAbbreviation()+"<br>"+player.inventory.items.get(i).getQuantity()+"<html>");
                     }
                 }
-                else if(Player.inventory.items.get(i) instanceof Weapon){
-                    if(((Weapon)Player.inventory.items.get(i)).getEquipped()){
-                        inventoryLabels[i].setText("<html><b>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<b><html>");
+                else if(player.inventory.items.get(i) instanceof Weapon){
+                    if(((Weapon)player.inventory.items.get(i)).getEquipped()){
+                        inventoryLabels[i].setText("<html><b>"+player.inventory.items.get(i).getAbbreviation()+"<br>"+player.inventory.items.get(i).getQuantity()+"<b><html>");
                     }
                     else{
-                        inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
+                        inventoryLabels[i].setText("<html>"+player.inventory.items.get(i).getAbbreviation()+"<br>"+player.inventory.items.get(i).getQuantity()+"<html>");
                     }
                 }
                 else{
-                    inventoryLabels[i].setText("<html>"+Player.inventory.items.get(i).getAbbreviation()+"<br>"+Player.inventory.items.get(i).getQuantity()+"<html>");
+                    inventoryLabels[i].setText("<html>"+player.inventory.items.get(i).getAbbreviation()+"<br>"+player.inventory.items.get(i).getQuantity()+"<html>");
                     }
                 }
             }
@@ -645,16 +650,16 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     activePanel.setInventoryItems(inventoryItems);
     }   
     private void inventoryRemoveIcons(){
-        if(Player!=null){
-            int listSize = Player.inventory.items.size();
+        if(player!=null){
+            int listSize = player.inventory.items.size();
             for(int i=listSize;i<Inventory.MAX_SIZE;i++){
                 inventoryLabels[i].setText(null);
             }
         }
     }
     private void inventorySetToolTipText(){
-        for(int i=0;i<Player.inventory.items.size();i++){
-            inventoryItems[i].setToolTipText(Player.inventory.items.get(i).getName());
+        for(int i=0;i<player.inventory.items.size();i++){
+            inventoryItems[i].setToolTipText(player.inventory.items.get(i).getName());
         }
     }
     private void createDialogLayout(){
@@ -668,7 +673,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         winLose = new WinLose();
     }
     private void checkIfWinOrLose(){
-        winLose.operate(Player, check, dialogPanel);
+        winLose.operate(player, check, dialogPanel);
     }
     @Override
     public void actionPerformed(ActionEvent e) {   
@@ -681,16 +686,14 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         if(dialogPanel.getHasBeenSelected()){
             getFocus();
             dialogPanel.setHasBeenSelected(false);
-        }   
-                
-        
+        }    
     }          
     private void createMap(){
         createExampleMap();
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Character p = new Character(0,0,10,10,100,100,300,"You",100,2);
+        Player p = new Player(0,0,10,10,100,100,300,"You",100,2);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
@@ -767,8 +770,9 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.BR_WARRIOR));
         e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Therta",2,50,200,NonPlayerCharacter.BR_TANK));       
         
-        Player = p;
-        npcs = e;
+        player = p;
+        entities = e;
+        level = new Level(p,e);
             
             
     }  

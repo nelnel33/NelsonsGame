@@ -1,16 +1,25 @@
 package nelsontsui.nelsonsgame.game;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import static nelsontsui.nelsonsgame.game.ActionPanel.hitpointsBarHeight;
+import static nelsontsui.nelsonsgame.game.ActionPanel.hitpointsBarOffset;
 import nelsontsui.nelsonsgame.game.items.Armor;
-import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
 import nelsontsui.nelsonsgame.game.items.Item;
+import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
 import nelsontsui.nelsonsgame.game.items.Weapon;
 
 public class Character extends DamagableEntity implements Externalizable{
+    
+    public static final String CLASSNAME = "Character";
+    public static final String DESCRIPTION = "A solid entity that has health and damage;Recommended Use: Player";
+    
     private String name;    
     private double initDamage;
     private double damage;
@@ -223,8 +232,14 @@ public class Character extends DamagableEntity implements Externalizable{
         this.x+=travelX;
     }
     
-    public static String description(){
-        return "Character;A solid entity that has health and damage;Recommended Use: Player";
+    @Override
+    public String className(){
+        return CLASSNAME;
+    }
+    
+    @Override
+    public String description(){
+        return DESCRIPTION;
     }
     
     @Override
@@ -257,6 +272,34 @@ public class Character extends DamagableEntity implements Externalizable{
         projectileSpeed = in.readDouble();
         inventory = (Inventory)in.readObject();
         init();
+    }
+    
+    @Override
+    public void render(Graphics2D graphic){
+        //Draw player and player's Projectiles
+        graphic.setColor(new Color(63,131,104));//Cyanish Green
+        graphic.fill(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
+        drawHitpointsBar(graphic,this);     
+                
+        if(!this.getProjectile().isEmpty()){
+            for(int z=0;z<this.getProjectile().size();z++){
+                this.getProjectile().get(z).render(graphic, new Color(63,131,104));
+            }
+        }
+    }
+    
+    public void drawHitpointsBar(Graphics2D g, Character d){
+        double ratio = d.getHitpoints()/d.getinitHitpoints();
+        double hitpointsBarWidth = d.getWidth()*ratio;
+        g.setColor(Color.GREEN);
+        if(d.getY()>(GameDisplay.ACTIONPANEL_HEIGHT/2)){
+            g.fill(new Rectangle2D.Double(
+                    d.getX(),d.getHitbox().close.y-hitpointsBarOffset,hitpointsBarWidth,hitpointsBarHeight));
+            }
+        else{
+            g.fill(new Rectangle2D.Double(
+                    d.getX(),d.getHitbox().far.y+hitpointsBarOffset,hitpointsBarWidth,hitpointsBarHeight));
+        }
     }
    
 }

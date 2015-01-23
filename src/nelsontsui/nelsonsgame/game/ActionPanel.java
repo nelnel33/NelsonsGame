@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 /*
 *NPCS attack once a second
-*Player is independent of FPS
+*player is independent of FPS
 */
 
 public class ActionPanel extends JPanel implements ActionListener, KeyListener{
@@ -32,15 +32,12 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     
     //protected Timer check = new Timer(TICK,this);
     
-    protected Character Player;
-    protected ArrayList<Entity> npcs = new ArrayList<>();
-    private int edgeX;
-    private int edgeY;
+    private Level level;    
+    protected Player player;
+    protected ArrayList<Entity> entities = new ArrayList<>();
     
     private InventoryIcon[] inventoryItems = new InventoryIcon[0];//only declared to prevent nullpointerexception
     private DialogBox dialogPanel;
-    
-    private Entity entity = new Entity();
     
     public static final int hitpointsBarOffset = 6;
     public static final int hitpointsBarHeight = 3;
@@ -58,29 +55,34 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public static final int SELECTBACK = 9;
     public static final int USE = 10;
     public static final int DROP = 11;
-    public ActionPanel(Character Player, ArrayList<Entity> npcs, int edgeX, int edgeY){
-        this.Player = Player;
-        this.npcs = npcs;
-        this.edgeX = edgeX;
-        this.edgeY = edgeY; 
+    public ActionPanel(Level level){
+        this.level = level;
+        this.player = level.getPlayer();
+        this.entities = level.getEntities(); 
         
-        setSize(this.edgeX,this.edgeY);
+        setSize(GameDisplay.ACTIONPANEL_WIDTH,GameDisplay.ACTIONPANEL_HEIGHT);
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
     }
     public ArrayList<Entity> getNpcs(){
-        return npcs;
+        return entities;
     }
     public Character getPlayer(){
-        return Player;
+        return player;
     }
     public void setNpcs(ArrayList<Entity> npcs){
-        this.npcs = npcs;
+        this.entities = npcs;
     }
-    public void setPlayer(Character Player){
-        this.Player = Player;
+    public void setPlayer(Player player){
+        this.player = player;
     }
+    public Level getLevel() {
+        return level;
+    }
+    public void setLevel(Level level) {
+        this.level = level;
+    }   
     public void setInventoryItems(InventoryIcon[] inventoryItems){
         this.inventoryItems = inventoryItems;
     }
@@ -88,33 +90,33 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         this.dialogPanel = dialogPanel;
     }
     public void npcMove(){
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof NonPlayerCharacter){
-                if(canNpcAct((NonPlayerCharacter)npcs.get(i))){
-                    if(!npcs.get(i).getHitbox().isTouching(Player.getHitbox())){
-                        if(Player.getHitbox().isStrictlyLeft(npcs.get(i).getHitbox())
-                                &&canNpcMoveLeft(npcs.get(i))
-                                &&withinPanelX(npcs.get(i))!=Hitbox.RIGHT){
-                            //npcs.get(i).setX(npcs.get(i).getX()-((NonPlayerCharacter)npcs.get(i)).getTravelX());
-                            ((NonPlayerCharacter)npcs.get(i)).moveLeft();//moveLeft
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof NonPlayerCharacter){
+                if(canNpcAct((NonPlayerCharacter)entities.get(i))){
+                    if(!entities.get(i).getHitbox().isTouching(player.getHitbox())){
+                        if(player.getHitbox().isStrictlyLeft(entities.get(i).getHitbox())
+                                &&canNpcMoveLeft(entities.get(i))
+                                &&withinPanelX(entities.get(i))!=Hitbox.RIGHT){
+                            //npcs.get(i).setX(entities.get(i).getX()-((NonPlayerCharacter)entities.get(i)).getTravelX());
+                            ((NonPlayerCharacter)entities.get(i)).moveLeft();//moveLeft
                         }
-                        if(Player.getHitbox().isStrictlyRight(npcs.get(i).getHitbox())//isLeft
-                                &&canNpcMoveRight(npcs.get(i))
-                                &&withinPanelX(npcs.get(i))!=Hitbox.LEFT){
-                            //npcs.get(i).setX(npcs.get(i).getX()+((NonPlayerCharacter)npcs.get(i)).getTravelX());
-                            ((NonPlayerCharacter)npcs.get(i)).moveRight();//moveRight
+                        if(player.getHitbox().isStrictlyRight(entities.get(i).getHitbox())//isLeft
+                                &&canNpcMoveRight(entities.get(i))
+                                &&withinPanelX(entities.get(i))!=Hitbox.LEFT){
+                            //npcs.get(i).setX(entities.get(i).getX()+((NonPlayerCharacter)entities.get(i)).getTravelX());
+                            ((NonPlayerCharacter)entities.get(i)).moveRight();//moveRight
                         } 
-                        if(Player.getHitbox().isStrictlyBelow(npcs.get(i).getHitbox())
-                                &&canNpcMoveDown(npcs.get(i))
-                                &&withinPanelY(npcs.get(i))!=Hitbox.BELOW){
-                            //npcs.get(i).setY(npcs.get(i).getY()+((NonPlayerCharacter)npcs.get(i)).getTravelY());      
-                            ((NonPlayerCharacter)npcs.get(i)).moveDown();
+                        if(player.getHitbox().isStrictlyBelow(entities.get(i).getHitbox())
+                                &&canNpcMoveDown(entities.get(i))
+                                &&withinPanelY(entities.get(i))!=Hitbox.BELOW){
+                            //npcs.get(i).setY(entities.get(i).getY()+((NonPlayerCharacter)entities.get(i)).getTravelY());      
+                            ((NonPlayerCharacter)entities.get(i)).moveDown();
                         }
-                        if(Player.getHitbox().isStrictlyAbove(npcs.get(i).getHitbox())
-                                &&canNpcMoveUp(npcs.get(i))
-                                &&withinPanelY(npcs.get(i))!=Hitbox.ABOVE){
-                            //npcs.get(i).setY(npcs.get(i).getY()-((NonPlayerCharacter)npcs.get(i)).getTravelY());
-                            ((NonPlayerCharacter)npcs.get(i)).moveUp();
+                        if(player.getHitbox().isStrictlyAbove(entities.get(i).getHitbox())
+                                &&canNpcMoveUp(entities.get(i))
+                                &&withinPanelY(entities.get(i))!=Hitbox.ABOVE){
+                            //npcs.get(i).setY(entities.get(i).getY()-((NonPlayerCharacter)entities.get(i)).getTravelY());
+                            ((NonPlayerCharacter)entities.get(i)).moveUp();
                         }                      
                     }
                 }
@@ -122,12 +124,12 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
     }
     public boolean canNpcMoveUp(Entity e){        
-        for(int i=0;i<npcs.size();i++){
-            if(e.equals(npcs.get(i))){}
+        for(int i=0;i<entities.size();i++){
+            if(e.equals(entities.get(i))){}
             else{
-                if(npcs.get(i) instanceof OpaqueEntity){
-                    if(e.getHitbox().isTouching(npcs.get(i).getHitbox())
-                       &&e.getHitbox().isStrictlyBelow(npcs.get(i).getHitbox())){
+                if(entities.get(i) instanceof OpaqueEntity){
+                    if(e.getHitbox().isTouching(entities.get(i).getHitbox())
+                       &&e.getHitbox().isStrictlyBelow(entities.get(i).getHitbox())){
                         return false;
                     } 
                 }
@@ -136,12 +138,12 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         return true;
     }
     public boolean canNpcMoveDown(Entity e){
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i).equals(e)){}
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i).equals(e)){}
             else{
-                if(npcs.get(i) instanceof OpaqueEntity){
-                    if(e.getHitbox().isTouching(npcs.get(i).getHitbox())
-                       &&e.getHitbox().isStrictlyAbove(npcs.get(i).getHitbox())){
+                if(entities.get(i) instanceof OpaqueEntity){
+                    if(e.getHitbox().isTouching(entities.get(i).getHitbox())
+                       &&e.getHitbox().isStrictlyAbove(entities.get(i).getHitbox())){
                         return false;
                     } 
                 }
@@ -150,12 +152,12 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         return true;
     }
     public boolean canNpcMoveLeft(Entity e){              
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i).equals(e)){}
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i).equals(e)){}
             else{
-                if(npcs.get(i) instanceof OpaqueEntity){
-                    if(e.getHitbox().isTouching(npcs.get(i).getHitbox())
-                       &&e.getHitbox().isStrictlyRight(npcs.get(i).getHitbox())){
+                if(entities.get(i) instanceof OpaqueEntity){
+                    if(e.getHitbox().isTouching(entities.get(i).getHitbox())
+                       &&e.getHitbox().isStrictlyRight(entities.get(i).getHitbox())){
                         return false;
                     } 
                 }
@@ -164,12 +166,12 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         return true;
     }
     public boolean canNpcMoveRight(Entity e){
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i).equals(e)){}
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i).equals(e)){}
             else{
-                if(npcs.get(i) instanceof OpaqueEntity){
-                    if(e.getHitbox().isTouching(npcs.get(i).getHitbox())
-                       &&e.getHitbox().isStrictlyLeft(npcs.get(i).getHitbox())){
+                if(entities.get(i) instanceof OpaqueEntity){
+                    if(e.getHitbox().isTouching(entities.get(i).getHitbox())
+                       &&e.getHitbox().isStrictlyLeft(entities.get(i).getHitbox())){
                         return false;
                     } 
                 }
@@ -179,14 +181,14 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
     
     public boolean canNpcAct(NonPlayerCharacter e){// or if another entity is blocking the path to player
-        return (Player.getHitbox().isTouching(
+        return (player.getHitbox().isTouching(
             ((NonPlayerCharacter)e).getDetectionBox()));
     }
     public boolean withinPanel(Entity e){
         if(e.getHitbox().close.y<=0||e.getHitbox().close.x<=0){
             return false;
         }
-        else if(e.getHitbox().far.y>=edgeY||e.getHitbox().far.x>=edgeX){
+        else if(e.getHitbox().far.y>=GameDisplay.ACTIONPANEL_HEIGHT||e.getHitbox().far.x>=GameDisplay.ACTIONPANEL_WIDTH){
             return false;
         }
         else{
@@ -198,7 +200,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         if(e.getHitbox().close.y<=0){
             return Hitbox.ABOVE;
         }
-        else if(e.getHitbox().far.y>=edgeY){
+        else if(e.getHitbox().far.y>=GameDisplay.ACTIONPANEL_HEIGHT){
             return Hitbox.BELOW;
         }
         else{
@@ -209,7 +211,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         if(e.getHitbox().close.x<=0){
             return Hitbox.LEFT;
         }
-        else if(e.getHitbox().far.x>=edgeX){
+        else if(e.getHitbox().far.x>=GameDisplay.ACTIONPANEL_WIDTH){
             return Hitbox.RIGHT;
         }
         else{
@@ -218,72 +220,44 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
         
     public void projectileInflictDamage(){
-        if(!(Player.getProjectile().isEmpty() || npcs.isEmpty())){
-            for(int i=0;i<npcs.size();i++){
-                for(int j=Player.getProjectile().size()-1;j>=0;j--){
-                    if(Player.getProjectile().get(j).getHitbox().isTouching(npcs.get(i).getHitbox())
-                            &&npcs.get(i) instanceof OpaqueEntity){
-                        Player.removeProjectile();
+        if(!(player.getProjectile().isEmpty() || entities.isEmpty())){
+            for(int i=0;i<entities.size();i++){
+                for(int j=player.getProjectile().size()-1;j>=0;j--){
+                    if(player.getProjectile().get(j).getHitbox().isTouching(entities.get(i).getHitbox())
+                            &&entities.get(i) instanceof OpaqueEntity){
+                        player.removeProjectile();
                         j--;
-                        if(npcs.get(i) instanceof DamagableEntity){
-                            Player.shoot((DamagableEntity)npcs.get(i));
-                            System.out.println("npc"+i+" HP:"+((DamagableEntity)npcs.get(i)).getHitpoints());
-                            if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
-                                if(npcs.get(i) instanceof NonPlayerCharacter){
-                                    dialogPanel.message(((NonPlayerCharacter)npcs.get(i)).getName()+" has been killed");
+                        if(entities.get(i) instanceof DamagableEntity){
+                            player.shoot((DamagableEntity)entities.get(i));
+                            System.out.println("npc"+i+" HP:"+((DamagableEntity)entities.get(i)).getHitpoints());
+                            if(((DamagableEntity)entities.get(i)).getHitpoints()<=0){
+                                if(entities.get(i) instanceof NonPlayerCharacter){
+                                    dialogPanel.message(((NonPlayerCharacter)entities.get(i)).getName()+" has been killed");
                                 }
-                                npcs.remove(i);
+                                entities.remove(i);
                             }
                         }
                     }
                 }
             }
         }
-        /*
-        if(!Player.getProjectile().isEmpty()&&!npcs.isEmpty()){
-            for(int i=0;i<npcs.size();i++){
-                for(int j=0;j<Player.getProjectile().size();j++){
-                    if(Player.getProjectile().get(0).getHitbox().isTouching(npcs.get(i).getHitbox())
-                            &&npcs.get(i) instanceof OpaqueEntity){
-                        Player.removeProjectile();
-                        if(npcs.get(i) instanceof DamagableEntity){
-                            Player.shoot((DamagableEntity)npcs.get(i));
-                            System.out.println("npc"+i+" HP:"+((DamagableEntity)npcs.get(i)).getHitpoints());
-                                if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
-                                    if(npcs.get(i) instanceof NonPlayerCharacter){
-                                        dialogPanel.message(((NonPlayerCharacter)npcs.get(i)).getName()+" has been killed");
-                                    }
-                                    npcs.remove(i);
-                            }
-                            if(Player.getProjectile().isEmpty()){
-                                break;
-                            }
-                        }
-                        else{
-                            break;
-                        }
-                    }
-                }
-            }
-        } 
-        */ 
     }
     public void projectileWithinPanel(){
-        if(!Player.getProjectile().isEmpty()){
-            if(withinPanel(Player.getProjectile().get(0))){
+        if(!player.getProjectile().isEmpty()){
+            if(withinPanel(player.getProjectile().get(0))){
                 //Player.getProjectile().get(0).fire();
             }
             else{
-                Player.removeProjectile();
+                player.removeProjectile();
             }
         }
     }
     public void detectForDamage(){
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof NonPlayerCharacter){
-                if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())){
-                    if(((NonPlayerCharacter)npcs.get(i)).getCharacterClass()!=NonPlayerCharacter.ARCHER){
-                        ((NonPlayerCharacter)npcs.get(i)).attack(Player);
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof NonPlayerCharacter){
+                if(player.getHitbox().isTouching(entities.get(i).getHitbox())){
+                    if(((NonPlayerCharacter)entities.get(i)).getCharacterClass()!=NonPlayerCharacter.ARCHER){
+                        ((NonPlayerCharacter)entities.get(i)).attack(player);
                     }                    
                 }                
             }
@@ -296,7 +270,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                         ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.SUBBOSS
                         ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.BR_ARCHER
                         ||((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.BR_SUBBOSS){
-                    if(((NonPlayerCharacter)e).getDetectionBox().isTouching(Player.getHitbox())){
+                    if(((NonPlayerCharacter)e).getDetectionBox().isTouching(player.getHitbox())){
                         return true;
                 }    
             }
@@ -304,151 +278,120 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             return false;
     }
     public void npcFireProjectile(){
-        for(int i=0;i<npcs.size();i++){
-            if(canNpcFireProjectile(npcs.get(i))){
-                if(npcs.get(i).getHitbox().isStrictlyAbove(Player.getHitbox())
-                        &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.DOWN);
+        for(int i=0;i<entities.size();i++){
+            if(canNpcFireProjectile(entities.get(i))){
+                if(entities.get(i).getHitbox().isStrictlyAbove(player.getHitbox())
+                        &&((NonPlayerCharacter)entities.get(i)).canFireNextProjectile()){
+                    ((NonPlayerCharacter)entities.get(i)).loadProjectile(Entity.DOWN);
                 }
-                else if(npcs.get(i).getHitbox().isStrictlyLeft(Player.getHitbox())
-                        &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.RIGHT);
+                else if(entities.get(i).getHitbox().isStrictlyLeft(player.getHitbox())
+                        &&((NonPlayerCharacter)entities.get(i)).canFireNextProjectile()){
+                    ((NonPlayerCharacter)entities.get(i)).loadProjectile(Entity.RIGHT);
                 }
-                else if(npcs.get(i).getHitbox().isStrictlyRight(Player.getHitbox())
-                        &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.LEFT);                    
+                else if(entities.get(i).getHitbox().isStrictlyRight(player.getHitbox())
+                        &&((NonPlayerCharacter)entities.get(i)).canFireNextProjectile()){
+                    ((NonPlayerCharacter)entities.get(i)).loadProjectile(Entity.LEFT);                    
                 }
-                else if(npcs.get(i).getHitbox().isStrictlyBelow(Player.getHitbox())
-                        &&((NonPlayerCharacter)npcs.get(i)).canFireNextProjectile()){
-                    ((NonPlayerCharacter)npcs.get(i)).loadProjectile(Entity.UP);
+                else if(entities.get(i).getHitbox().isStrictlyBelow(player.getHitbox())
+                        &&((NonPlayerCharacter)entities.get(i)).canFireNextProjectile()){
+                    ((NonPlayerCharacter)entities.get(i)).loadProjectile(Entity.UP);
                 }
             }
         }
     }
     public void npcProjectileWithinPanel(){
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof NonPlayerCharacter){
-                if(!((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty()){
-                    if(withinPanel(((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0))){
-                        ((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).fire();
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof NonPlayerCharacter){
+                if(!((NonPlayerCharacter)entities.get(i)).getProjectile().isEmpty()){
+                    if(withinPanel(((NonPlayerCharacter)entities.get(i)).getProjectile().get(0))){
+                        ((NonPlayerCharacter)entities.get(i)).getProjectile().get(0).fire();
                     }
                     else{
-                        ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
+                        ((NonPlayerCharacter)entities.get(i)).removeProjectile();
                     }
                 }
             }
         }
     }
     public void npcProjectileInflictDamage(){         
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof NonPlayerCharacter){
-                if(!(((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty())){
-                    if(((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).getHitbox().isTouching(Player.getHitbox())){
-                        ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
-                        ((NonPlayerCharacter)npcs.get(i)).attack(Player);
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof NonPlayerCharacter){
+                if(!(((NonPlayerCharacter)entities.get(i)).getProjectile().isEmpty())){
+                    if(((NonPlayerCharacter)entities.get(i)).getProjectile().get(0).getHitbox().isTouching(player.getHitbox())){
+                        ((NonPlayerCharacter)entities.get(i)).removeProjectile();
+                        ((NonPlayerCharacter)entities.get(i)).attack(player);
                         }
                     else{
-                        for(int j=0;j<npcs.size();j++){
+                        for(int j=0;j<entities.size();j++){
                             if(i==j){}
                             else{                    
-                                if(npcs.get(j) instanceof OpaqueEntity
-                                    &&((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).getHitbox().isTouching((npcs.get(j)).getHitbox())){
-                                        ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
+                                if(entities.get(j) instanceof OpaqueEntity
+                                    &&((NonPlayerCharacter)entities.get(i)).getProjectile().get(0).getHitbox().isTouching((entities.get(j)).getHitbox())){
+                                        ((NonPlayerCharacter)entities.get(i)).removeProjectile();
                                         break;
-                            }                        
+                                }                        
+                            }
                         }
                     }
                 }
             }
         }
-    }
-            
-    /*        
-    for(int i=0;i<npcs.size();i++){
-        if(npcs.get(i) instanceof NonPlayerCharacter){
-            if(!((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty()){
-                if(((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).getHitbox().isTouching(Player.getHitbox())){
-                    ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
-                    ((NonPlayerCharacter)npcs.get(i)).attack(Player);
-                            }
-                else{
-                for(int z=0;z<npcs.size();z++){
-                        if(i==z){}
-                        else{
-                            if(!((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty()){
-                                if(((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0).getHitbox().isTouching(
-                                    (npcs.get(z)).getHitbox())
-                                        &&npcs.get(z) instanceof OpaqueEntity){
-                                        ((NonPlayerCharacter)npcs.get(i)).removeProjectile();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //System.out.println("Player HP:"+Player.getHitpoints());
-                        if(((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty()){
-                            break;
-                    }                          
-                }
-            }
-        }
-    */ 
     }  
     
     public void inflictDamage(){
-        for(int i=0;i<npcs.size();i++){
-            if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())){
-                if(npcs.get(i) instanceof DamagableEntity){
-                    if(Player.attack((DamagableEntity)npcs.get(i)) && Player.getHasWeapon()){
+        for(int i=0;i<entities.size();i++){
+            if(player.getHitbox().isTouching(entities.get(i).getHitbox())){
+                if(entities.get(i) instanceof DamagableEntity){
+                    if(player.attack((DamagableEntity)entities.get(i)) && player.getHasWeapon()){
                         dialogPanel.message("You cannot attack a Damagable Entity with a "+
-                            Player.weapon.getName()+" equipped");
+                            player.weapon.getName()+" equipped");
                     }
-                    System.out.println("NPC"+i+" HP: "+((DamagableEntity)npcs.get(i)).getHitpoints());
-                        if(((DamagableEntity)npcs.get(i)).getHitpoints()<=0){
-                            if(npcs.get(i) instanceof NonPlayerCharacter){
-                                dialogPanel.message(((NonPlayerCharacter)npcs.get(i)).getName()+" has been killed");
+                    System.out.println("NPC"+i+" HP: "+((DamagableEntity)entities.get(i)).getHitpoints());
+                        if(((DamagableEntity)entities.get(i)).getHitpoints()<=0){
+                            if(entities.get(i) instanceof NonPlayerCharacter){
+                                dialogPanel.message(((NonPlayerCharacter)entities.get(i)).getName()+" has been killed");
                             }
-                            npcs.remove(i);
+                            entities.remove(i);
                         }
                     }
                 }                
             }
         }
     public boolean canPlayerMoveUp(){
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof OpaqueEntity
-                &&Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                &&Player.getHitbox().isStrictlyBelow(npcs.get(i).getHitbox())){
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof OpaqueEntity
+                &&player.getHitbox().isTouching(entities.get(i).getHitbox())
+                &&player.getHitbox().isStrictlyBelow(entities.get(i).getHitbox())){
                 return false;
             }            
         }
         return true;
     }
     public boolean canPlayerMoveDown(){
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof OpaqueEntity
-                &&Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                &&Player.getHitbox().isStrictlyAbove(npcs.get(i).getHitbox())){
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof OpaqueEntity
+                &&player.getHitbox().isTouching(entities.get(i).getHitbox())
+                &&player.getHitbox().isStrictlyAbove(entities.get(i).getHitbox())){
                 return false;
             }            
         }
         return true;
     }
     public boolean canPlayerMoveLeft(){        
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof OpaqueEntity
-                &&Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                &&Player.getHitbox().isStrictlyRight(npcs.get(i).getHitbox())){
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof OpaqueEntity
+                &&player.getHitbox().isTouching(entities.get(i).getHitbox())
+                &&player.getHitbox().isStrictlyRight(entities.get(i).getHitbox())){
                 return false;
             }            
         }
         return true;
     }
     public boolean canPlayerMoveRight(){        
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof OpaqueEntity
-                &&Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                &&Player.getHitbox().isStrictlyLeft(npcs.get(i).getHitbox())){
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof OpaqueEntity
+                &&player.getHitbox().isTouching(entities.get(i).getHitbox())
+                &&player.getHitbox().isStrictlyLeft(entities.get(i).getHitbox())){
                 return false;
             }            
         }
@@ -456,22 +399,22 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
     
     public void checkForItems(){
-        for(int i=0;i<npcs.size();i++){
-            if(npcs.get(i) instanceof SpawnableItem){
-                if(Player.getHitbox().isTouching(npcs.get(i).getHitbox())
-                        &&Player.inventory.getSize()<Inventory.MAX_SIZE){
-                    Player.inventory.pickUpItem(((SpawnableItem)npcs.get(i)).getItems());
-                    dialogPanel.message(Player.getName()+" picked up: "+((SpawnableItem)npcs.get(i)).getItems().getQuantity()+" "+((SpawnableItem)npcs.get(i)).getItems().getName());
-                    npcs.remove(i);
-                    for(int j=0;j<Player.inventory.items.size();j++){
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof SpawnableItem){
+                if(player.getHitbox().isTouching(entities.get(i).getHitbox())
+                        &&player.inventory.getSize()<Inventory.MAX_SIZE){
+                    player.inventory.pickUpItem(((SpawnableItem)entities.get(i)).getItems());
+                    dialogPanel.message(player.getName()+" picked up: "+((SpawnableItem)entities.get(i)).getItems().getQuantity()+" "+((SpawnableItem)entities.get(i)).getItems().getName());
+                    entities.remove(i);
+                    for(int j=0;j<player.inventory.items.size();j++){
                     }
                 }
             }
         }
     }
     public void checkForInventory(){
-        if((!Player.inventory.items.isEmpty())){
-            for(int i=0;i<Player.inventory.items.size();i++){
+        if((!player.inventory.items.isEmpty())){
+            for(int i=0;i<player.inventory.items.size();i++){
                 if(inventoryItems.length==0){break;}
                 else if(inventoryItems[i].isButton1()){
                     use(i);
@@ -483,17 +426,17 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
     }
     public void checkPortals(){
-        if(!npcs.isEmpty()){
-            for(int i=0;i<npcs.size();i++){
-                if(npcs.get(i) instanceof Portal){
-                    for(int j=0;j<npcs.size();j++){
+        if(!entities.isEmpty()){
+            for(int i=0;i<entities.size();i++){
+                if(entities.get(i) instanceof Portal){
+                    for(int j=0;j<entities.size();j++){
                         if(i==j){}
                         else{
-                            ((Portal)npcs.get(i)).determineCanPlayerUse(npcs);
-                            ((Portal)npcs.get(i)).teleport(Player);
-                            if(((Portal)npcs.get(i)).canNpcUse()){
-                                System.out.println(((Portal)npcs.get(i)).canNpcUse());
-                                ((Portal)npcs.get(i)).teleport(npcs.get(j));
+                            ((Portal)entities.get(i)).determineCanPlayerUse(entities);
+                            ((Portal)entities.get(i)).teleport(player);
+                            if(((Portal)entities.get(i)).canNpcUse()){
+                                System.out.println(((Portal)entities.get(i)).canNpcUse());
+                                ((Portal)entities.get(i)).teleport(entities.get(j));
                             }
                         }
                     }                    
@@ -502,11 +445,11 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
     }
     public void checkTalkableGates(){
-        if(!npcs.isEmpty()){
-            for(int i=0;i<npcs.size();i++){
-                if(npcs.get(i) instanceof TalkableGate){
-                    TalkableGate t = (TalkableGate)npcs.get(i);          
-                    if(t.canOperate(Player)){
+        if(!entities.isEmpty()){
+            for(int i=0;i<entities.size();i++){
+                if(entities.get(i) instanceof TalkableGate){
+                    TalkableGate t = (TalkableGate)entities.get(i);          
+                    if(t.canOperate(player)){
                         dialogPanel.message(t.getSpeech());                                                          
                     }
                 }
@@ -514,30 +457,30 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
     }
     public void regenOverTime(){
-        if(Player.getHitpoints()<Player.getinitHitpoints()){
-            Player.heal(1);       
+        if(player.getHitpoints()<player.getinitHitpoints()){
+            player.heal(1);       
         }
     }  
     public void checkHasBeenFired(){
-        if(!Player.getProjectile().isEmpty()){
-            for(int i=0;i<Player.getProjectile().size();i++){
-                if(Player.getProjectile().get(i).hasBeenFired()){
-                    Player.getProjectile().get(i).fire();
+        if(!player.getProjectile().isEmpty()){
+            for(int i=0;i<player.getProjectile().size();i++){
+                if(player.getProjectile().get(i).hasBeenFired()){
+                    player.getProjectile().get(i).fire();
                 }
             }
         }
     }
     public void checkForMapGateOperation(){
-        if(!npcs.isEmpty()){
-            for(int i=0;i<npcs.size();i++){
-                if(npcs.get(i) instanceof MapGate){
-                    MapGate m = (MapGate)npcs.get(i);
-                    m.checkIfCanUse(npcs);
+        if(!entities.isEmpty()){
+            for(int i=0;i<entities.size();i++){
+                if(entities.get(i) instanceof MapGate){
+                    MapGate m = (MapGate)entities.get(i);
+                    m.checkIfCanUse(entities);
                     if(m.usedToExitMap()){
-                        m.operate(Player, this);
+                        m.operate(player, this);
                     }
                     else{
-                        m.operate(Player,dialogPanel);
+                        m.operate(player,dialogPanel);
                     }                            
                 }
             }
@@ -545,44 +488,44 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     }
             
     public void up(){
-        if((withinPanelY(Player)!=Hitbox.ABOVE)&&
+        if((withinPanelY(player)!=Hitbox.ABOVE)&&
                 canPlayerMoveUp()){
-        //System.out.print("Moved from: ("+Player.getX()+","+Player.getY()+") ");
-        //Player.setY(Player.getY()-Player.getTravelY());
-            Player.moveUp();
-        //System.out.println("to: ("+Player.getX()+","+Player.getY()+") ");
+        //System.out.print("Moved from: ("+player.getX()+","+player.getY()+") ");
+        //Player.setY(player.getY()-player.getTravelY());
+            player.moveUp();
+        //System.out.println("to: ("+player.getX()+","+player.getY()+") ");
         } 
-        Player.setDirection(Entity.UP);
+        player.setDirection(Entity.UP);
     }
     public void down(){
-        if(((withinPanelY(Player)!=Hitbox.BELOW)&&
+        if(((withinPanelY(player)!=Hitbox.BELOW)&&
                 canPlayerMoveDown())){
-        //System.out.print("Moved from: ("+Player.getX()+","+Player.getY()+") ");
-        //Player.setY(Player.getY()+Player.getTravelY());
-            Player.moveDown();
-        //System.out.println("to: ("+Player.getX()+","+Player.getY()+") ");  
+        //System.out.print("Moved from: ("+player.getX()+","+player.getY()+") ");
+        //Player.setY(player.getY()+player.getTravelY());
+            player.moveDown();
+        //System.out.println("to: ("+player.getX()+","+player.getY()+") ");  
         }    
-        Player.setDirection(Entity.DOWN);
+        player.setDirection(Entity.DOWN);
     }
     public void left(){
-        if(((withinPanelX(Player)!=Hitbox.LEFT)&&
+        if(((withinPanelX(player)!=Hitbox.LEFT)&&
                 canPlayerMoveLeft())){
-        //System.out.print("Moved from: ("+Player.getX()+","+Player.getY()+") ");
-        //Player.setX(Player.getX()-Player.getTravelX());
-            Player.moveLeft();
-        //System.out.println("to: ("+Player.getX()+","+Player.getY()+")");
+        //System.out.print("Moved from: ("+player.getX()+","+player.getY()+") ");
+        //Player.setX(player.getX()-player.getTravelX());
+            player.moveLeft();
+        //System.out.println("to: ("+player.getX()+","+player.getY()+")");
         }        
-        Player.setDirection(Entity.LEFT);
+        player.setDirection(Entity.LEFT);
     }
     public void right(){
-        if(((withinPanelX(Player)!=Hitbox.RIGHT)&&
+        if(((withinPanelX(player)!=Hitbox.RIGHT)&&
                 canPlayerMoveRight())){
-        //System.out.print("Moved from: ("+Player.getX()+","+Player.getY()+") ");
-        //Player.setX(Player.getX()+Player.getTravelX());
-            Player.moveRight();
-        //System.out.println("to: ("+Player.getX()+","+Player.getY()+")");
+        //System.out.print("Moved from: ("+player.getX()+","+player.getY()+") ");
+        //Player.setX(player.getX()+player.getTravelX());
+            player.moveRight();
+        //System.out.println("to: ("+player.getX()+","+player.getY()+")");
         } 
-        Player.setDirection(Entity.RIGHT);
+        player.setDirection(Entity.RIGHT);
     }
     public void shoot(){
         boolean hasBow = false;
@@ -590,20 +533,20 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         boolean isCompatible = false;
         int index=100;//Arbitrary number just to check.
         
-        for(int i=0;i<Player.inventory.items.size();i++){
-            if(Player.getHasWeapon()){
-                if(Player.inventory.items.get(i) instanceof ProjectileWeapon){
-                    if(Player.weapon.equals(Player.inventory.items.get(i))){
+        for(int i=0;i<player.inventory.items.size();i++){
+            if(player.getHasWeapon()){
+                if(player.inventory.items.get(i) instanceof ProjectileWeapon){
+                    if(player.weapon.equals(player.inventory.items.get(i))){
                         hasBow = true;
                     }
                 }
-                if(Player.inventory.items.get(i) instanceof Ammo){
+                if(player.inventory.items.get(i) instanceof Ammo){
                     hasArrow = true;
                     index = i;                
                     if(hasArrow
-                            &&(Player.weapon instanceof ProjectileWeapon)
-                            &&(Player.inventory.items.get(i) instanceof Ammo)){
-                        isCompatible = ((ProjectileWeapon)Player.weapon).isCompatible((Ammo)Player.inventory.items.get(i));
+                            &&(player.weapon instanceof ProjectileWeapon)
+                            &&(player.inventory.items.get(i) instanceof Ammo)){
+                        isCompatible = ((ProjectileWeapon)player.weapon).isCompatible((Ammo)player.inventory.items.get(i));
                     }
                 }
                 if(hasBow&&hasArrow){
@@ -613,10 +556,10 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
         
         if(hasBow&&(index!=100)&&isCompatible){
-            Player.loadProjectile(Player.getDirection());
-            Player.inventory.useItem(index,Player);
-            for(int i=0;i<Player.getProjectile().size();i++){
-                Player.getProjectile().get(i).fire();
+            player.loadProjectile(player.getDirection());
+            player.inventory.useItem(index,player);
+            for(int i=0;i<player.getProjectile().size();i++){
+                player.getProjectile().get(i).fire();
             }
         }
     }
@@ -627,75 +570,75 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         
     }
     public void heal(){
-        for(int i=0;i<Player.inventory.items.size();i++){
-            if(Player.inventory.items.get(i) instanceof HealthPotion){
-                Player.inventory.useItem(i,Player);
+        for(int i=0;i<player.inventory.items.size();i++){
+            if(player.inventory.items.get(i) instanceof HealthPotion){
+                player.inventory.useItem(i,player);
             }
         }        
     }
     public void use(int i){
-        if(Player.inventory.items.get(i) instanceof UnusableItem){
-            if(Player.inventory.items.get(i) instanceof Weapon){
-                if(Player.getHasWeapon()&&(Player.weapon.equals((Weapon)Player.inventory.items.get(i)))){
-                   dialogPanel.message(Player.getName()+" unequip: "+Player.weapon.getName());
-                   Player.unequipWeapon((Weapon)Player.inventory.items.get(i));                   
+        if(player.inventory.items.get(i) instanceof UnusableItem){
+            if(player.inventory.items.get(i) instanceof Weapon){
+                if(player.getHasWeapon()&&(player.weapon.equals((Weapon)player.inventory.items.get(i)))){
+                   dialogPanel.message(player.getName()+" unequip: "+player.weapon.getName());
+                   player.unequipWeapon((Weapon)player.inventory.items.get(i));                   
                 }
                 else{
-                   Player.equipWeapon((Weapon)Player.inventory.items.get(i));  
-                   dialogPanel.message(Player.getName()+" equip: "+Player.weapon.getName());
+                   player.equipWeapon((Weapon)player.inventory.items.get(i));  
+                   dialogPanel.message(player.getName()+" equip: "+player.weapon.getName());
                 }
             }
-            if(Player.inventory.items.get(i) instanceof Armor){
-                if(Player.getHasArmor()&&(Player.armor.equals((Armor)Player.inventory.items.get(i)))){
-                   dialogPanel.message(Player.getName()+" unequip: "+Player.armor.getName());
-                   Player.unequipArmor((Armor)Player.inventory.items.get(i));                    
+            if(player.inventory.items.get(i) instanceof Armor){
+                if(player.getHasArmor()&&(player.armor.equals((Armor)player.inventory.items.get(i)))){
+                   dialogPanel.message(player.getName()+" unequip: "+player.armor.getName());
+                   player.unequipArmor((Armor)player.inventory.items.get(i));                    
                 }
                 else{
-                   Player.equipArmor((Armor)Player.inventory.items.get(i));
-                   dialogPanel.message(Player.getName()+" equip: "+Player.armor.getName());
+                   player.equipArmor((Armor)player.inventory.items.get(i));
+                   dialogPanel.message(player.getName()+" equip: "+player.armor.getName());
                 }
             }
         } 
         else {
-            dialogPanel.message(Player.getName()+" use: "+Player.inventory.items.get(i).getName());
-            Player.inventory.useItem(i,Player);
+            dialogPanel.message(player.getName()+" use: "+player.inventory.items.get(i).getName());
+            player.inventory.useItem(i,player);
         }
     }
     public void drop(int i){
-        if(Player.inventory.items.get(i) instanceof UnusableItem){
-            if(Player.inventory.items.get(i) instanceof Weapon){
-                if(Player.getHasWeapon()&&(Player.weapon.equals((Weapon)Player.inventory.items.get(i)))){
-                   dialogPanel.message(Player.getName()+" unequip: "+Player.weapon.getName());
-                   Player.unequipWeapon((Weapon)Player.inventory.items.get(i));
+        if(player.inventory.items.get(i) instanceof UnusableItem){
+            if(player.inventory.items.get(i) instanceof Weapon){
+                if(player.getHasWeapon()&&(player.weapon.equals((Weapon)player.inventory.items.get(i)))){
+                   dialogPanel.message(player.getName()+" unequip: "+player.weapon.getName());
+                   player.unequipWeapon((Weapon)player.inventory.items.get(i));
                 }
             }
-            else if(Player.inventory.items.get(i) instanceof Armor){
-                if(Player.getHasArmor()&&(Player.armor.equals((Armor)Player.inventory.items.get(i)))){
-                   dialogPanel.message(Player.getName()+" unequip: "+Player.armor.getName());
-                   Player.unequipArmor((Armor)Player.inventory.items.get(i)); 
+            else if(player.inventory.items.get(i) instanceof Armor){
+                if(player.getHasArmor()&&(player.armor.equals((Armor)player.inventory.items.get(i)))){
+                   dialogPanel.message(player.getName()+" unequip: "+player.armor.getName());
+                   player.unequipArmor((Armor)player.inventory.items.get(i)); 
                 }
             }
         }        
         
-        dialogPanel.message(Player.getName()+" drop: "+Player.inventory.items.get(i).getQuantity()+" "+Player.inventory.items.get(i).getName());
+        dialogPanel.message(player.getName()+" drop: "+player.inventory.items.get(i).getQuantity()+" "+player.inventory.items.get(i).getName());
         
-        if(Player.getX()<edgeX/2){
-            SpawnableItem temp = Player.inventory.dropItem(i, Player.getX()+Player.DROP_DISTANCE_X, Player.getY());  
-            npcs.add(temp);
+        if(player.getX()<GameDisplay.ACTIONPANEL_WIDTH/2){
+            SpawnableItem temp = player.inventory.dropItem(i, player.getX()+player.DROP_DISTANCE_X, player.getY());  
+            entities.add(temp);
             }
         else{
-            SpawnableItem temp = Player.inventory.dropItem(i, Player.getX()-Player.DROP_DISTANCE_X, Player.getY());                    
-            npcs.add(temp);
+            SpawnableItem temp = player.inventory.dropItem(i, player.getX()-player.DROP_DISTANCE_X, player.getY());                    
+            entities.add(temp);
             }        
         
     }          
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(Player!=null){
+        if(player!=null){
             if(frameCount%FPS==0){
                 detectForDamage();
-                //System.out.println("Player HP:"+Player.getHitpoints());
+                //System.out.println("player HP:"+player.getHitpoints());
                 npcFireProjectile();
             }   
             if(frameCount%(10*FPS)==0){
@@ -715,7 +658,6 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
             if(keyPressed[ATTACK]){
                 attack();
-                //shoot();
                 keyPressed[ATTACK] = false;
             }
             if(keyPressed[SHOOT]){
@@ -730,15 +672,15 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                 keyPressed[HEAL]=false;
             }
             if(keyPressed[SELECTFOR]){
-                //increments inventory; does nothing in actionPerformed method
+                
             }
             if(keyPressed[SELECTBACK]){
                 //increments inventory; does nothing in actionPerformed method
             }
             if(keyPressed[USE]){
                 keyPressed[USE] = false;  
-                if(!Player.inventory.items.isEmpty()){
-                    for(int i=0;i<Player.inventory.items.size();i++){
+                if(!player.inventory.items.isEmpty()){
+                    for(int i=0;i<player.inventory.items.size();i++){
                         if(Inventory.inventorySelectorIndex==i){
                             use(i);
                     }
@@ -747,14 +689,15 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
             if(keyPressed[DROP]){
                 keyPressed[DROP] = false;
-                if(!Player.inventory.items.isEmpty()){
-                for(int i=0;i<Player.inventory.items.size();i++){
+                if(!player.inventory.items.isEmpty()){
+                for(int i=0;i<player.inventory.items.size();i++){
                     if(Inventory.inventorySelectorIndex==i){
                         drop(i);                   
                         }
                     }
                 }
             }  
+            
             checkForInventory();
             npcProjectileInflictDamage();
             npcMove();
@@ -766,41 +709,30 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             checkForItems();
             projectileWithinPanel();
             projectileInflictDamage();
-            Player.inventory.sortInventory();    
+            player.inventory.sortInventory();    
             repaint();
             frameCount++;
         }
-        //System.out.println("framecount:"+frameCount);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_UP){
-            keyPressed[UP] = true;
-            //up(); Player.setDirection(Entity.UP);            
+            keyPressed[UP] = true;           
         }
         if(key == KeyEvent.VK_DOWN){
             keyPressed[DOWN] = true;
-            //down(); Player.setDirection(Entity.DOWN);
         }
         if(key == KeyEvent.VK_LEFT){
             keyPressed[LEFT] = true;
-            //left(); Player.setDirection(Entity.LEFT);
         }
         if(key == KeyEvent.VK_RIGHT){
             keyPressed[RIGHT] = true;
-            //right(); Player.setDirection(Entity.RIGHT);
         } 
         if(key == KeyEvent.VK_A){
-            //keyPressed[ATTACK] = true;
-            //inflictDamage();
         }
         if(key == KeyEvent.VK_S){
-            //keyPressed[SHOOT] = true;
-            //if(Player.canFireNextProjectile()){
-            //Player.loadProjectile(Player.getDirection());
-            //}
         }
         if(key == KeyEvent.VK_D){
             keyPressed[DEFEND] = true;
@@ -826,30 +758,22 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_UP){
-            keyPressed[UP] = false;
-            //up(); Player.setDirection(Entity.UP);            
+            keyPressed[UP] = false;    
         }
         if(key == KeyEvent.VK_DOWN){
             keyPressed[DOWN] = false;
-            //down(); Player.setDirection(Entity.DOWN);
         }
         if(key == KeyEvent.VK_LEFT){
             keyPressed[LEFT] = false;
-            //left(); Player.setDirection(Entity.LEFT);
         }
         if(key == KeyEvent.VK_RIGHT){
             keyPressed[RIGHT] = false;
-            //right(); Player.setDirection(Entity.RIGHT);
         } 
         if(key == KeyEvent.VK_A){
             keyPressed[ATTACK] = true;
-            //inflictDamage();
         }
         if(key == KeyEvent.VK_S){
             keyPressed[SHOOT] = true;
-            //if(Player.canFireNextProjectile()){
-            //Player.loadProjectile(Player.getDirection());
-            //}
         }
         if(key == KeyEvent.VK_D){
             keyPressed[DEFEND] = false;
@@ -879,127 +803,12 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         super.paintComponent(g);
         Graphics2D graphic = (Graphics2D)g;  
         
-        //drawPlayer(graphic);
-        
-        if(!npcs.isEmpty()){
-            for(int i=0;i<npcs.size();i++){
-                Entity temp = npcs.get(i);
-                if(temp.getClass().equals(entity.getClass())){
-                    graphic.setColor(Color.DARK_GRAY);//gray
-                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));                    
-                }
-                else if(temp instanceof Portal){
-                    if(((Portal)temp).isMain){
-                        graphic.setColor(new Color(233,118,17));//Orange
-                    }
-                    else{
-                        graphic.setColor(new Color(43,127,223));//Blue
-                    }
-                    graphic.fill(new Ellipse2D.Double(npcs.get(i).getX(),npcs.get(i).getY(),npcs.get(i).getWidth(),npcs.get(i).getHeight()));
-                }
-                else if(temp instanceof TalkableGate){
-                    graphic.setColor(Color.DARK_GRAY);
-                    graphic.draw(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }
-                else if(temp instanceof MapGate){
-                    graphic.setColor(Color.black);
-                    graphic.draw(new Ellipse2D.Double(npcs.get(i).getX(),npcs.get(i).getY(),npcs.get(i).getWidth(),npcs.get(i).getHeight()));
-                }               
-                
-                else if(temp instanceof NonPlayerCharacter){
-                    if(((((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.WARRIOR)
-                            ||((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BR_WARRIOR)){
-                        graphic.setColor(new Color(156,34,34));//dark red
-                    }
-                    else if(((((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.ARCHER)
-                            ||((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BR_ARCHER)){
-                        graphic.setColor(new Color(176,176,75));//snakeskin
-                    }
-                    else if(((((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.TANK)
-                            ||((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BR_TANK)){
-                        graphic.setColor(new Color(92,90,19));//camogreen
-                    }
-                    else if(((((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.SUBBOSS)
-                            ||((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BR_SUBBOSS)){
-                        graphic.setColor(new Color(85,18,105));//dark purple
-                    }
-                    else if(((NonPlayerCharacter)temp).getCharacterClass()==NonPlayerCharacter.BOSS){
-                        graphic.setColor(new Color(0,0,0));//black
-                    }
-                    changeColorWhenHit(graphic,(NonPlayerCharacter)npcs.get(i));
-                    graphic.fill(new Rectangle2D.Double(npcs.get(i).getX(),npcs.get(i).getY(),npcs.get(i).getWidth(),npcs.get(i).getHeight()));
-                    if(!((NonPlayerCharacter)npcs.get(i)).getProjectile().isEmpty()){
-                        for(int z=0;z<((NonPlayerCharacter)npcs.get(i)).getProjectile().size();z++){
-                            Projectile p = ((NonPlayerCharacter)npcs.get(i)).getProjectile().get(0);
-                            graphic.fill(new Ellipse2D.Double(p.x,p.y,p.width,p.height));
-                        }
-                    }
-                    
-                    drawHitpointsBar(graphic,(NonPlayerCharacter)temp);
-                }
-                else if(temp instanceof DamagableEntity){
-                    graphic.setColor(Color.GRAY);//greenish
-                    changeColorWhenHit(graphic,(DamagableEntity)(npcs.get(i)));
-                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }
-                else if(temp instanceof MapGate || temp instanceof TalkableGate){
-                    graphic.setColor(new Color(192,192,192));
-                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }
-                else if(temp instanceof SpawnableItem){
-                    graphic.setColor(new Color(188,101,121));
-                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }
-                else if(temp instanceof OpaqueEntity){
-                    graphic.setColor(Color.DARK_GRAY);
-                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }
-                else{
-                    graphic.setColor(new Color(0,204,0));//greenish
-                    graphic.fill(new Rectangle2D.Double(temp.getX(),temp.getY(),temp.getWidth(),temp.getHeight()));
-                }  
-                
-            }
+        for(Entity ent: entities){
+            ent.render(graphic);
         }
         
-        drawPlayer(graphic);        
+        player.render(graphic);
         
-    }
-    
-    public void drawPlayer(Graphics2D graphic){
-        //Draw Player and Player's Projectiles
-        graphic.setColor(new Color(63,131,104));//Cyanish Green
-        graphic.fill(new Rectangle2D.Double(Player.getX(),Player.getY(),Player.getWidth(),Player.getHeight()));
-        drawHitpointsBar(graphic,Player);     
-                
-        if(!Player.getProjectile().isEmpty()){
-            for(int z=0;z<Player.getProjectile().size();z++){
-                graphic.setColor(new Color(63,131,104));
-                graphic.fill(new Rectangle2D.Double(Player.getProjectile().get(z).x,Player.getProjectile().get(z).y,
-                Player.getProjectile().get(z).width,Player.getProjectile().get(z).height));
-            }
-        }
-    }
-    
-    public void drawHitpointsBar(Graphics2D g, Character d){
-        double ratio = d.getHitpoints()/d.getinitHitpoints();
-        double hitpointsBarWidth = d.getWidth()*ratio;
-        g.setColor(Color.GREEN);
-        if(d.getY()>(edgeY/2)){
-            g.fill(new Rectangle2D.Double(
-                    d.getX(),d.getHitbox().close.y-hitpointsBarOffset,hitpointsBarWidth,hitpointsBarHeight));
-            }
-        else{
-            g.fill(new Rectangle2D.Double(
-                    d.getX(),d.getHitbox().far.y+hitpointsBarOffset,hitpointsBarWidth,hitpointsBarHeight));
-        }
-    }
-    
-    public void changeColorWhenHit(Graphics2D g, DamagableEntity p){
-        if(p.hasBeenHit()){
-            g.setColor(Color.ORANGE);
-            p.setHasBeenHit(false);
-        }
     }
 
     @Override

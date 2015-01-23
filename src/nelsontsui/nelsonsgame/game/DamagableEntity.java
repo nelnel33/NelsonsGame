@@ -1,11 +1,18 @@
 package nelsontsui.nelsonsgame.game;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 public class DamagableEntity extends OpaqueEntity implements Externalizable{
+    
+    public static final String CLASSNAME = "DamagableEntity";
+    public static final String DESCRIPTION = "An solid entity that has hitpoints;Recommended Use: Physical gate/door;";
+    
     protected double initHitpoints;
     protected double hitpoints;
     
@@ -46,8 +53,14 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
         hitpoints+=heal;
     }
     
-    public static String description(){
-        return "DamagableEntity;An solid entity that has hitpoints;Recommended Use: Physical gate/door;";
+    @Override
+    public String className(){
+        return CLASSNAME;
+    }
+    
+    @Override
+    public String description(){
+        return DESCRIPTION;
     }
     
     @Override
@@ -70,5 +83,19 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
         
         initHitpoints = in.readDouble();
         hitpoints = in.readDouble();
+    }
+    
+    @Override
+    public void render(Graphics2D graphic){
+        graphic.setColor(Color.GRAY);//greenish
+        changeColorWhenHit(graphic, this);
+        graphic.fill(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
+    }
+    
+    public void changeColorWhenHit(Graphics2D g, DamagableEntity p){
+        if(p.hasBeenHit()){
+            g.setColor(Color.ORANGE);
+            p.setHasBeenHit(false);
+        }
     }
 }
