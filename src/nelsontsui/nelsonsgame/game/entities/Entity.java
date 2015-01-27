@@ -1,4 +1,6 @@
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.entities;
+import nelsontsui.nelsonsgame.game.mapping.Hitbox;
+import nelsontsui.nelsonsgame.game.mapping.Point;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -18,10 +20,10 @@ public class Entity implements Externalizable{
     protected double height;
     protected int direction;
     
-    protected static final int UP = 1;
-    protected static final int DOWN = 2;
-    protected static final int LEFT = 3;
-    protected static final int RIGHT = 4;
+    public static final int UP = 1;
+    public static final int DOWN = 2;
+    public static final int LEFT = 3;
+    public static final int RIGHT = 4;
     
     //No particular reason why it starts at 33. I just like 33.
     private static final long serialVersionUID = 331L;

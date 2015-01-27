@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.mapping;
     
 import java.io.Externalizable;
 import java.io.IOException;
@@ -12,8 +12,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 public class Point implements Externalizable{
-    protected double x;
-    protected double y;
+    public double x;
+    public double y;
     
     private static final long serialVersionUID = 342L;
     
@@ -37,6 +37,10 @@ public class Point implements Externalizable{
     }
     public void setY(double y){
         this.y = y;
+    }
+    
+    public boolean equals(Point p){
+        return (x==p.x) && (y==p.y);
     }
 
     @Override

@@ -1,4 +1,15 @@
 package nelsontsui.nelsonsgame.game;
+import nelsontsui.nelsonsgame.game.entities.SpawnableItem;
+import nelsontsui.nelsonsgame.game.entities.TalkableGate;
+import nelsontsui.nelsonsgame.game.entities.Portal;
+import nelsontsui.nelsonsgame.game.entities.OpaqueEntity;
+import nelsontsui.nelsonsgame.game.entities.NonPlayerCharacter;
+import nelsontsui.nelsonsgame.game.entities.Player;
+import nelsontsui.nelsonsgame.game.entities.MapGate;
+import nelsontsui.nelsonsgame.game.mapping.Level;
+import nelsontsui.nelsonsgame.game.entities.Inventory;
+import nelsontsui.nelsonsgame.game.entities.DamagableEntity;
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import nelsontsui.nelsonsgame.game.items.HealthPotion;
 import nelsontsui.nelsonsgame.game.items.Weapon;
 import nelsontsui.nelsonsgame.game.items.StrengthPotion;
@@ -32,7 +43,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     public static final Border blackborder = BorderFactory.createLineBorder(Color.black);   
     
     private Level level;
-    protected Character player;
+    protected Player player;
     protected ArrayList<Entity> entities = new ArrayList<>();
     
     //Main Panels
@@ -156,7 +167,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     public void setEntities(ArrayList<Entity> entities){
         this.entities = entities;
     }
-    public void setPlayer(Character Player){
+    public void setPlayer(Player Player){
         this.player = Player;
     }
     public void getFocus(){
@@ -522,28 +533,28 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         attack.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                activePanel.attack();
+                player.attack(entities, dialogPanel);
                 activePanel.requestFocusInWindow();
             }
         });
         shoot.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                activePanel.shoot();
+                player.shoot();
                 activePanel.requestFocusInWindow();
             }
         });
         defend.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                activePanel.defend();
+                player.defend();
                 activePanel.requestFocusInWindow();
             }
         });
         heal.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                activePanel.heal();
+                player.heal();
                 activePanel.requestFocusInWindow();
             }
         });
@@ -621,6 +632,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         }
         //System.out.println(Inventory.inventorySelectorIndex);
     }
+    /**
     private void setInventoryIcons(){
     if((player!=null)&&(!player.inventory.items.isEmpty())){
         for(int i=0;i<player.inventory.items.size();i++){
@@ -662,6 +674,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
             inventoryItems[i].setToolTipText(player.inventory.items.get(i).getName());
         }
     }
+    **/
     private void createDialogLayout(){
         
     }
@@ -678,9 +691,9 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     @Override
     public void actionPerformed(ActionEvent e) {   
         setInventoryColor();
-        setInventoryIcons();
-        inventorySetToolTipText();
-        inventoryRemoveIcons();
+        player.setInventoryIcons(inventoryLabels,activePanel,inventoryItems);
+        player.inventorySetToolTipText(inventoryItems);
+        player.inventoryRemoveIcons(inventoryLabels);
         setStatsText();    
         checkIfWinOrLose();
         if(dialogPanel.getHasBeenSelected()){

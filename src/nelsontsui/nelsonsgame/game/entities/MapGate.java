@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.entities;
 
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
@@ -15,6 +16,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import nelsontsui.nelsonsgame.game.ActionPanel;
+import nelsontsui.nelsonsgame.game.DialogBox;
+import nelsontsui.nelsonsgame.game.MainDisplay;
 import nelsontsui.nelsonsgame.leveleditor.ReadFile;
 
 public class MapGate extends Entity implements Externalizable{
@@ -104,10 +108,10 @@ public class MapGate extends Entity implements Externalizable{
         if(usedToExitMap && (file!=null) ){
             ReadFile reader = new ReadFile(file);
             reader.read();
-            ArrayList<Entity> npcs = reader.getEntities();
+            ArrayList<Entity> entities = reader.getEntities();
             Player player = reader.getPlayer();
-            if(player!=null && npcs!= null){
-                action.setNpcs(npcs);
+            if(player != null && entities != null){
+                action.setEntities(entities);
                 action.setPlayer(player);
                 System.out.println("Player and Npcs were transfered(MAPGATE)");
             }
@@ -130,6 +134,23 @@ public class MapGate extends Entity implements Externalizable{
         }
         else{
             return "INVALID USE CONDITION";
+        }
+    }
+    
+    public static void checkForMapGateOperation(ArrayList<Entity> entities, Player player, DialogBox dialogPanel, ActionPanel activePanel){
+        if(!entities.isEmpty()){
+            for(int i=0;i<entities.size();i++){
+                if(entities.get(i) instanceof MapGate){
+                    MapGate m = (MapGate)entities.get(i);
+                    m.checkIfCanUse(entities);
+                    if(m.usedToExitMap()){
+                        m.operate(player, activePanel);
+                    }
+                    else{
+                        m.operate(player,dialogPanel);
+                    }                            
+                }
+            }
         }
     }
     

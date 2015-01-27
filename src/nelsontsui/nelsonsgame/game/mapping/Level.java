@@ -4,13 +4,16 @@
  * and open the template in the editor.
  */
 
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.mapping;
 
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import nelsontsui.nelsonsgame.game.entities.Entity;
+import nelsontsui.nelsonsgame.game.entities.Player;
 
 
 

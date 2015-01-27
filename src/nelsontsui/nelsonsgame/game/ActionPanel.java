@@ -1,5 +1,13 @@
 package nelsontsui.nelsonsgame.game;
 
+import nelsontsui.nelsonsgame.game.entities.TalkableGate;
+import nelsontsui.nelsonsgame.game.entities.Portal;
+import nelsontsui.nelsonsgame.game.entities.NonPlayerCharacter;
+import nelsontsui.nelsonsgame.game.entities.Player;
+import nelsontsui.nelsonsgame.game.entities.MapGate;
+import nelsontsui.nelsonsgame.game.mapping.Level;
+import nelsontsui.nelsonsgame.game.entities.Inventory;
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import nelsontsui.nelsonsgame.game.items.UnusableItem;
 import nelsontsui.nelsonsgame.game.items.HealthPotion;
 import nelsontsui.nelsonsgame.game.items.Weapon;
@@ -65,13 +73,13 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
     }
-    public ArrayList<Entity> getNpcs(){
+    public ArrayList<Entity> getEntities(){
         return entities;
     }
-    public Character getPlayer(){
+    public Player getPlayer(){
         return player;
     }
-    public void setNpcs(ArrayList<Entity> npcs){
+    public void setEntities(ArrayList<Entity> npcs){
         this.entities = npcs;
     }
     public void setPlayer(Player player){
@@ -89,6 +97,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public void setDialogPanel(DialogBox dialogPanel){
         this.dialogPanel = dialogPanel;
     }
+    
+    /**
     public void npcMove(){
         for(int i=0;i<entities.size();i++){
             if(entities.get(i) instanceof NonPlayerCharacter){
@@ -188,7 +198,8 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         if(e.getHitbox().close.y<=0||e.getHitbox().close.x<=0){
             return false;
         }
-        else if(e.getHitbox().far.y>=GameDisplay.ACTIONPANEL_HEIGHT||e.getHitbox().far.x>=GameDisplay.ACTIONPANEL_WIDTH){
+        else if(e.getHitbox().far.y>=GameDisplay.ACTIONPANEL_HEIGHT||
+                e.getHitbox().far.x>=GameDisplay.ACTIONPANEL_WIDTH){
             return false;
         }
         else{
@@ -218,7 +229,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             return Hitbox.UNDETERMINED;
         }
     }
-        
+    
     public void projectileInflictDamage(){
         if(!(player.getProjectile().isEmpty() || entities.isEmpty())){
             for(int i=0;i<entities.size();i++){
@@ -242,6 +253,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    
     public void projectileWithinPanel(){
         if(!player.getProjectile().isEmpty()){
             if(withinPanel(player.getProjectile().get(0))){
@@ -252,6 +264,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    
     public void detectForDamage(){
         for(int i=0;i<entities.size();i++){
             if(entities.get(i) instanceof NonPlayerCharacter){
@@ -263,6 +276,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    
     public boolean canNpcFireProjectile(Entity e){
             if(e instanceof NonPlayerCharacter){
                 if(((NonPlayerCharacter)e).characterClass == NonPlayerCharacter.ARCHER
@@ -277,6 +291,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
         }
             return false;
     }
+    
     public void npcFireProjectile(){
         for(int i=0;i<entities.size();i++){
             if(canNpcFireProjectile(entities.get(i))){
@@ -299,6 +314,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    
     public void npcProjectileWithinPanel(){
         for(int i=0;i<entities.size();i++){
             if(entities.get(i) instanceof NonPlayerCharacter){
@@ -313,6 +329,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    
     public void npcProjectileInflictDamage(){         
         for(int i=0;i<entities.size();i++){
             if(entities.get(i) instanceof NonPlayerCharacter){
@@ -347,16 +364,17 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                             player.weapon.getName()+" equipped");
                     }
                     System.out.println("NPC"+i+" HP: "+((DamagableEntity)entities.get(i)).getHitpoints());
-                        if(((DamagableEntity)entities.get(i)).getHitpoints()<=0){
-                            if(entities.get(i) instanceof NonPlayerCharacter){
-                                dialogPanel.message(((NonPlayerCharacter)entities.get(i)).getName()+" has been killed");
-                            }
-                            entities.remove(i);
+                    if(((DamagableEntity)entities.get(i)).getHitpoints()<=0){
+                        if(entities.get(i) instanceof NonPlayerCharacter){
+                            dialogPanel.message(((NonPlayerCharacter)entities.get(i)).getName()+" has been killed");
                         }
+                        entities.remove(i);
                     }
-                }                
-            }
+                }
+            }                
         }
+    }
+    
     public boolean canPlayerMoveUp(){
         for(int i=0;i<entities.size();i++){
             if(entities.get(i) instanceof OpaqueEntity
@@ -412,6 +430,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    
     public void checkForInventory(){
         if((!player.inventory.items.isEmpty())){
             for(int i=0;i<player.inventory.items.size();i++){
@@ -425,6 +444,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    
     public void checkPortals(){
         if(!entities.isEmpty()){
             for(int i=0;i<entities.size();i++){
@@ -444,6 +464,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+
     public void checkTalkableGates(){
         if(!entities.isEmpty()){
             for(int i=0;i<entities.size();i++){
@@ -456,20 +477,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
-    public void regenOverTime(){
-        if(player.getHitpoints()<player.getinitHitpoints()){
-            player.heal(1);       
-        }
-    }  
-    public void checkHasBeenFired(){
-        if(!player.getProjectile().isEmpty()){
-            for(int i=0;i<player.getProjectile().size();i++){
-                if(player.getProjectile().get(i).hasBeenFired()){
-                    player.getProjectile().get(i).fire();
-                }
-            }
-        }
-    }
+    
     public void checkForMapGateOperation(){
         if(!entities.isEmpty()){
             for(int i=0;i<entities.size();i++){
@@ -486,44 +494,48 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             }
         }
     }
+    
+    public void regenOverTime(int amount){
+        if(player.getHitpoints()<player.getinitHitpoints()){
+            player.heal(amount);       
+        }
+    }  
+    
+    public void checkHasBeenFired(){
+        if(!player.getProjectile().isEmpty()){
+            for(int i=0;i<player.getProjectile().size();i++){
+                if(player.getProjectile().get(i).hasBeenFired()){
+                    player.getProjectile().get(i).fire();
+                }
+            }
+        }
+    }
             
     public void up(){
         if((withinPanelY(player)!=Hitbox.ABOVE)&&
                 canPlayerMoveUp()){
-        //System.out.print("Moved from: ("+player.getX()+","+player.getY()+") ");
-        //Player.setY(player.getY()-player.getTravelY());
             player.moveUp();
-        //System.out.println("to: ("+player.getX()+","+player.getY()+") ");
         } 
         player.setDirection(Entity.UP);
     }
     public void down(){
         if(((withinPanelY(player)!=Hitbox.BELOW)&&
                 canPlayerMoveDown())){
-        //System.out.print("Moved from: ("+player.getX()+","+player.getY()+") ");
-        //Player.setY(player.getY()+player.getTravelY());
             player.moveDown();
-        //System.out.println("to: ("+player.getX()+","+player.getY()+") ");  
         }    
         player.setDirection(Entity.DOWN);
     }
     public void left(){
         if(((withinPanelX(player)!=Hitbox.LEFT)&&
                 canPlayerMoveLeft())){
-        //System.out.print("Moved from: ("+player.getX()+","+player.getY()+") ");
-        //Player.setX(player.getX()-player.getTravelX());
             player.moveLeft();
-        //System.out.println("to: ("+player.getX()+","+player.getY()+")");
         }        
         player.setDirection(Entity.LEFT);
     }
     public void right(){
         if(((withinPanelX(player)!=Hitbox.RIGHT)&&
                 canPlayerMoveRight())){
-        //System.out.print("Moved from: ("+player.getX()+","+player.getY()+") ");
-        //Player.setX(player.getX()+player.getTravelX());
             player.moveRight();
-        //System.out.println("to: ("+player.getX()+","+player.getY()+")");
         } 
         player.setDirection(Entity.RIGHT);
     }
@@ -631,18 +643,94 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             entities.add(temp);
             }        
         
-    }          
+    }        
+    **/
 
     @Override
     public void actionPerformed(ActionEvent e) {
+       actions();
+    }
+    
+    public void actions(){
+        if(player!=null){
+            if(frameCount%FPS==0){
+                player.detectForDamage(entities);
+                NonPlayerCharacter.checkFireProjectile(entities, player);
+            }   
+            if(frameCount%(10*FPS)==0){
+                player.regenOverTime(1);
+            }
+            if(keyPressed[UP]){
+                player.up(entities);
+            }
+            if(keyPressed[DOWN]){
+                player.down(entities);
+            }
+            if(keyPressed[LEFT]){
+                player.left(entities);
+            }
+            if(keyPressed[RIGHT]){
+                player.right(entities);
+            }
+            if(keyPressed[ATTACK]){
+                player.attack(entities, dialogPanel);
+                keyPressed[ATTACK] = false;
+            }
+            if(keyPressed[SHOOT]){
+                player.shoot();
+                keyPressed[SHOOT] = false;
+            }
+            if(keyPressed[DEFEND]){
+                player.defend();      
+            }
+            if(keyPressed[HEAL]){
+                player.heal();
+                keyPressed[HEAL]=false;
+            }
+            if(keyPressed[SELECTFOR]){
+                
+            }
+            if(keyPressed[SELECTBACK]){
+                //increments inventory; does nothing in actionPerformed method
+            }
+            if(keyPressed[USE]){
+                keyPressed[USE] = false;  
+                player.useKey(dialogPanel);
+            }
+            if(keyPressed[DROP]){
+                keyPressed[DROP] = false;
+                player.dropKey(entities, dialogPanel);
+            }  
+            
+            player.checkForInventory(inventoryItems, dialogPanel, entities);
+            
+
+            NonPlayerCharacter.checkProjectileInflictDamage(player, entities);
+            NonPlayerCharacter.checkMove(entities, player);
+            NonPlayerCharacter.checkProjectileWithinPanel(entities);     
+
+            MapGate.checkForMapGateOperation(entities, player, dialogPanel, this);
+            player.checkHasBeenFired();
+            Portal.checkPortals(entities, player);
+            TalkableGate.checkTalkableGates(entities, player, dialogPanel); 
+            player.checkForItems(entities, dialogPanel);
+            player.projectileWithinPanel();
+            player.projectileInflictDamage(entities, dialogPanel);
+            player.getInventory().sortInventory();    
+            repaint();
+            frameCount++;
+        }
+    }
+    
+    /**
+    public void actions(){
         if(player!=null){
             if(frameCount%FPS==0){
                 detectForDamage();
-                //System.out.println("player HP:"+player.getHitpoints());
                 npcFireProjectile();
             }   
             if(frameCount%(10*FPS)==0){
-                regenOverTime();
+                regenOverTime(1);
             }
             if(keyPressed[UP]){
                 up();
@@ -683,9 +771,9 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
                     for(int i=0;i<player.inventory.items.size();i++){
                         if(Inventory.inventorySelectorIndex==i){
                             use(i);
+                        }
                     }
-                }
-            }
+                }   
             }
             if(keyPressed[DROP]){
                 keyPressed[DROP] = false;
@@ -714,6 +802,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
             frameCount++;
         }
     }
+    **/
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -815,3 +904,5 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public void keyTyped(KeyEvent e) {}
     
 }
+
+

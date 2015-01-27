@@ -6,11 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import nelsontsui.nelsonsgame.game.Character;
-import nelsontsui.nelsonsgame.game.Entity;
+import nelsontsui.nelsonsgame.game.entities.Character;
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import nelsontsui.nelsonsgame.game.FileSelector;
-import nelsontsui.nelsonsgame.game.Level;
-import nelsontsui.nelsonsgame.game.Player;
+import nelsontsui.nelsonsgame.game.mapping.Level;
+import nelsontsui.nelsonsgame.game.entities.Player;
 
 public class WriteFile {
     private String formalFileName;

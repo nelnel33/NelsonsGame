@@ -1,4 +1,4 @@
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.entities;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

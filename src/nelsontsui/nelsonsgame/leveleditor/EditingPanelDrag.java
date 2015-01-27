@@ -1,5 +1,6 @@
 package nelsontsui.nelsonsgame.leveleditor;
 
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import nelsontsui.nelsonsgame.game.*;
-import nelsontsui.nelsonsgame.game.Point;
+import nelsontsui.nelsonsgame.game.mapping.Point;
 
 public class EditingPanelDrag extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
     protected ArrayList<Point> ends = new ArrayList<>(); 
@@ -27,7 +28,7 @@ public class EditingPanelDrag extends JPanel implements MouseListener, MouseMoti
     protected DimensionDouble dragArea;//How large your drawRect will be;
     
     protected ArrayList<Entity> npcs = new ArrayList<>();
-    protected nelsontsui.nelsonsgame.game.Character player;
+    protected nelsontsui.nelsonsgame.game.entities.Character player;
     
     public static final int TOP_LEFT = 100;
     public static final int TOP_RIGHT = 200;

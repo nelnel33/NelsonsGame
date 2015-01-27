@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import nelsontsui.nelsonsgame.game.DimensionDouble;
 import nelsontsui.nelsonsgame.game.FileSelector;
-import nelsontsui.nelsonsgame.game.Point;
+import nelsontsui.nelsonsgame.game.mapping.Point;
 
 public class CustomOptionsPanel extends JDialog implements ActionListener{
     /*

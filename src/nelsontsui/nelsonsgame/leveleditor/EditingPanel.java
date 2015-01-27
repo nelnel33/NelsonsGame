@@ -6,6 +6,10 @@
 
 package nelsontsui.nelsonsgame.leveleditor;
 
+import nelsontsui.nelsonsgame.game.entities.TalkableGate;
+import nelsontsui.nelsonsgame.game.entities.OpaqueEntity;
+import nelsontsui.nelsonsgame.game.entities.Player;
+import nelsontsui.nelsonsgame.game.mapping.Level;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,15 +26,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import nelsontsui.nelsonsgame.game.*;
-import nelsontsui.nelsonsgame.game.DamagableEntity;
+import nelsontsui.nelsonsgame.game.entities.DamagableEntity;
 import nelsontsui.nelsonsgame.game.DimensionDouble;
-import nelsontsui.nelsonsgame.game.Entity;
-import nelsontsui.nelsonsgame.game.MapGate;
-import nelsontsui.nelsonsgame.game.NonPlayerCharacter;
-import nelsontsui.nelsonsgame.game.Point;
-import nelsontsui.nelsonsgame.game.Portal;
-import nelsontsui.nelsonsgame.game.Projectile;
-import nelsontsui.nelsonsgame.game.SpawnableItem;
+import nelsontsui.nelsonsgame.game.entities.Entity;
+import nelsontsui.nelsonsgame.game.entities.MapGate;
+import nelsontsui.nelsonsgame.game.entities.NonPlayerCharacter;
+import nelsontsui.nelsonsgame.game.mapping.Point;
+import nelsontsui.nelsonsgame.game.entities.Portal;
+import nelsontsui.nelsonsgame.game.entities.Projectile;
+import nelsontsui.nelsonsgame.game.entities.SpawnableItem;
 import nelsontsui.nelsonsgame.game.items.Armor;
 import nelsontsui.nelsonsgame.game.items.Ammo;
 import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
@@ -73,7 +77,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     protected final String defaultDetailedSelectorId = "Entity";
     
     //defaultOptions
-    protected final String defaultName="Default Name";
+    protected final String defaultName="Name";
     protected final int defaultHitpoints=20;
     protected final int defaultDamage=2;
     protected final int defaultDetectionRadius=200;
@@ -117,6 +121,9 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
     
     private static int increment = 0;
     
+    private boolean hasPlacedFirstPortal;
+    private Portal currPortal;
+    
     public EditingPanel(Point cursor, Point placement, DimensionDouble dimension){
         this.cursor = cursor;
         this.placement = placement;
@@ -143,6 +150,8 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         portalExit = defaultPortalExit;
         dimension = defaultDimension;
         currentFile = defaultCurrentFile;
+        hasPlacedFirstPortal = false;
+        currPortal = null;
     }
     public Point getEditCursor(){
         return cursor;
@@ -242,7 +251,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
             }
         }
         if(SwingUtilities.isRightMouseButton(e)){
-            if((npcsOnGrid[py][px] instanceof nelsontsui.nelsonsgame.game.Character)&&!(npcsOnGrid[py][px] instanceof NonPlayerCharacter)){
+            if((npcsOnGrid[py][px] instanceof nelsontsui.nelsonsgame.game.entities.Character)&&!(npcsOnGrid[py][px] instanceof NonPlayerCharacter)){
                 playerSet=false;
             }
             points[py][px] = null;
@@ -344,16 +353,24 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
             }
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("MainPortalDefault")){
-            npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.DEFAULT,true);
+            Portal curr = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.DEFAULT,true);
+            npcsOnGrid[r][c] = curr;
+            togglePortalPlacement(curr);
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("SubPortalDefault")){
-            npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.DEFAULT,false);
+            Portal curr = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.DEFAULT,false);
+            npcsOnGrid[r][c] = curr;
+            togglePortalPlacement(curr);
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("MainPortalKillAll")){
-            npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.KILL_ALL_NONBOSS,true);
+            Portal curr = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.KILL_ALL_NONBOSS,true);
+            npcsOnGrid[r][c] = curr;
+            togglePortalPlacement(curr);
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("SubPortalKillAll")){
-            npcsOnGrid[r][c] = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.KILL_ALL_NONBOSS,false);
+            Portal curr = new Portal(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),new Entity(portalExit.getX(),portalExit.getY(),dimension.getWidth(),dimension.getHeight()),Portal.KILL_ALL_NONBOSS,false);
+            npcsOnGrid[r][c] = curr;
+            togglePortalPlacement(curr);
         }
         //DetailSelectors - NPCS
         else if(currentDetailedSelectorId.equalsIgnoreCase("Warrior")){
@@ -414,6 +431,18 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         else{
             npcsOnGrid[r][c] = new Entity(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight());
         }        
+    }
+    public void togglePortalPlacement(Portal curr){
+        if(hasPlacedFirstPortal){
+            hasPlacedFirstPortal = false;
+            currPortal.setSubportal(curr);
+            curr.setSubportal(currPortal);
+            currPortal = null;            
+        }
+        else{
+            hasPlacedFirstPortal = true;
+            currPortal = curr;
+        }
     }
     public void checkForId(){
         //protected EntityTile[] detailedSelectors;
@@ -509,8 +538,9 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
                 Entity e = npcsOnGrid[z][k];
                 if(e==null){}
                 else{
-                    colorEntities(e,graphic);
-                    graphic.fill(new Rectangle2D.Double(e.getX(),e.getY(),e.getWidth(),e.getHeight()));
+                    e.render(graphic);
+                    //colorEntities(e,graphic);
+                    //graphic.fill(new Rectangle2D.Double(e.getX(),e.getY(),e.getWidth(),e.getHeight()));
                     //System.out.println("painted"+e+"@"+e.getX()+","+e.getY());
                 }
             }
@@ -554,7 +584,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
                 graphic.setColor(new Color(0,0,0));//black
             }                    
         }
-        else if(temp instanceof nelsontsui.nelsonsgame.game.Character){
+        else if(temp instanceof nelsontsui.nelsonsgame.game.entities.Character){
             graphic.setColor(new Color(63,131,104));//Cyanish Green     
         }
         else if(temp instanceof DamagableEntity){

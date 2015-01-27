@@ -1,5 +1,8 @@
 package nelsontsui.nelsonsgame.game;
 
+import nelsontsui.nelsonsgame.game.entities.Player;
+import nelsontsui.nelsonsgame.game.mapping.Level;
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;

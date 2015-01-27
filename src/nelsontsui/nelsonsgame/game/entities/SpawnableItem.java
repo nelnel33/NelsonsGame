@@ -1,5 +1,6 @@
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.entities;
 
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;

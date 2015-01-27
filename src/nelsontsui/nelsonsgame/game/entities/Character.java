@@ -1,5 +1,6 @@
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.entities;
 
+import nelsontsui.nelsonsgame.game.mapping.Hitbox;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -8,6 +9,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import nelsontsui.nelsonsgame.game.ActionPanel;
+import nelsontsui.nelsonsgame.game.DialogBox;
+import nelsontsui.nelsonsgame.game.GameDisplay;
 import static nelsontsui.nelsonsgame.game.ActionPanel.hitpointsBarHeight;
 import static nelsontsui.nelsonsgame.game.ActionPanel.hitpointsBarOffset;
 import nelsontsui.nelsonsgame.game.items.Armor;
@@ -218,6 +222,202 @@ public class Character extends DamagableEntity implements Externalizable{
             weapon.setEquipped(false);
         }
     }
+    
+    
+    public boolean canMoveUp(ArrayList<Entity> entities){        
+        for(int i=0;i<entities.size();i++){
+            if(this.equals(entities.get(i))){}
+            else{
+                if(entities.get(i) instanceof OpaqueEntity &&
+                        this.getHitbox().isTouching(entities.get(i).getHitbox()) &&
+                        this.getHitbox().isStrictlyBelow(entities.get(i).getHitbox())){
+                    return false;                     
+                }
+            }
+        }
+        return true;
+    }
+    public boolean canMoveDown(ArrayList<Entity> entities){
+        for(int i=0;i<entities.size();i++){
+            if(this.equals(entities.get(i))){}
+            else{
+                if(entities.get(i) instanceof OpaqueEntity &&
+                        this.getHitbox().isTouching(entities.get(i).getHitbox()) &&
+                        this.getHitbox().isStrictlyAbove(entities.get(i).getHitbox())){
+                    return false;                     
+                }
+            }
+        }
+        return true;
+    }
+    public boolean canMoveLeft(ArrayList<Entity> entities){              
+        for(int i=0;i<entities.size();i++){
+            if(this.equals(entities.get(i))){}
+            else{
+                if(entities.get(i) instanceof OpaqueEntity &&
+                        this.getHitbox().isTouching(entities.get(i).getHitbox()) &&
+                        this.getHitbox().isStrictlyRight(entities.get(i).getHitbox())){
+                    return false;                     
+                }
+            }
+        }
+        return true;
+    }
+    public boolean canMoveRight(ArrayList<Entity> entities){
+        for(int i=0;i<entities.size();i++){
+            if(this.equals(entities.get(i))){}
+            else{
+                if(entities.get(i) instanceof OpaqueEntity &&
+                        this.getHitbox().isTouching(entities.get(i).getHitbox()) &&
+                        this.getHitbox().isStrictlyLeft(entities.get(i).getHitbox())){
+                    return false;                     
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean withinPanel(){
+        if(this.getHitbox().close.y<=0||this.getHitbox().close.x<=0){
+            return false;
+        }
+        else if(this.getHitbox().far.y>=GameDisplay.ACTIONPANEL_HEIGHT||
+                this.getHitbox().far.x>=GameDisplay.ACTIONPANEL_WIDTH){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    public int withinPanelY(){
+        if(this.getHitbox().close.y<=0){
+            return Hitbox.ABOVE;
+        }
+        else if(this.getHitbox().far.y>=GameDisplay.ACTIONPANEL_HEIGHT){
+            return Hitbox.BELOW;
+        }
+        else{
+        return Hitbox.UNDETERMINED;
+        }
+    }
+    public int withinPanelX(){
+        if(this.getHitbox().close.x<=0){
+            return Hitbox.LEFT;
+        }
+        else if(this.getHitbox().far.x>=GameDisplay.ACTIONPANEL_WIDTH){
+            return Hitbox.RIGHT;
+        }
+        else{
+            return Hitbox.UNDETERMINED;
+        }
+    }
+    
+    public static boolean withinPanel(Entity e){
+        if(e.getHitbox().close.y<=0||e.getHitbox().close.x<=0){
+            return false;
+        }
+        else if(e.getHitbox().far.y>=GameDisplay.ACTIONPANEL_HEIGHT||
+                e.getHitbox().far.x>=GameDisplay.ACTIONPANEL_WIDTH){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    public static int withinPanelY(Entity e){
+        if(e.getHitbox().close.y<=0){
+            return Hitbox.ABOVE;
+        }
+        else if(e.getHitbox().far.y>=GameDisplay.ACTIONPANEL_HEIGHT){
+            return Hitbox.BELOW;
+        }
+        else{
+        return Hitbox.UNDETERMINED;
+        }
+    }
+    
+    public static int withinPanelX(Entity e){
+        if(e.getHitbox().close.x<=0){
+            return Hitbox.LEFT;
+        }
+        else if(e.getHitbox().far.x>=GameDisplay.ACTIONPANEL_WIDTH){
+            return Hitbox.RIGHT;
+        }
+        else{
+            return Hitbox.UNDETERMINED;
+        }
+    }
+    
+    public void projectileInflictDamage(ArrayList<Entity> entities, DialogBox dialogPanel){
+        if(!(this.getProjectile().isEmpty() || entities.isEmpty())){
+            for(int i=0;i<entities.size();i++){
+                for(int j=this.getProjectile().size()-1;j>=0;j--){
+                    if(this.getProjectile().get(j).getHitbox().isTouching(entities.get(i).getHitbox())
+                            &&entities.get(i) instanceof OpaqueEntity){
+                        this.removeProjectile();
+                        j--;
+                        if(entities.get(i) instanceof DamagableEntity){
+                            this.shoot((DamagableEntity)entities.get(i));
+                            System.out.println("npc"+i+" HP:"+((DamagableEntity)entities.get(i)).getHitpoints());
+                            if(((DamagableEntity)entities.get(i)).getHitpoints()<=0){
+                                if(entities.get(i) instanceof Character){
+                                    dialogPanel.message(((Character)entities.get(i)).getName()+" has been killed");
+                                }
+                                entities.remove(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    public void projectileWithinPanel(){
+        if(!this.getProjectile().isEmpty()){
+            if(withinPanel(this.getProjectile().get(0))){
+                //Player.getProjectile().get(0).fire();
+            }
+            else{
+                this.removeProjectile();
+            }
+        }
+    }
+    
+    public void detectForDamage(ArrayList<Entity> entities){
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof NonPlayerCharacter){
+                if(this.getHitbox().isTouching(entities.get(i).getHitbox())){
+                    if(((NonPlayerCharacter)entities.get(i)).getCharacterClass()!=NonPlayerCharacter.ARCHER){
+                        ((NonPlayerCharacter)entities.get(i)).attack(this);
+                    }                    
+                }                
+            }
+        }
+    }
+    
+    public void inflictDamage(ArrayList<Entity> entities, DialogBox dialogPanel){
+        for(int i=0;i<entities.size();i++){
+            if(this.getHitbox().isTouching(entities.get(i).getHitbox())){
+                if(entities.get(i) instanceof DamagableEntity){
+                    if(this.attack((DamagableEntity)entities.get(i)) && this.getHasWeapon()){
+                        dialogPanel.message("You cannot attack a Damagable Entity with a "+
+                            this.weapon.getName()+" equipped");
+                    }
+                    System.out.println("NPC"+i+" HP: "+((DamagableEntity)entities.get(i)).getHitpoints());
+                    if(((DamagableEntity)entities.get(i)).getHitpoints()<=0){
+                        if(entities.get(i) instanceof NonPlayerCharacter){
+                            dialogPanel.message(((NonPlayerCharacter)entities.get(i)).getName()+" has been killed");
+                        }
+                        entities.remove(i);
+                    }
+                }
+            }                
+        }
+    }
+    
+    
     
     public void moveUp(){
         this.y-=travelY;

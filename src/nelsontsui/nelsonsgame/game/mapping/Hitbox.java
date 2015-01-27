@@ -1,17 +1,19 @@
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.mapping;
+
+import nelsontsui.nelsonsgame.game.mapping.Point;
 
 
 public class Hitbox{
-    protected Point close;//top left corner; closer to origin.
-    protected Point far;//bottom right corner; farther from origin
+    public Point close;//top left corner; closer to origin.
+    public Point far;//bottom right corner; farther from origin
     
     public static final int RANGE = 3;//buffer for collision detection.
     
-    protected static final int ABOVE=1;
-    protected static final int BELOW=2;
-    protected static final int LEFT=3;
-    protected static final int RIGHT=4;
-    protected static final int UNDETERMINED=0;
+    public static final int ABOVE=1;
+    public static final int BELOW=2;
+    public static final int LEFT=3;
+    public static final int RIGHT=4;
+    public static final int UNDETERMINED=0;
     public Hitbox(Point close, Point far){
         this.close = close;
         this.far = far;
@@ -95,6 +97,10 @@ public class Hitbox{
         else{
             return true;
         }
+    }
+    
+    public boolean equals(Hitbox h){
+        return close.equals(h.close) && far.equals(h.far);
     }
     
     @Override

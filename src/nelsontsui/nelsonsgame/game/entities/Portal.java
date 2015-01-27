@@ -1,5 +1,6 @@
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.entities;
 
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import nelsontsui.nelsonsgame.game.GameDisplay;
 
 public class Portal extends Entity implements Externalizable{
     
@@ -79,16 +81,37 @@ public class Portal extends Entity implements Externalizable{
     public void setIsMain(boolean isMain){
         this.isMain = isMain;
     }
+    
+    public static void checkPortals(ArrayList<Entity> entities, Player player){
+        if(!entities.isEmpty()){
+            for(int i=0;i<entities.size();i++){
+                if(entities.get(i) instanceof Portal){
+                    for(int j=0;j<entities.size();j++){
+                        if(i==j){}
+                        else{
+                            ((Portal)entities.get(i)).determineCanPlayerUse(entities);
+                            ((Portal)entities.get(i)).teleport(player);
+                            if(((Portal)entities.get(i)).canNpcUse()){
+                                System.out.println(((Portal)entities.get(i)).canNpcUse());
+                                ((Portal)entities.get(i)).teleport(entities.get(j));
+                            }
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+    
     public void determineCanPlayerUse(ArrayList<Entity> e){
         if(condition==DEFAULT){
             canPlayerUse = true;
         }
         else if(condition == KILL_ALL_NONBOSS){
-            checkNpcs(e);
+            checkEntities(e);
         }
         
     }
-    private void checkNpcs(ArrayList<Entity> e){
+    private void checkEntities(ArrayList<Entity> e){
         int npcCount = 0;
         for(int i=0;i<e.size();i++){
             if(e.get(i) instanceof NonPlayerCharacter){
@@ -107,23 +130,26 @@ public class Portal extends Entity implements Externalizable{
         
     }
     private void setCoords(Entity e, Entity p){
-                if(e.getHitbox().isTouching(this.getHitbox())){
-                    if(p.getX()<GameDisplay.ACTIONPANEL_WIDTH/2){
-                        e.setX(p.getX()+p.getWidth()+offsetDistance);
-                        e.setY(p.getY());
-                    }
-                    else{
-                        e.setX(p.getX()-offsetDistance);
-                        e.setY(p.getY());
-                    }
-                }
+        if(e.getHitbox().isTouching(this.getHitbox())){
+            if(p.getX()<GameDisplay.ACTIONPANEL_WIDTH/2){
+                e.setX(p.getX()+p.getWidth()+offsetDistance);
+                e.setY(p.getY());
             }
+            else{
+                e.setX(p.getX()-offsetDistance-e.getWidth());
+                e.setY(p.getY());
+            }
+            
+            System.out.println(this.toString());
+        }
+    }
 
     public void teleport(Entity e){
         if(canPlayerUse){
             setCoords(e,subportal);
         } 
     }
+    
     public String conditionAsString(int c){
         if(c==DEFAULT){
             return "Default";
@@ -148,7 +174,7 @@ public class Portal extends Entity implements Externalizable{
     
     @Override
     public String toString(){
-        return "UseCondition: "+conditionAsString(condition)+"; Subportal: "+subportal.toString()+"; "+super.toString();
+        return super.toString()+" UseCondition: "+conditionAsString(condition)+"; Subportal: ("+subportal.x+", "+subportal.y+");";
     }
     
     @Override

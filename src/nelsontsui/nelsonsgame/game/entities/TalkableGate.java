@@ -1,5 +1,7 @@
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.entities;
 
+import nelsontsui.nelsonsgame.game.entities.Player;
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -7,6 +9,8 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import nelsontsui.nelsonsgame.game.DialogBox;
 
 
 public class TalkableGate extends Entity implements Externalizable{
@@ -50,6 +54,19 @@ public class TalkableGate extends Entity implements Externalizable{
         }
     }
     
+    public static void checkTalkableGates(ArrayList<Entity> entities, Player player, DialogBox dialogPanel){
+        if(!entities.isEmpty()){
+            for(int i=0;i<entities.size();i++){
+                if(entities.get(i) instanceof TalkableGate){
+                    TalkableGate t = (TalkableGate)entities.get(i);          
+                    if(t.canOperate(player)){
+                        dialogPanel.message(t.getSpeech());                                                          
+                    }
+                }
+            }
+        }
+    }
+    
     @Override
     public String className(){
         return CLASSNAME;
@@ -80,7 +97,9 @@ public class TalkableGate extends Entity implements Externalizable{
     
     @Override
     public void render(Graphics2D graphic){
+        int il = 3;
         graphic.setColor(Color.DARK_GRAY);
-        graphic.draw(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
+        //graphic.draw(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
+        graphic.draw(new Rectangle2D.Double(this.getX()+il,this.getY()+il,this.getWidth()-(2*il),this.getHeight()-(2*il)));
     }
 }

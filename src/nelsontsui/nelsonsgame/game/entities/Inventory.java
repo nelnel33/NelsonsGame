@@ -1,5 +1,6 @@
-package nelsontsui.nelsonsgame.game;
+package nelsontsui.nelsonsgame.game.entities;
 
+import nelsontsui.nelsonsgame.game.entities.Character;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;

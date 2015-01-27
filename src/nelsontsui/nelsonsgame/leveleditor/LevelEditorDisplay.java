@@ -1,5 +1,15 @@
 package nelsontsui.nelsonsgame.leveleditor;
 
+import nelsontsui.nelsonsgame.game.entities.SpawnableItem;
+import nelsontsui.nelsonsgame.game.entities.TalkableGate;
+import nelsontsui.nelsonsgame.game.entities.Portal;
+import nelsontsui.nelsonsgame.game.entities.OpaqueEntity;
+import nelsontsui.nelsonsgame.game.entities.NonPlayerCharacter;
+import nelsontsui.nelsonsgame.game.entities.Player;
+import nelsontsui.nelsonsgame.game.entities.MapGate;
+import nelsontsui.nelsonsgame.game.mapping.Level;
+import nelsontsui.nelsonsgame.game.entities.DamagableEntity;
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -21,8 +31,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import nelsontsui.nelsonsgame.game.*;
-import nelsontsui.nelsonsgame.game.Point;
-import nelsontsui.nelsonsgame.game.Character;
+import nelsontsui.nelsonsgame.game.mapping.Point;
+import nelsontsui.nelsonsgame.game.entities.Character;
 
 public class LevelEditorDisplay extends JDialog implements ActionListener, MouseListener{   
     //static decs

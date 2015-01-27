@@ -1,5 +1,6 @@
 package nelsontsui.nelsonsgame.game;
 
+import nelsontsui.nelsonsgame.game.entities.Character;
 import javax.swing.Timer;
 
 public class WinLose{

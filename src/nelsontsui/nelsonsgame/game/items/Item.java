@@ -3,7 +3,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import nelsontsui.nelsonsgame.game.Character;
+import nelsontsui.nelsonsgame.game.entities.Character;
 import nelsontsui.nelsonsgame.leveleditor.StringWrapper;
 
 public class Item implements Externalizable{

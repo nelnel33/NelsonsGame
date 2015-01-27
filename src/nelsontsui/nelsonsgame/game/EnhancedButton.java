@@ -1,5 +1,6 @@
 package nelsontsui.nelsonsgame.game;
 
+import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -27,16 +28,16 @@ public class EnhancedButton extends JButton implements MouseListener, ActionList
     public void actionPerformed(ActionEvent e) {
         if(pressed){
             if(operation == Entity.UP){
-                activePanel.up();
+                activePanel.getPlayer().up(activePanel.getEntities());
             }
             else if(operation == Entity.DOWN){
-                activePanel.down();
+                activePanel.getPlayer().down(activePanel.getEntities());
             }
             else if(operation == Entity.LEFT){
-                activePanel.left();
+                activePanel.getPlayer().left(activePanel.getEntities());
             }
             else if(operation == Entity.RIGHT){
-                activePanel.right();
+                activePanel.getPlayer().right(activePanel.getEntities());
             }
             else{
                 System.out.println("INVALID OPERATION!");
