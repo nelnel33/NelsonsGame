@@ -1,14 +1,16 @@
 Things to Implement — To Do List
 	1.	Make MapGates that have a level/file path contain the level/file that it is connecting to rather than just having the path. Basically, save the level that is being contained directly into the main level
 	-	Or have connecting MapGates be in the directory as the one that links to it, in order for it to connect.
-	2.	Implement images/graphics directly into all entities
-	⁃	There will be a default icon implemented by me
-	⁃	But there will also be an option in the level editor to change the icon
-	3.	Rework collision detection
+	2.	Rework collision detection
 	⁃	Hitbox Class	
 	⁃	Make some sort of buffer range so objects can jump over a detection line.
 	⁃	ActionPanel Class
 	⁃	Works fine when touching the wall and moving up and down. But you get stuck when touching the wall and moving left and right.
+		
+		==COMPLETED==
+	3.	Implement images/graphics directly into all entities
+	⁃	There will be a default icon implemented by me
+	⁃	But there will also be an option in the level editor to change the icon
 	4.	Move character methods and logic into their own classes. i.e) npcMove and canNpcMove into NonPlayerCharacter Class or canMoveUp into Character Class
 	5.	Rework access modifiers. 
 	⁃	STOP USING protected
