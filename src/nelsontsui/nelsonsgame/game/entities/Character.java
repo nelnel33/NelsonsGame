@@ -385,18 +385,6 @@ public class Character extends DamagableEntity implements Externalizable{
         }
     }
     
-    public void detectForDamage(ArrayList<Entity> entities){
-        for(int i=0;i<entities.size();i++){
-            if(entities.get(i) instanceof NonPlayerCharacter){
-                if(this.getHitbox().isTouching(entities.get(i).getHitbox())){
-                    if(((NonPlayerCharacter)entities.get(i)).getCharacterClass()!=NonPlayerCharacter.ARCHER){
-                        ((NonPlayerCharacter)entities.get(i)).attack(this);
-                    }                    
-                }                
-            }
-        }
-    }
-    
     public void inflictDamage(ArrayList<Entity> entities, DialogBox dialogPanel){
         for(int i=0;i<entities.size();i++){
             if(this.getHitbox().isTouching(entities.get(i).getHitbox())){

@@ -237,6 +237,18 @@ public class NonPlayerCharacter extends Character implements Externalizable {
         }
     }
     
+    public static void detectForDamage(ArrayList<Entity> entities, Player player){
+        for(int i=0;i<entities.size();i++){
+            if(entities.get(i) instanceof NonPlayerCharacter){
+                if(player.getHitbox().isTouching(entities.get(i).getHitbox())){
+                    if(((NonPlayerCharacter)entities.get(i)).getCharacterClass()!=NonPlayerCharacter.ARCHER){
+                        ((NonPlayerCharacter)entities.get(i)).attack(player);
+                    }                    
+                }                
+            }
+        }
+    }
+    
     
     public String className(){
         return CLASSNAME;

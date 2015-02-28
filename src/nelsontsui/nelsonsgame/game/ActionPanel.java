@@ -654,7 +654,7 @@ public class ActionPanel extends JPanel implements ActionListener, KeyListener{
     public void actions(){
         if(player!=null){
             if(frameCount%FPS==0){
-                player.detectForDamage(entities);
+                NonPlayerCharacter.detectForDamage(entities, player);
                 NonPlayerCharacter.checkFireProjectile(entities, player);
             }   
             if(frameCount%(10*FPS)==0){
