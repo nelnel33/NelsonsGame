@@ -1,6 +1,6 @@
 package nelsontsui.nelsonsgame.game.entities;
 
-import nelsontsui.nelsonsgame.game.entities.Inventory;
+import nelsontsui.nelsonsgame.game.entities.helper.Inventory;
 import nelsontsui.nelsonsgame.game.mapping.Hitbox;
 import nelsontsui.nelsonsgame.game.entities.Entity;
 import nelsontsui.nelsonsgame.game.entities.Character;
@@ -29,6 +29,9 @@ import nelsontsui.nelsonsgame.game.items.Weapon;
  * @author Nelnel33
  */
 public class Player extends Character implements Externalizable{
+    public static final String CLASSNAME = "Player";
+    public static final String DESCRIPTION = "A solid entity that has health and damage;Recommended Use: Player";
+    public static final String FILENAME = "player";
 
     public Player() {
         super();
@@ -56,7 +59,7 @@ public class Player extends Character implements Externalizable{
                     this.inventory.pickUpItem(((SpawnableItem)entities.get(i)).getItems());
                     dialogPanel.message(this.getName()+" picked up: "+((SpawnableItem)entities.get(i)).getItems().getQuantity()+" "+((SpawnableItem)entities.get(i)).getItems().getName());
                     entities.remove(i);
-                    for(int j=0;j<this.inventory.items.size();j++){
+                    for(int j=0;j<this.inventory.getItems().size();j++){
                     }
                 }
             }
@@ -64,8 +67,8 @@ public class Player extends Character implements Externalizable{
     }
     
     public void checkForInventory(InventoryIcon[] inventoryItems, DialogBox dialogPanel, ArrayList<Entity> entities){
-        if((!this.inventory.items.isEmpty())){
-            for(int i=0;i<this.inventory.items.size();i++){
+        if((!this.inventory.getItems().isEmpty())){
+            for(int i=0;i<this.inventory.getItems().size();i++){
                 if(inventoryItems.length==0){break;}
                 else if(inventoryItems[i].isButton1()){
                     use(i, dialogPanel);
@@ -127,20 +130,20 @@ public class Player extends Character implements Externalizable{
         boolean isCompatible = false;
         int index=100;//Arbitrary number just to check.
         
-        for(int i=0;i<this.inventory.items.size();i++){
+        for(int i=0;i<this.inventory.getItems().size();i++){
             if(this.getHasWeapon()){
-                if(this.inventory.items.get(i) instanceof ProjectileWeapon){
-                    if(this.weapon.equals(this.inventory.items.get(i))){
+                if(this.inventory.getItems().get(i) instanceof ProjectileWeapon){
+                    if(this.weapon.equals(this.inventory.getItems().get(i))){
                         hasBow = true;
                     }
                 }
-                if(this.inventory.items.get(i) instanceof Ammo){
+                if(this.inventory.getItems().get(i) instanceof Ammo){
                     hasArrow = true;
                     index = i;                
                     if(hasArrow
                             &&(this.weapon instanceof ProjectileWeapon)
-                            &&(this.inventory.items.get(i) instanceof Ammo)){
-                        isCompatible = ((ProjectileWeapon)this.weapon).isCompatible((Ammo)this.inventory.items.get(i));
+                            &&(this.inventory.getItems().get(i) instanceof Ammo)){
+                        isCompatible = ((ProjectileWeapon)this.weapon).isCompatible((Ammo)this.inventory.getItems().get(i));
                     }
                 }
                 if(hasBow&&hasArrow){
@@ -164,44 +167,44 @@ public class Player extends Character implements Externalizable{
         
     }
     public void heal(){
-        for(int i=0;i<this.inventory.items.size();i++){
-            if(this.inventory.items.get(i) instanceof HealthPotion){
+        for(int i=0;i<this.inventory.getItems().size();i++){
+            if(this.inventory.getItems().get(i) instanceof HealthPotion){
                 this.inventory.useItem(i,this);
             }
         }        
     }
     public void use(int i, DialogBox dialogPanel){
-        if(this.inventory.items.get(i) instanceof UnusableItem){
-            if(this.inventory.items.get(i) instanceof Weapon){
-                if(this.getHasWeapon()&&(this.weapon.equals((Weapon)this.inventory.items.get(i)))){
+        if(this.inventory.getItems().get(i) instanceof UnusableItem){
+            if(this.inventory.getItems().get(i) instanceof Weapon){
+                if(this.getHasWeapon()&&(this.weapon.equals((Weapon)this.inventory.getItems().get(i)))){
                    dialogPanel.message(this.getName()+" unequip: "+this.weapon.getName());
-                   this.unequipWeapon((Weapon)this.inventory.items.get(i));                   
+                   this.unequipWeapon((Weapon)this.inventory.getItems().get(i));                   
                 }
                 else{
-                   this.equipWeapon((Weapon)this.inventory.items.get(i));  
+                   this.equipWeapon((Weapon)this.inventory.getItems().get(i));  
                    dialogPanel.message(this.getName()+" equip: "+this.weapon.getName());
                 }
             }
-            if(this.inventory.items.get(i) instanceof Armor){
-                if(this.getHasArmor()&&(this.armor.equals((Armor)this.inventory.items.get(i)))){
+            if(this.inventory.getItems().get(i) instanceof Armor){
+                if(this.getHasArmor()&&(this.armor.equals((Armor)this.inventory.getItems().get(i)))){
                    dialogPanel.message(this.getName()+" unequip: "+this.armor.getName());
-                   this.unequipArmor((Armor)this.inventory.items.get(i));                    
+                   this.unequipArmor((Armor)this.inventory.getItems().get(i));                    
                 }
                 else{
-                   this.equipArmor((Armor)this.inventory.items.get(i));
+                   this.equipArmor((Armor)this.inventory.getItems().get(i));
                    dialogPanel.message(this.getName()+" equip: "+this.armor.getName());
                 }
             }
         } 
         else {
-            dialogPanel.message(this.getName()+" use: "+this.inventory.items.get(i).getName());
+            dialogPanel.message(this.getName()+" use: "+this.inventory.getItems().get(i).getName());
             this.inventory.useItem(i,this);
         }
     }
     
     public void useKey(DialogBox dialogPanel){
-        if(!this.inventory.items.isEmpty()){
-            for(int i=0;i<this.inventory.items.size();i++){
+        if(!this.inventory.getItems().isEmpty()){
+            for(int i=0;i<this.inventory.getItems().size();i++){
                 if(Inventory.inventorySelectorIndex==i){
                     this.use(i, dialogPanel);
                 }
@@ -210,22 +213,22 @@ public class Player extends Character implements Externalizable{
     }
     
     public void drop(int i, DialogBox dialogPanel, ArrayList<Entity> entities){
-        if(this.inventory.items.get(i) instanceof UnusableItem){
-            if(this.inventory.items.get(i) instanceof Weapon){
-                if(this.getHasWeapon()&&(this.weapon.equals((Weapon)this.inventory.items.get(i)))){
+        if(this.inventory.getItems().get(i) instanceof UnusableItem){
+            if(this.inventory.getItems().get(i) instanceof Weapon){
+                if(this.getHasWeapon()&&(this.weapon.equals((Weapon)this.inventory.getItems().get(i)))){
                    dialogPanel.message(this.getName()+" unequip: "+this.weapon.getName());
-                   this.unequipWeapon((Weapon)this.inventory.items.get(i));
+                   this.unequipWeapon((Weapon)this.inventory.getItems().get(i));
                 }
             }
-            else if(this.inventory.items.get(i) instanceof Armor){
-                if(this.getHasArmor()&&(this.armor.equals((Armor)this.inventory.items.get(i)))){
+            else if(this.inventory.getItems().get(i) instanceof Armor){
+                if(this.getHasArmor()&&(this.armor.equals((Armor)this.inventory.getItems().get(i)))){
                    dialogPanel.message(this.getName()+" unequip: "+this.armor.getName());
-                   this.unequipArmor((Armor)this.inventory.items.get(i)); 
+                   this.unequipArmor((Armor)this.inventory.getItems().get(i)); 
                 }
             }
         }        
         
-        dialogPanel.message(this.getName()+" drop: "+this.inventory.items.get(i).getQuantity()+" "+this.inventory.items.get(i).getName());
+        dialogPanel.message(this.getName()+" drop: "+this.inventory.getItems().get(i).getQuantity()+" "+this.inventory.getItems().get(i).getName());
         
         if(this.getX()<GameDisplay.ACTIONPANEL_WIDTH/2){
             SpawnableItem temp = this.inventory.dropItem(i, this.getX()+this.DROP_DISTANCE_X, this.getY());  
@@ -238,8 +241,8 @@ public class Player extends Character implements Externalizable{
     }  
     
     public void dropKey(ArrayList<Entity> entities, DialogBox dialogPanel){
-        if(!this.inventory.items.isEmpty()){
-            for(int i=0;i<this.inventory.items.size();i++){
+        if(!this.inventory.getItems().isEmpty()){
+            for(int i=0;i<this.inventory.getItems().size();i++){
                 if(Inventory.inventorySelectorIndex==i){
                     this.drop(i, dialogPanel, entities);                   
                 }
@@ -248,27 +251,27 @@ public class Player extends Character implements Externalizable{
     }
     
     public void setInventoryIcons(JLabel[] inventoryLabels, ActionPanel activePanel, InventoryIcon[] inventoryItems){
-        if((this!=null)&&(!this.inventory.items.isEmpty())){
-            for(int i=0;i<this.inventory.items.size();i++){
-                if(this.inventory.items.get(i).getQuantity()>0){
-                    if(this.inventory.items.get(i) instanceof Armor){
-                        if(((Armor)this.inventory.items.get(i)).getEquipped()){
-                            inventoryLabels[i].setText("<html><b>"+this.inventory.items.get(i).getAbbreviation()+"<br>"+this.inventory.items.get(i).getQuantity()+"<b><html>");
+        if((this!=null)&&(!this.inventory.getItems().isEmpty())){
+            for(int i=0;i<this.inventory.getItems().size();i++){
+                if(this.inventory.getItems().get(i).getQuantity()>0){
+                    if(this.inventory.getItems().get(i) instanceof Armor){
+                        if(((Armor)this.inventory.getItems().get(i)).getEquipped()){
+                            inventoryLabels[i].setText("<html><b>"+this.inventory.getItems().get(i).getAbbreviation()+"<br>"+this.inventory.getItems().get(i).getQuantity()+"<b><html>");
                         }
                         else{
-                            inventoryLabels[i].setText("<html>"+this.inventory.items.get(i).getAbbreviation()+"<br>"+this.inventory.items.get(i).getQuantity()+"<html>");
+                            inventoryLabels[i].setText("<html>"+this.inventory.getItems().get(i).getAbbreviation()+"<br>"+this.inventory.getItems().get(i).getQuantity()+"<html>");
                         }
                     }
-                else if(this.inventory.items.get(i) instanceof Weapon){
-                    if(((Weapon)this.inventory.items.get(i)).getEquipped()){
-                        inventoryLabels[i].setText("<html><b>"+this.inventory.items.get(i).getAbbreviation()+"<br>"+this.inventory.items.get(i).getQuantity()+"<b><html>");
+                else if(this.inventory.getItems().get(i) instanceof Weapon){
+                    if(((Weapon)this.inventory.getItems().get(i)).getEquipped()){
+                        inventoryLabels[i].setText("<html><b>"+this.inventory.getItems().get(i).getAbbreviation()+"<br>"+this.inventory.getItems().get(i).getQuantity()+"<b><html>");
                     }
                     else{
-                        inventoryLabels[i].setText("<html>"+this.inventory.items.get(i).getAbbreviation()+"<br>"+this.inventory.items.get(i).getQuantity()+"<html>");
+                        inventoryLabels[i].setText("<html>"+this.inventory.getItems().get(i).getAbbreviation()+"<br>"+this.inventory.getItems().get(i).getQuantity()+"<html>");
                     }
                 }
                 else{
-                    inventoryLabels[i].setText("<html>"+this.inventory.items.get(i).getAbbreviation()+"<br>"+this.inventory.items.get(i).getQuantity()+"<html>");
+                    inventoryLabels[i].setText("<html>"+this.inventory.getItems().get(i).getAbbreviation()+"<br>"+this.inventory.getItems().get(i).getQuantity()+"<html>");
                     }
                 }
             }
@@ -278,15 +281,15 @@ public class Player extends Character implements Externalizable{
     
     public void inventoryRemoveIcons(JLabel[] inventoryLabels){
         if(this!=null){
-            int listSize = this.inventory.items.size();
+            int listSize = this.inventory.getItems().size();
             for(int i=listSize;i<Inventory.MAX_SIZE;i++){
                 inventoryLabels[i].setText(null);
             }
         }
     }
     public void inventorySetToolTipText(InventoryIcon[] inventoryItems){
-        for(int i=0;i<this.inventory.items.size();i++){
-            inventoryItems[i].setToolTipText(this.inventory.items.get(i).getName());
+        for(int i=0;i<this.inventory.getItems().size();i++){
+            inventoryItems[i].setToolTipText(this.inventory.getItems().get(i).getName());
         }
     }
     

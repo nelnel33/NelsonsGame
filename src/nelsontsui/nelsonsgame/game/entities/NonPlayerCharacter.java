@@ -15,8 +15,9 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 public class NonPlayerCharacter extends Character implements Externalizable {
     
-    public static final String CLASSNAME = "NonPlayerCharacter";
+    public static final String CLASSNAME = "Non-Player Character";
     public static final String DESCRIPTION = "A solid entity that is controlled by the computer;Recommended Use: Computer Controlled Character;";
+    public static final String FILENAME = "non_player_character";
     
     protected int detectionRadius;
     protected int characterClass;

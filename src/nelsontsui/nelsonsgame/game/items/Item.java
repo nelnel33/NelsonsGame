@@ -7,6 +7,10 @@ import nelsontsui.nelsonsgame.game.entities.Character;
 import nelsontsui.nelsonsgame.leveleditor.StringWrapper;
 
 public class Item implements Externalizable{
+    public static final String CLASSNAME = "Item";
+    public static final String DESCRIPTION = "Generic Item";
+    public static final String FILENAME = "item";
+    
     protected String name;
     protected int quantity;
     

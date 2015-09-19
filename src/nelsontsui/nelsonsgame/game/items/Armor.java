@@ -6,6 +6,10 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 public class Armor extends UnusableItem implements Externalizable{
+    public static final String CLASSNAME = "Armor";
+    public static final String DESCRIPTION = "Armor for a player";
+    public static final String FILENAME = "armor";
+    
     private int protection;
     private boolean equipped=false;
     

@@ -1,4 +1,4 @@
-package nelsontsui.nelsonsgame.leveleditor;
+package file;
 
 import java.io.File;
 import java.io.FileNotFoundException;

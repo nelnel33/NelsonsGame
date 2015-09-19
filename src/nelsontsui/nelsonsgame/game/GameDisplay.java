@@ -7,8 +7,8 @@ import nelsontsui.nelsonsgame.game.entities.NonPlayerCharacter;
 import nelsontsui.nelsonsgame.game.entities.Player;
 import nelsontsui.nelsonsgame.game.entities.MapGate;
 import nelsontsui.nelsonsgame.game.mapping.Level;
-import nelsontsui.nelsonsgame.game.entities.Inventory;
-import nelsontsui.nelsonsgame.game.entities.DamagableEntity;
+import nelsontsui.nelsonsgame.game.entities.helper.Inventory;
+import nelsontsui.nelsonsgame.game.entities.DamageableEntity;
 import nelsontsui.nelsonsgame.game.entities.Entity;
 import nelsontsui.nelsonsgame.game.items.HealthPotion;
 import nelsontsui.nelsonsgame.game.items.Weapon;
@@ -726,7 +726,7 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new NonPlayerCharacter(30,120,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
         e.add(new NonPlayerCharacter(50,120,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));        
         
-        e.add(new DamagableEntity(150,362,10,36,2));//breakable entity/door of room 1 to room 2
+        e.add(new DamageableEntity(150,362,10,36,2));//breakable entity/door of room 1 to room 2
         e.add(new NonPlayerCharacter(30,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
         e.add(new NonPlayerCharacter(50,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
         e.add(new NonPlayerCharacter(70,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
@@ -740,11 +740,11 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new SpawnableItem(30,300,new Ammo("Rocks",50)));
         e.add(new SpawnableItem(100,340,new HealthPotion("Donuts",5,5)));
         
-        e.add(new DamagableEntity(450,2,10,36,2));//breakable entity/door of room 2 to room 3
+        e.add(new DamageableEntity(450,2,10,36,2));//breakable entity/door of room 2 to room 3
         e.add(new OpaqueEntity(450,40,10,400));//right wall of room 2; left wall of room 3 and 4
         e.add(new OpaqueEntity(280,180,40,40));//safespot/obstacle middle
-        e.add(new DamagableEntity(280,60,40,40,30));//safespot/obstacle top
-        e.add(new DamagableEntity(280,300,40,40,30));//safespot/obstacle bottom
+        e.add(new DamageableEntity(280,60,40,40,30));//safespot/obstacle top
+        e.add(new DamageableEntity(280,300,40,40,30));//safespot/obstacle bottom
         
         e.add(new NonPlayerCharacter(240,60,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
         e.add(new NonPlayerCharacter(240,80,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));

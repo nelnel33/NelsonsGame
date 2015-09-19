@@ -8,7 +8,7 @@ import nelsontsui.nelsonsgame.game.entities.NonPlayerCharacter;
 import nelsontsui.nelsonsgame.game.entities.Player;
 import nelsontsui.nelsonsgame.game.entities.MapGate;
 import nelsontsui.nelsonsgame.game.mapping.Level;
-import nelsontsui.nelsonsgame.game.entities.DamagableEntity;
+import nelsontsui.nelsonsgame.game.entities.DamageableEntity;
 import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -334,8 +334,7 @@ public class LevelEditorDisplay extends JDialog implements ActionListener, Mouse
             detailedSelectors[ENTITY][1].setToolTipText(
                     StringWrapper.wrapOnSemiColonHTML(OpaqueEntity.DESCRIPTION));
         detailedSelectors[ENTITY][2] = new EntityTile("Damagable","DamagableEntity");
-            detailedSelectors[ENTITY][2].setToolTipText(
-                    StringWrapper.wrapOnSemiColonHTML(DamagableEntity.DESCRIPTION));
+            detailedSelectors[ENTITY][2].setToolTipText(StringWrapper.wrapOnSemiColonHTML(DamageableEntity.DESCRIPTION));
         detailedSelectors[ENTITY][3] = new EntityTile("Talk Gate","TalkableGate");
             detailedSelectors[ENTITY][3].setToolTipText(
                     StringWrapper.wrapOnSemiColonHTML(TalkableGate.DESCRIPTION));

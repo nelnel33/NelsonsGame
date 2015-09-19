@@ -8,6 +8,10 @@ import nelsontsui.nelsonsgame.game.entities.Character;
 
 public class StrengthPotion extends Potion implements Externalizable{
     
+    public static final String CLASSNAME = "Strength Potion";
+    public static final String DESCRIPTION = "A potion that boosts strength";
+    public static final String FILENAME = "strength_potion";
+    
     private static final long serialVersionUID = 33148L;
     
     public StrengthPotion(){

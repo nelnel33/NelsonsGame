@@ -7,6 +7,11 @@ import java.io.ObjectOutput;
 import nelsontsui.nelsonsgame.game.items.Item;
 
 public class Potion extends Item implements Externalizable{
+    
+    public static final String CLASSNAME = "Potion";
+    public static final String DESCRIPTION = "Generic Potion";
+    public static final String FILENAME = "potion";
+    
     private double strength;
     
     private static final long serialVersionUID = 33147L;

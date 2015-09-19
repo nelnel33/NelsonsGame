@@ -13,6 +13,10 @@ import java.io.ObjectOutput;
 
 public class Ammo extends UnusableItem implements Externalizable{
     
+    public static final String CLASSNAME = "Ammo";
+    public static final String DESCRIPTION = "Ammo for a Projectile Weapon";
+    public static final String FILENAME = "ammo";
+    
     private static final long serialVersionUID = 33146L;
     
     public Ammo(){

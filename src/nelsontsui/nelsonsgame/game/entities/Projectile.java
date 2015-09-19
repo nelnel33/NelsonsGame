@@ -10,11 +10,13 @@ import nelsontsui.nelsonsgame.game.entities.Entity;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import nelsontsui.nelsonsgame.game.entities.Entity;
 
 public class Projectile extends Entity{
     
     public static final String CLASSNAME = "Projectile";
     public static final String DESCRIPTION = "Object that travels across the screen";
+    public static final String FILENAME = "projectile";
     
     private double speed;
     private int direction;

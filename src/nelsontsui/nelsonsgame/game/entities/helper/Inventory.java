@@ -1,4 +1,4 @@
-package nelsontsui.nelsonsgame.game.entities;
+package nelsontsui.nelsonsgame.game.entities.helper;
 
 import nelsontsui.nelsonsgame.game.entities.Character;
 import java.io.Externalizable;
@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import nelsontsui.nelsonsgame.game.entities.Character;
+import nelsontsui.nelsonsgame.game.entities.SpawnableItem;
 import nelsontsui.nelsonsgame.game.items.Item;
 
 public class Inventory implements Externalizable{

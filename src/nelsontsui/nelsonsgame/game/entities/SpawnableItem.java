@@ -12,8 +12,9 @@ import nelsontsui.nelsonsgame.game.items.Item;
 
 public class SpawnableItem extends Entity implements Externalizable{
     
-    public static final String CLASSNAME = "SpawnableItem";    
+    public static final String CLASSNAME = "Spawnable Item";    
     public static final String DESCRIPTION = "A non-solid object that contains";
+    public static final String FILENAME = "spawnable_item";
     
     protected Item items;
     

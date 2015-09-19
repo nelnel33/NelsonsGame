@@ -19,13 +19,14 @@ import java.util.ArrayList;
 import nelsontsui.nelsonsgame.game.ActionPanel;
 import nelsontsui.nelsonsgame.game.DialogBox;
 import nelsontsui.nelsonsgame.game.MainDisplay;
-import nelsontsui.nelsonsgame.leveleditor.ReadFile;
+import file.ReadFile;
 
 public class MapGate extends Entity implements Externalizable{
     
     public static final String CLASSNAME = "Map Gate";
     public static final String DESCRIPTION = "A non-solid object that is used to exit the map or display that you have won;"
                 + "Recommended Use: Level linker;";
+    public static final String FILENAME = "map_gate";
     
     private int useCondition;
     private boolean canUse;

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import nelsontsui.nelsonsgame.leveleditor.ReadFile;
-import nelsontsui.nelsonsgame.leveleditor.WriteFile;
+import file.ReadFile;
+import file.WriteFile;
 
 public class FileSelector extends JFileChooser{
     public static final String newline = "\n";

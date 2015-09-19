@@ -13,6 +13,10 @@ import java.io.ObjectOutput;
 
 public class ProjectileWeapon extends Weapon implements Externalizable{
     
+    public static final String CLASSNAME = "Projectile Weapon";
+    public static final String DESCRIPTION = "A Weapon that fires projectiles";
+    public static final String FILENAME = "projectile_weapon";
+    
     private static final long serialVersionUID = 33145L;
     
     public ProjectileWeapon(){

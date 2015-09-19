@@ -13,6 +13,7 @@ public class OpaqueEntity extends Entity implements Externalizable{
     
     public static final String CLASSNAME = "Opaque Entity";
     public static final String DESCRIPTION = "A solid object that has a location and size;Recommended Use: Walls";
+    public static final String FILENAME = "opaque_entity";
     
     private static final long serialVersionUID = 332L;
     

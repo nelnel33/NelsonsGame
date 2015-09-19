@@ -17,6 +17,7 @@ public class Portal extends Entity implements Externalizable{
     public static final String CLASSNAME = "Portal";
     public static final String DESCRIPTION = "A non-solid entity/object uses to teleport characters from one location to another;Recommended Use: Portal;"
                 + "Click the \'Custom\' button on the bottom to set the exit location of the portal;";
+    public static final String FILENAME = "portal";
     
     private Entity subportal;
     private boolean canNpcUse;

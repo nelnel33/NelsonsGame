@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import nelsontsui.nelsonsgame.game.*;
-import nelsontsui.nelsonsgame.game.entities.DamagableEntity;
+import nelsontsui.nelsonsgame.game.entities.DamageableEntity;
 import nelsontsui.nelsonsgame.game.DimensionDouble;
 import nelsontsui.nelsonsgame.game.entities.Entity;
 import nelsontsui.nelsonsgame.game.entities.MapGate;
@@ -329,7 +329,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
             npcsOnGrid[r][c] = new OpaqueEntity(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight());
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("DamagableEntity")){
-            npcsOnGrid[r][c] = new DamagableEntity(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),hitpoints);
+            npcsOnGrid[r][c] = new DamageableEntity(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),hitpoints);
         }
         else if(currentDetailedSelectorId.equalsIgnoreCase("TalkableGate")){
             npcsOnGrid[r][c] = new TalkableGate(p.getX(),p.getY(),dimension.getWidth(),dimension.getHeight(),talkableSpeech);
@@ -587,7 +587,7 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
         else if(temp instanceof nelsontsui.nelsonsgame.game.entities.Character){
             graphic.setColor(new Color(63,131,104));//Cyanish Green     
         }
-        else if(temp instanceof DamagableEntity){
+        else if(temp instanceof DamageableEntity){
             graphic.setColor(Color.GRAY);//grey                    
         }
         else if(temp instanceof MapGate || temp instanceof TalkableGate){

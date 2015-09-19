@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-public class DamagableEntity extends OpaqueEntity implements Externalizable{
+public class DamageableEntity extends OpaqueEntity implements Externalizable{
     
-    public static final String CLASSNAME = "DamagableEntity";
+    public static final String CLASSNAME = "Damagable Entity";
     public static final String DESCRIPTION = "An solid entity that has hitpoints;Recommended Use: Physical gate/door;";
+    public static final String FILENAME = "damageable_entity";
     
     protected double initHitpoints;
     protected double hitpoints;
@@ -20,10 +21,10 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
     
     private static final long serialVersionUID = 333L;
     
-    public DamagableEntity(){
+    public DamageableEntity(){
         super();
     }
-    public DamagableEntity(double x,
+    public DamageableEntity(double x,
                            double y,
                            double width,
                            double height,
@@ -92,7 +93,7 @@ public class DamagableEntity extends OpaqueEntity implements Externalizable{
         graphic.fill(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
     }
     
-    public void changeColorWhenHit(Graphics2D g, DamagableEntity p){
+    public void changeColorWhenHit(Graphics2D g, DamageableEntity p){
         if(p.hasBeenHit()){
             g.setColor(Color.ORANGE);
             p.setHasBeenHit(false);

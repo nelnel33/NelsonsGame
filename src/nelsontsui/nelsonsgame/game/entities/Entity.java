@@ -8,11 +8,15 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import nelsontsui.nelsonsgame.game.imagearchiver.ImportedImage;
 
 public class Entity implements Externalizable{
     
     public static final String CLASSNAME = "Entity";
     public static final String DESCRIPTION = "A non-solid object that has no attributes other than a location and size; Recommended Use: Pathway;";
+    public static final String FILENAME = "entity";
+    
+    public static final ImportedImage IMAGE = new ImportedImage(FILENAME, ImportedImage.ENTITIES_DIR);
     
     protected double x;
     protected double y;    
@@ -115,6 +119,7 @@ public class Entity implements Externalizable{
     }
     
     public void render(Graphics2D graphic){
+        //IMAGE.drawTiledImage(graphic, x,y,width, height, 10);
         graphic.setColor(new Color(0,204,0));//greenish
         graphic.fill(new Rectangle2D.Double(this.getX(),this.getY(),this.getWidth(),this.getHeight()));
     }

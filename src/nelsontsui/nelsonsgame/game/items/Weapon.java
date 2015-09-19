@@ -6,6 +6,10 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 public class Weapon extends UnusableItem implements Externalizable{
+    public static final String CLASSNAME = "Weapon";
+    public static final String DESCRIPTION = "A melee weapon";
+    public static final String FILENAME = "weapon";
+    
     private int damage;
     private boolean equipped = false;
     

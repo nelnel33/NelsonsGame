@@ -6,7 +6,7 @@ import nelsontsui.nelsonsgame.game.entities.NonPlayerCharacter;
 import nelsontsui.nelsonsgame.game.entities.Player;
 import nelsontsui.nelsonsgame.game.entities.MapGate;
 import nelsontsui.nelsonsgame.game.mapping.Level;
-import nelsontsui.nelsonsgame.game.entities.Inventory;
+import nelsontsui.nelsonsgame.game.entities.helper.Inventory;
 import nelsontsui.nelsonsgame.game.entities.Entity;
 import nelsontsui.nelsonsgame.game.items.UnusableItem;
 import nelsontsui.nelsonsgame.game.items.HealthPotion;

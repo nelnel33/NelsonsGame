@@ -15,9 +15,10 @@ import nelsontsui.nelsonsgame.game.DialogBox;
 
 public class TalkableGate extends Entity implements Externalizable{
     
-    public static final String CLASSNAME = "TalkableGate";
+    public static final String CLASSNAME = "Talkable Gate";
     public static final String DESCRIPTION = "A non-solid object/entity. When you step over it, it speaks in the dialog box;"
                 + "Recommended Use: Boss Dialog, Instructions for level;"; 
+    public static final String FILENAME = "talkable_gate";
     
     private String speech;
     private boolean flag = true;

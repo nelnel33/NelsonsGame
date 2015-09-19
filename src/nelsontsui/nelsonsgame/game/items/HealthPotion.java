@@ -14,6 +14,10 @@ import nelsontsui.nelsonsgame.game.entities.Character;
 
 public class HealthPotion extends Potion implements Externalizable{
     
+    public static final String CLASSNAME = "Health Potion";
+    public static final String DESCRIPTION = "A Potion that Heals";
+    public static final String FILENAME = "health_potion";
+    
     private static final long serialVersionUID = 33149L;
     
     public HealthPotion(){

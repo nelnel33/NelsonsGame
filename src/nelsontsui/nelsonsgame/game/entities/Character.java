@@ -1,5 +1,6 @@
 package nelsontsui.nelsonsgame.game.entities;
 
+import nelsontsui.nelsonsgame.game.entities.helper.Inventory;
 import nelsontsui.nelsonsgame.game.mapping.Hitbox;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -19,10 +20,10 @@ import nelsontsui.nelsonsgame.game.items.Item;
 import nelsontsui.nelsonsgame.game.items.ProjectileWeapon;
 import nelsontsui.nelsonsgame.game.items.Weapon;
 
-public class Character extends DamagableEntity implements Externalizable{
-    
+public class Character extends DamageableEntity implements Externalizable{    
     public static final String CLASSNAME = "Character";
     public static final String DESCRIPTION = "A solid entity that has health and damage;Recommended Use: Player";
+    public static final String FILENAME = "character";
     
     private String name;    
     private double initDamage;
@@ -141,7 +142,7 @@ public class Character extends DamagableEntity implements Externalizable{
     public void addToInventory(Item item){
         this.inventory.addToInventory(item);
     }
-    public boolean attack(DamagableEntity other){
+    public boolean attack(DamageableEntity other){
         if(this.hasWeapon){
             if(!(this.weapon instanceof ProjectileWeapon)){
                 int d = (int)(Math.random()*this.damage);
@@ -156,7 +157,7 @@ public class Character extends DamagableEntity implements Externalizable{
         other.setHasBeenHit(true);
         return true;
     }
-    public void shoot(DamagableEntity other){
+    public void shoot(DamageableEntity other){
         if(this.hasWeapon){
             if(this.weapon instanceof ProjectileWeapon){
                 int d = (int)(Math.random()*this.damage);
@@ -358,10 +359,10 @@ public class Character extends DamagableEntity implements Externalizable{
                             &&entities.get(i) instanceof OpaqueEntity){
                         this.removeProjectile();
                         j--;
-                        if(entities.get(i) instanceof DamagableEntity){
-                            this.shoot((DamagableEntity)entities.get(i));
-                            System.out.println("npc"+i+" HP:"+((DamagableEntity)entities.get(i)).getHitpoints());
-                            if(((DamagableEntity)entities.get(i)).getHitpoints()<=0){
+                        if(entities.get(i) instanceof DamageableEntity){
+                            this.shoot((DamageableEntity)entities.get(i));
+                            System.out.println("npc"+i+" HP:"+((DamageableEntity)entities.get(i)).getHitpoints());
+                            if(((DamageableEntity)entities.get(i)).getHitpoints()<=0){
                                 if(entities.get(i) instanceof Character){
                                     dialogPanel.message(((Character)entities.get(i)).getName()+" has been killed");
                                 }
@@ -388,13 +389,13 @@ public class Character extends DamagableEntity implements Externalizable{
     public void inflictDamage(ArrayList<Entity> entities, DialogBox dialogPanel){
         for(int i=0;i<entities.size();i++){
             if(this.getHitbox().isTouching(entities.get(i).getHitbox())){
-                if(entities.get(i) instanceof DamagableEntity){
-                    if(this.attack((DamagableEntity)entities.get(i)) && this.getHasWeapon()){
+                if(entities.get(i) instanceof DamageableEntity){
+                    if(this.attack((DamageableEntity)entities.get(i)) && this.getHasWeapon()){
                         dialogPanel.message("You cannot attack a Damagable Entity with a "+
                             this.weapon.getName()+" equipped");
                     }
-                    System.out.println("NPC"+i+" HP: "+((DamagableEntity)entities.get(i)).getHitpoints());
-                    if(((DamagableEntity)entities.get(i)).getHitpoints()<=0){
+                    System.out.println("NPC"+i+" HP: "+((DamageableEntity)entities.get(i)).getHitpoints());
+                    if(((DamageableEntity)entities.get(i)).getHitpoints()<=0){
                         if(entities.get(i) instanceof NonPlayerCharacter){
                             dialogPanel.message(((NonPlayerCharacter)entities.get(i)).getName()+" has been killed");
                         }
