@@ -251,11 +251,26 @@ public class EditingPanel extends JPanel implements MouseListener, MouseMotionLi
             }
         }
         if(SwingUtilities.isRightMouseButton(e)){
-            if((npcsOnGrid[py][px] instanceof nelsontsui.nelsonsgame.game.entities.Character)&&!(npcsOnGrid[py][px] instanceof NonPlayerCharacter)){
-                playerSet=false;
+            // outerloop and innerloop checks through the entire matrix
+            outerloop : for(int i=0;i<gridRows;i++){
+                innerloop : for(int j=0;j<gridColumns;j++){
+                    if(npcsOnGrid[i][j] != null){
+                        double x = npcsOnGrid[i][j].getX();
+                        double y = npcsOnGrid[i][j].getY();
+                        double width = npcsOnGrid[i][j].getWidth();
+                        double height = npcsOnGrid[i][j].getHeight();
+                        //this checks if the cursor is intersecting an entity
+                        if(new java.awt.Rectangle.Double(x, y, width, height).intersects(new java.awt.Rectangle.Double(e.getX(),e.getY(),1,1))){
+                            if((npcsOnGrid[i][j] instanceof nelsontsui.nelsonsgame.game.entities.Character)&&!(npcsOnGrid[i][j] instanceof NonPlayerCharacter)){
+                                playerSet=false;
+                            }
+                            points[i][j] = null;
+                            npcsOnGrid[i][j]=null;
+                            break outerloop;
+                        }
+                    }
+                }
             }
-            points[py][px] = null;
-            npcsOnGrid[py][px]=null;
         }
     }  
     public int determineSupposedPointOrigin(Point origin, Point released){
