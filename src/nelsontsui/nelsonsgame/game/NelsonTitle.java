@@ -10,28 +10,37 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import javax.swing.JFrame;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
  *
- * @author Nelnel33
+ * @author Alan T
  */
-public class NelsonTitle extends JPanel{
-
-    private int width = 370;
-    private int height = 40;
-    private final static String nelsonsGame = "Nelson's Game";
-    
-    public NelsonTitle(){}
+public class NelsonTitle extends JPanel{    
+    public NelsonTitle(){
+        setOpaque(false);
+    }
     
     @Override
     public void paintComponent(Graphics g){
-        Graphics2D graphic = (Graphics2D)g;
-        graphic.setFont(new Font(Font.SANS_SERIF,Font.BOLD,50));
-        graphic.setColor(new Color(184,242,242));//light blue;
-        graphic.drawString(nelsonsGame,0,50);        
+        super.paintComponent(g);
+        Graphics2D gd = (Graphics2D)g;
+        
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(getClass().getResource("/nelsontsui/nelsonsgame/game/resources/startmenu/nelsons_sword.png"));
+        } catch (IOException ex) {}
+        gd.drawImage(image, 0, 100, 600, 78, null);
+        
+        Font font = MainDisplay.MEDIEVAL_FONT.getFont(0,80);
+        gd.setFont(font);
+        
+        gd.setColor(Color.BLACK);
+        gd.drawString("NELSON'S",150,170);
+        gd.drawString("GAME",425,250);
     }
 }
 

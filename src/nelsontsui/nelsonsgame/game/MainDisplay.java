@@ -18,6 +18,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import nelsontsui.nelsonsgame.leveleditor.LevelEditorDisplay;
 import file.ReadFile;
+import nelsontsui.nelsonsgame.utilites.FontImplementer;
 
 /*
 |=|=SerialVersionUIDs=|=|
@@ -67,10 +68,10 @@ public class MainDisplay extends JFrame implements ActionListener{
     private JButton importButtonGameDisplay;
     
     //Buttons in the start menu
-    private JButton play;
-    private JButton howTo;
-    private JButton importButton;
-    private JButton leveleditor;
+    private NButton play;
+    private NButton howTo;
+    private NButton importButton;
+    private NButton leveleditor;
     
     //JDialog that contains howto/instructions
     private HowTo instructions;
@@ -83,6 +84,9 @@ public class MainDisplay extends JFrame implements ActionListener{
     
     //Warning Message 
     private boolean canBeClicked;
+    
+    //Font to use throughout program
+    public static final FontImplementer MEDIEVAL_FONT = new FontImplementer("/nelsontsui/nelsonsgame/game/resources/startmenu/medieval_font.ttf");
     
     //Win, Lose, and General Messages
     public static final String winMessageMain = "\nYOU WON!";
@@ -108,10 +112,10 @@ public class MainDisplay extends JFrame implements ActionListener{
         setLocationRelativeTo(null);
     }
     private void init(){
-        play = new JButton("Play Nelson's Game");
-        howTo = new JButton("Instructions");
-        importButton = new JButton("Import and Play!");
-        leveleditor = new JButton("Level Editor");
+        play = new NButton("Play Nelson's Game");
+        howTo = new NButton("Instructions");
+        importButton = new NButton("Import and Play!");
+        leveleditor = new NButton("Level Editor");
         
         setStartMenuButtonAction();
         setGameDisplayButtonAction();

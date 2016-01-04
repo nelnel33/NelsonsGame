@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Alan/Documents/GitHub/NelsonsGame/src/nelsontsui/nelsonsgame/game/NButton.java</file>
+            <file>file:/C:/Users/Alan/Documents/GitHub/NelsonsGame/src/nelsontsui/nelsonsgame/game/NelsonTitle.java</file>
+            <file>file:/C:/Users/Alan/Documents/GitHub/NelsonsGame/src/nelsontsui/nelsonsgame/game/resources/startmenu/nelsons_sword.png</file>
+            <file>file:/C:/Users/Alan/Documents/GitHub/NelsonsGame/src/nelsontsui/nelsonsgame/utilites/FontImplementer.java</file>
+            <file>file:/C:/Users/Alan/Documents/GitHub/NelsonsGame/src/nelsontsui/nelsonsgame/game/MainDisplay.java</file>
+            <file>file:/C:/Users/Alan/Documents/GitHub/NelsonsGame/src/nelsontsui/nelsonsgame/game/NelsonsGame.java</file>
+            <file>file:/C:/Users/Alan/Documents/GitHub/NelsonsGame/src/nelsontsui/nelsonsgame/game/HowTo.java</file>
+            <file>file:/C:/Users/Alan/Documents/GitHub/NelsonsGame/src/nelsontsui/nelsonsgame/game/StartMenu.java</file>
+        </group>
     </open-files>
 </project-private>

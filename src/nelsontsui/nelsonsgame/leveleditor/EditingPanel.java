@@ -42,6 +42,10 @@ import nelsontsui.nelsonsgame.game.items.HealthPotion;
 import nelsontsui.nelsonsgame.game.items.StrengthPotion;
 import nelsontsui.nelsonsgame.game.items.Weapon;
 
+/**
+ * 
+ * @author Nelnel33, Alan T
+ */
 public class EditingPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener{       
     protected Point cursor;//where the cursor is;
     protected Point placement;//where the entity will be placed
