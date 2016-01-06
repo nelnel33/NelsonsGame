@@ -26,7 +26,7 @@ import nelsontsui.nelsonsgame.game.items.Weapon;
 
 /**
  *
- * @author Nelnel33
+ * @author Nelnel33, Alan T
  */
 public class Player extends Character implements Externalizable{
     public static final String CLASSNAME = "Player";
@@ -177,22 +177,34 @@ public class Player extends Character implements Externalizable{
         if(this.inventory.getItems().get(i) instanceof UnusableItem){
             if(this.inventory.getItems().get(i) instanceof Weapon){
                 if(this.getHasWeapon()&&(this.weapon.equals((Weapon)this.inventory.getItems().get(i)))){
-                   dialogPanel.message(this.getName()+" unequip: "+this.weapon.getName());
-                   this.unequipWeapon((Weapon)this.inventory.getItems().get(i));                   
+                    dialogPanel.message(this.getName()+" unequip: "+this.weapon.getName());
+                    this.unequipWeapon((Weapon)this.inventory.getItems().get(i));                   
+                }
+                else if(this.getHasWeapon()){
+                    dialogPanel.message(this.getName()+" unequip: "+this.weapon.getName());
+                    this.unequipWeapon(this.weapon);
+                    this.equipWeapon((Weapon)this.inventory.getItems().get(i));
+                    dialogPanel.message(this.getName()+" equip: "+this.inventory.getItems().get(i).getName());
                 }
                 else{
-                   this.equipWeapon((Weapon)this.inventory.getItems().get(i));  
-                   dialogPanel.message(this.getName()+" equip: "+this.weapon.getName());
+                    this.equipWeapon((Weapon)this.inventory.getItems().get(i));  
+                    dialogPanel.message(this.getName()+" equip: "+this.weapon.getName());
                 }
             }
             if(this.inventory.getItems().get(i) instanceof Armor){
                 if(this.getHasArmor()&&(this.armor.equals((Armor)this.inventory.getItems().get(i)))){
-                   dialogPanel.message(this.getName()+" unequip: "+this.armor.getName());
-                   this.unequipArmor((Armor)this.inventory.getItems().get(i));                    
+                    dialogPanel.message(this.getName()+" unequip: "+this.armor.getName());
+                    this.unequipArmor((Armor)this.inventory.getItems().get(i));                    
+                }
+                else if(this.getHasArmor()){
+                    dialogPanel.message(this.getName()+" unequip: "+this.armor.getName());
+                    this.unequipArmor(this.armor);
+                    this.equipArmor((Armor)this.inventory.getItems().get(i));
+                    dialogPanel.message(this.getName()+" equip: "+this.inventory.getItems().get(i).getName());
                 }
                 else{
-                   this.equipArmor((Armor)this.inventory.getItems().get(i));
-                   dialogPanel.message(this.getName()+" equip: "+this.armor.getName());
+                    this.equipArmor((Armor)this.inventory.getItems().get(i));
+                    dialogPanel.message(this.getName()+" equip: "+this.armor.getName());
                 }
             }
         } 

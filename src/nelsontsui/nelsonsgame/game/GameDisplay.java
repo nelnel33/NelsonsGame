@@ -610,17 +610,17 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         }        
         
         for(int h=0;h<Inventory.MAX_SIZE;h++){
-                //c.weightx=1;
-                c.gridx = (int)(h%Inventory.GRID_ROW);
-                c.gridy = (int)(h/Inventory.GRID_COL)+1;
-                g.setConstraints(inventoryItems[h], c);
-                if(h%Inventory.GRID_ROW==Inventory.GRID_COL){
-                    c.gridwidth = GridBagConstraints.REMAINDER;
-                    c.weighty=0;
-                }
-                inventoryPanel.add(inventoryItems[h]);
+            //c.weightx=1;
+            c.gridx = (int)(h%Inventory.GRID_ROW);
+            c.gridy = (int)(h/Inventory.GRID_COL)+1;
+            g.setConstraints(inventoryItems[h], c);
+            if(h%Inventory.GRID_ROW==Inventory.GRID_COL){
+                c.gridwidth = GridBagConstraints.REMAINDER;
+                c.weighty=0;
             }
+            inventoryPanel.add(inventoryItems[h]);
         }
+    }
     private void setInventoryColor(){
         for(int i=0;i<Inventory.MAX_SIZE;i++){
             if(Inventory.inventorySelectorIndex!=i){
