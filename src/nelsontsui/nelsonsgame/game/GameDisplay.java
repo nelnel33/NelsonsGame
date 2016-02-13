@@ -706,13 +706,13 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
     } 
     private void createExampleMap(){
         ArrayList<Entity> e = new ArrayList<>(); //size of map(width =  740; height = 400)
-        Player p = new Player(0,0,10,10,100,100,300,"You",100,2);
+        Player p = new Player(0,0,10,10,100,100,300,"You",10000,200);
         
         e.add(new OpaqueEntity(70,0,10,70));//right wall of spawn room
         e.add(new OpaqueEntity(0,70,80,10));//bottom wall of spawn room
-        e.add(new SpawnableItem(30,30,new Weapon("Mechanical Pencil",1)));
-        e.add(new SpawnableItem(30,30,new Armor("Sombrero of Doom",5)));
-        e.add(new SpawnableItem(30,30,new HealthPotion("Chewy Gum",3,5)));        
+        e.add(new SpawnableItem(30,30,new Weapon("Sword",1)));
+        e.add(new SpawnableItem(30,30,new Armor("C-Mail",5)));
+        e.add(new SpawnableItem(30,30,new HealthPotion("Shrimp",3,5)));        
         
         Portal one = new Portal(30,50,20,20,new Entity(80,50,20,20),Portal.DEFAULT,true);//portal from spawnroom to room1  
         Portal two = new Portal(80,50,20,20,new Entity(30,50,20,20),Portal.DEFAULT,false);//portal from room1 to spawnroom
@@ -721,24 +721,24 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         
         e.add(new OpaqueEntity(150,0,10,360));//right wall of room 1 and room 2; left wall of room 3
         e.add(new OpaqueEntity(0,150,120,10));//bottom wall of room 1
-        e.add(new NonPlayerCharacter(100,0,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(100,30,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(30,120,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(50,120,10,10,50,50,0,"Berta",2,5,10,NonPlayerCharacter.WARRIOR));        
+        e.add(new NonPlayerCharacter(100,0,10,10,50,50,0,"Robert",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(100,30,10,10,50,50,0,"Ned",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,120,10,10,50,50,0,"Joffrey",2,5,10,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,120,10,10,50,50,0,"Aegon",2,5,10,NonPlayerCharacter.WARRIOR));        
         
         e.add(new DamageableEntity(150,362,10,36,2));//breakable entity/door of room 1 to room 2
-        e.add(new NonPlayerCharacter(30,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(50,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(70,200,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(30,250,10,10,50,50,200,"Arlpha",2,5,40,NonPlayerCharacter.ARCHER));
-        e.add(new NonPlayerCharacter(30,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(50,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(70,290,10,10,50,50,0,"Berta",3,10,40,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(30,310,10,10,50,50,200,"Arlpha",2,5,40,NonPlayerCharacter.ARCHER));        
-        e.add(new SpawnableItem(0,380,new Weapon("BigStick",4)));
-        e.add(new SpawnableItem(0,200,new Armor("T-Shirt",30)));
-        e.add(new SpawnableItem(30,300,new Ammo("Rocks",50)));
-        e.add(new SpawnableItem(100,340,new HealthPotion("Donuts",5,5)));
+        e.add(new NonPlayerCharacter(30,200,10,10,50,50,0,"Viserys",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,200,10,10,50,50,0,"Jack",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(70,200,10,10,50,50,0,"Joseph",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,250,10,10,50,50,200,"Ygritte",2,5,40,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(30,290,10,10,50,50,0,"Daemon",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(50,290,10,10,50,50,0,"Johnson",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(70,290,10,10,50,50,0,"Gregor",3,10,40,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(30,310,10,10,50,50,200,"Karils",2,5,40,NonPlayerCharacter.ARCHER));        
+        e.add(new SpawnableItem(0,380,new Weapon("L-Sword",4)));
+        e.add(new SpawnableItem(0,200,new Armor("C-Mail++",30)));
+        e.add(new SpawnableItem(30,300,new Ammo("Arrow",50)));
+        e.add(new SpawnableItem(100,340,new HealthPotion("Beef",5,5)));
         
         e.add(new DamageableEntity(450,2,10,36,2));//breakable entity/door of room 2 to room 3
         e.add(new OpaqueEntity(450,40,10,400));//right wall of room 2; left wall of room 3 and 4
@@ -746,42 +746,42 @@ public class GameDisplay extends JPanel implements ActionListener{ //JFrame to J
         e.add(new DamageableEntity(280,60,40,40,30));//safespot/obstacle top
         e.add(new DamageableEntity(280,300,40,40,30));//safespot/obstacle bottom
         
-        e.add(new NonPlayerCharacter(240,60,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(240,80,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(360,60,10,10,25,25,0,"Therta",2,30,200,NonPlayerCharacter.TANK));
-        e.add(new NonPlayerCharacter(360,80,10,10,50,50,200,"Arlpha",2,10,200,NonPlayerCharacter.ARCHER));        
-        e.add(new NonPlayerCharacter(240,300,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(240,330,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.WARRIOR));
-        e.add(new NonPlayerCharacter(360,300,10,10,25,25,0,"Therta",2,30,200,NonPlayerCharacter.TANK));
-        e.add(new NonPlayerCharacter(360,330,10,10,50,50,200,"Arlpha",2,10,200,NonPlayerCharacter.ARCHER));        
-        e.add(new NonPlayerCharacter(240,180,15,15,50,50,300,"Derlta",10,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(240,60,10,10,50,50,0,"Grim",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(240,80,10,10,50,50,0,"Billy",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(360,60,10,10,25,25,0,"Sandor",2,30,200,NonPlayerCharacter.TANK));
+        e.add(new NonPlayerCharacter(360,80,10,10,50,50,200,"Robin",2,10,200,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(240,300,10,10,50,50,0,"Robb",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(240,330,10,10,50,50,0,"Krem",4,15,200,NonPlayerCharacter.WARRIOR));
+        e.add(new NonPlayerCharacter(360,300,10,10,25,25,0,"Gregor",2,30,200,NonPlayerCharacter.TANK));
+        e.add(new NonPlayerCharacter(360,330,10,10,50,50,200,"Petyr",2,10,200,NonPlayerCharacter.ARCHER));        
+        e.add(new NonPlayerCharacter(240,180,15,15,50,50,300,"Geoffry",10,50,100,NonPlayerCharacter.SUBBOSS));
         
-        e.add(new SpawnableItem(200,200,new ProjectileWeapon("Slingshot",3)));
-        e.add(new SpawnableItem(450,231,new Weapon("Sword",10)));
-        e.add(new SpawnableItem(440,340,new Armor("Shield",100)));
-        e.add(new SpawnableItem(300,350,new HealthPotion("H-Pot",10,20)));
+        e.add(new SpawnableItem(200,200,new ProjectileWeapon("Bow",3)));
+        e.add(new SpawnableItem(450,231,new Weapon("Rapier",10)));
+        e.add(new SpawnableItem(440,340,new Armor("P-body",100)));
+        e.add(new SpawnableItem(300,350,new HealthPotion("Revival",10,20)));
         
-        e.add(new TalkableGate(450,2,10,36,"Berta, Eye'm lyk dah---sir-prized u made it---lyk dah---dhis far---bart---berta lyk pree-pair to dye."));
+        e.add(new TalkableGate(450,2,10,36,"I'm surprised you made it this far. PREPARE TO DIE!"));
         
         e.add(new OpaqueEntity(460,195,280,10));
         
         Portal three = new Portal(720,176,20,20,new Entity(720,380,20,20),Portal.KILL_ALL_NONBOSS,true);//portal to bossroom(1way)
         e.add(three);
         
-        e.add(new NonPlayerCharacter(680,50,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.SUBBOSS));
-        e.add(new NonPlayerCharacter(660,100,25,25,25,25,200,"Omerga",15,50,100,NonPlayerCharacter.SUBBOSS));
-        e.add(new NonPlayerCharacter(500,150,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.ARCHER));
-        e.add(new NonPlayerCharacter(530,150,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(680,50,25,25,25,25,200,"Barristan Selmy",15,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(660,100,25,25,25,25,200,"Dharoks the Wretched",15,50,100,NonPlayerCharacter.SUBBOSS));
+        e.add(new NonPlayerCharacter(500,150,10,10,50,50,200,"The Great English Longbowman",5,10,200,NonPlayerCharacter.ARCHER));
+        e.add(new NonPlayerCharacter(530,150,10,10,50,50,200,"The Almost As Great English Longbowman",5,10,190,NonPlayerCharacter.ARCHER));
         e.add(new SpawnableItem(660,160,new StrengthPotion("S-Pot",1,5)));
         
         //BOSSROOM//
-        e.add(new NonPlayerCharacter(600,330,30,30,50,50,200,"Al-ee Sa-ya-nee Dah Pack-ee",100,200,200,NonPlayerCharacter.BOSS));
+        e.add(new NonPlayerCharacter(600,330,30,30,50,50,200,"Tim Tebow",100,200,200,NonPlayerCharacter.BOSS));
         win = new MapGate(700,360,20,20,MapGate.KILL_ALL);
         e.add(win);
-        e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"Omerga",10,50,100,NonPlayerCharacter.BR_SUBBOSS));
-        e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"Arlpha",5,10,200,NonPlayerCharacter.BR_ARCHER));
-        e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Berta",4,15,200,NonPlayerCharacter.BR_WARRIOR));
-        e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Therta",2,50,200,NonPlayerCharacter.BR_TANK));       
+        e.add(new NonPlayerCharacter(660,300,25,25,25,25,200,"James T. Kirk",10,50,100,NonPlayerCharacter.BR_SUBBOSS));
+        e.add(new NonPlayerCharacter(550,230,10,10,50,50,200,"A-Rod",5,10,200,NonPlayerCharacter.BR_ARCHER));
+        e.add(new NonPlayerCharacter(550,270,10,10,50,50,0,"Mark Zuckerburg",4,15,200,NonPlayerCharacter.BR_WARRIOR));
+        e.add(new NonPlayerCharacter(550,300,10,10,50,50,0,"Thad Castle",2,50,200,NonPlayerCharacter.BR_TANK));       
         
         player = p;
         entities = e;
