@@ -56,13 +56,14 @@ public class StartMenu extends JPanel{
         setLayout(null);
         setPreferredSize(new Dimension(1000,610));
         
-        initTorches();
+        //initTorches();
         setButtonHolderLayout();
         addTitle();
         addWatermark();
         
     }
     
+    /*
     private void initTorches(){
         Image image = new ImageIcon(getClass().getResource("/nelsontsui/nelsonsgame/game/resources/startmenu/100x100 torch.gif")).getImage();
         ImageIcon icon = new ImageIcon(image);
@@ -70,15 +71,16 @@ public class StartMenu extends JPanel{
         torch1 = new JLabel(icon);
         torch1.setPreferredSize(new Dimension(100,100));
         torch1.setBounds(250,300,100,100);
-//        torch1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        //torch1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         add(torch1);
         
         torch2 = new JLabel(icon);
         torch2.setPreferredSize(new Dimension(100,100));
         torch2.setBounds(650,300,100,100);
-//        torch2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        //torch2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         add(torch2);
     }
+    */
     
     private void setButtonHolderLayout(){
         buttonHolder = new JPanel();
